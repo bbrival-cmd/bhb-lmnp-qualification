@@ -58,11 +58,11 @@
   }
   .hero-photo{
     position:absolute; inset:0; background-size:cover; background-position:center 35%;
-    opacity:.28; filter:saturate(70%) contrast(1.05); z-index:0; pointer-events:none;
+    opacity:.55; filter:saturate(65%) contrast(1.05); z-index:0; pointer-events:none;
   }
   .hero-photo-overlay{
     position:absolute; inset:0; z-index:0; pointer-events:none;
-    background:linear-gradient(165deg,var(--navy) 0%, rgba(31,58,99,.88) 55%, rgba(22,50,86,.94) 100%);
+    background:linear-gradient(165deg,rgba(15,27,49,.82) 0%, rgba(20,35,63,.68) 45%, rgba(15,30,53,.85) 100%);
   }
   .hero-inner{ max-width:620px; margin:0 auto; position:relative; z-index:1; text-align:center; }
 
@@ -81,9 +81,9 @@
   @keyframes sealIn{ from{ opacity:0; transform:scale(.6) rotate(-8deg); } to{ opacity:1; transform:scale(1) rotate(0); } }
 
   .eyebrow{ font-size:11.5px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent-ink); margin-bottom:14px; }
-  .hero h1{ font-size:clamp(28px,5vw,38px); font-weight:600; color:#fff; line-height:1.22; margin-bottom:16px; }
+  .hero h1{ font-size:clamp(28px,5vw,38px); font-weight:600; color:#fff; line-height:1.22; margin-bottom:16px; text-shadow:0 2px 14px rgba(0,0,0,.4); }
   .hero h1 em{ font-style:italic; color:#bfe9fc; }
-  .hero-sub{ font-size:15.5px; color:rgba(255,255,255,.78); line-height:1.6; max-width:480px; margin:0 auto; }
+  .hero-sub{ font-size:15.5px; color:rgba(255,255,255,.85); line-height:1.6; max-width:480px; margin:0 auto; text-shadow:0 1px 10px rgba(0,0,0,.35); }
 
   .btn-hero{
     display:inline-flex; align-items:center; gap:8px; margin-top:26px; padding:15px 30px; border-radius:40px;
