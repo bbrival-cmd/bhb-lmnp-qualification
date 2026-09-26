@@ -114,6 +114,13 @@
   .badge-orange{ background:var(--warn-soft); color:var(--warn-ink); }
   .badge-red{ background:var(--bad-soft); color:var(--bad-ink); }
 
+  /* ── CASH / CREDIT SPLIT SUMMARY ── */
+  .cash-summary{ background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 15px; }
+  .cash-summary-row{ display:flex; justify-content:space-between; align-items:center; padding:4px 0; }
+  .cash-summary-lbl{ font-size:11.5px; color:var(--ink-muted); font-weight:600; }
+  .cash-summary-val{ font-size:14.5px; font-weight:700; color:var(--ink); }
+  .cash-summary-note{ font-size:11px; color:var(--ink-faint); margin-top:8px; line-height:1.5; }
+
   /* ── CARDS ── */
   .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm); }
   .card-label{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--ink-faint); margin-bottom:15px; display:flex; align-items:center; gap:7px; }
@@ -348,25 +355,34 @@
       <div class="field">
         <label>Budget du projet <span class="req">*</span></label>
         <div class="amount-wrap">
-          <input type="number" id="montant" placeholder="200000" min="0" value="80000" oninput="calcLive()">
+          <input type="number" id="montant" placeholder="200000" min="0" value="80000" oninput="onMontantInput()">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Nos produits démarrent à 40 000 €</span>
       </div>
       <div class="field">
-        <label>Épargne disponible actuelle</label>
-        <div class="slider-row">
-          <input type="range" id="epargneRange" min="0" max="150000" step="1000" value="8000" oninput="onEpargneInput(this.value)">
-          <div class="slider-readout"><span id="epargneVal">8 000</span> €</div>
+        <label>Mode d'achat souhaité</label>
+        <div class="toggle-group" id="modeAchatToggle">
+          <div class="toggle-btn" onclick="selectModeAchat(this,'comptant')" data-val="comptant">💶 Comptant</div>
+          <div class="toggle-btn" onclick="selectModeAchat(this,'credit')" data-val="credit">🏦 Crédit</div>
+          <div class="toggle-btn sel" onclick="selectModeAchat(this,'mixte')" data-val="mixte">🔀 Comptant + Crédit</div>
         </div>
-        <div class="slider-scale"><span>0 €</span><span>150 000 €</span></div>
-        <span class="field-hint">Épargne totale du prospect, hors résidence principale</span>
       </div>
     </div>
 
     <div class="divider"></div>
 
     <div class="field">
+      <label>Épargne disponible actuelle</label>
+      <div class="slider-row">
+        <input type="range" id="epargneRange" min="0" max="150000" step="1000" value="8000" oninput="onEpargneInput(this.value)">
+        <div class="slider-readout"><span id="epargneVal">8 000</span> €</div>
+      </div>
+      <div class="slider-scale"><span>0 €</span><span>150 000 €</span></div>
+      <span class="field-hint">Épargne totale du prospect, hors résidence principale</span>
+    </div>
+
+    <div class="field cond-block" id="apportSliderWrap" style="margin-top:13px;">
       <label>Apport à mobiliser sur ce projet</label>
       <div class="slider-row">
         <input type="range" id="apportRange" min="0" max="8000" step="500" value="8000" oninput="onApportInput(this.value)">
@@ -374,6 +390,18 @@
       </div>
       <div class="slider-scale"><span>0 €</span><span id="apportMaxLabel">8 000 €</span></div>
       <div class="field-hint" id="apportHint">Base : 10% du budget du projet. Ajustez selon l'épargne réellement mobilisable.</div>
+    </div>
+
+    <div class="cash-summary" style="margin-top:13px;">
+      <div class="cash-summary-row">
+        <span class="cash-summary-lbl">Épargne mobilisée</span>
+        <span class="cash-summary-val mono" id="cashApportVal">8 000 €</span>
+      </div>
+      <div class="cash-summary-row">
+        <span class="cash-summary-lbl">Reliquat à financer à crédit</span>
+        <span class="cash-summary-val mono" id="cashReliquatVal">72 000 €</span>
+      </div>
+      <div class="cash-summary-note" id="cashSummaryNote"></div>
     </div>
   </div>
 
@@ -499,13 +527,12 @@ const MIN_PRODUIT = 40000;
 const MAX_DTI = 0.35;
 const GREEN_DTI = 0.30;
 
-const state = { projType:'locatif', statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000 };
+const state = { projType:'locatif', statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte' };
 
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('quali_wh');
   if (saved) document.getElementById('webhookUrl').value = saved;
-  updateApportHint();
-  calcLive();
+  applyModeConstraints();
 });
 
 function selectToggle(key, el, val) {
@@ -533,36 +560,90 @@ function toggleCoemprunteur(el, val) {
 function onDureeInput(v) { state.duree = parseInt(v); document.getElementById('dureeVal').textContent = v; calcLive(); }
 function onTauxInput(v) { state.taux = parseFloat(v); document.getElementById('tauxVal').textContent = parseFloat(v).toFixed(2); calcLive(); }
 
+function selectModeAchat(el, val) {
+  document.querySelectorAll('#modeAchatToggle .toggle-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  state.mode = val;
+  applyModeConstraints();
+}
+
+function onMontantInput() {
+  applyModeConstraints();
+}
+
 function onEpargneInput(v) {
   const epargne = Math.max(0, parseFloat(v)||0);
   state.epargne = epargne;
   document.getElementById('epargneVal').textContent = formatMoney(epargne).replace(' €','');
-  // L'épargne saisie se reporte automatiquement dans l'apport à mobiliser ; ajustable ensuite au curseur.
-  state.apport = epargne;
-  const range = document.getElementById('apportRange');
-  range.max = epargne;
-  range.value = state.apport;
-  document.getElementById('apportMaxLabel').textContent = formatMoney(epargne);
-  document.getElementById('apportVal').textContent = formatMoney(state.apport).replace(' €','');
-  updateApportHint();
-  calcLive();
+  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const maxApport = Math.max(0, Math.min(epargne, montant));
+  // L'épargne mobilisée se reporte automatiquement dans l'apport, sauf en mode 100% crédit.
+  state.apport = (state.mode === 'credit') ? 0 : maxApport;
+  applyModeConstraints();
 }
 
 function onApportInput(v) {
-  state.apport = Math.min(parseFloat(v)||0, state.epargne);
+  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const maxApport = Math.max(0, Math.min(state.epargne, montant));
+  state.apport = Math.min(Math.max(0, parseFloat(v)||0), maxApport);
   document.getElementById('apportVal').textContent = formatMoney(state.apport).replace(' €','');
   updateApportHint();
+  updateCashSummary();
+  calcLive();
+}
+
+function applyModeConstraints() {
+  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const maxApport = Math.max(0, Math.min(state.epargne, montant));
+  const sliderWrap = document.getElementById('apportSliderWrap');
+
+  if (state.mode === 'comptant') {
+    state.apport = maxApport;
+    sliderWrap.classList.add('hidden');
+  } else if (state.mode === 'credit') {
+    state.apport = 0;
+    sliderWrap.classList.add('hidden');
+  } else {
+    sliderWrap.classList.remove('hidden');
+    if (state.apport > maxApport) state.apport = maxApport;
+    const range = document.getElementById('apportRange');
+    range.max = maxApport;
+    range.value = state.apport;
+    document.getElementById('apportMaxLabel').textContent = formatMoney(maxApport);
+    document.getElementById('apportVal').textContent = formatMoney(state.apport).replace(' €','');
+  }
+  updateApportHint();
+  updateCashSummary();
   calcLive();
 }
 
 function updateApportHint() {
   const hint = document.getElementById('apportHint');
+  if (state.mode !== 'mixte') return;
   if (state.epargne <= 0) {
     hint.textContent = "Renseignez l'épargne disponible pour activer ce curseur.";
     return;
   }
   const restant = state.epargne - state.apport;
   hint.textContent = `Sur ${formatMoney(state.epargne)} d'épargne, ${formatMoney(restant)} resteraient en réserve après l'opération.`;
+}
+
+function updateCashSummary() {
+  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const apport = state.apport;
+  const reliquat = Math.max(0, montant - apport);
+  setText('cashApportVal', formatMoney(apport));
+  setText('cashReliquatVal', formatMoney(reliquat));
+  const note = document.getElementById('cashSummaryNote');
+  if (state.mode === 'comptant') {
+    note.textContent = reliquat <= 0
+      ? "✅ Épargne suffisante pour un règlement comptant intégral."
+      : `⚠️ Épargne insuffisante pour un comptant intégral — estimation du financement du reliquat de ${formatMoney(reliquat)} ci-dessous.`;
+  } else if (state.mode === 'credit') {
+    note.textContent = "🏦 Financement intégral à crédit souhaité — épargne conservée en réserve.";
+  } else {
+    note.textContent = '';
+  }
 }
 
 function calcMensualite(capital, tauxMensuel, nbMois) {
@@ -617,7 +698,7 @@ function calcLive() {
   const capaciteTotale = apport + capaciteCredit;
   setText('signalCapacite', formatMoney(capaciteTotale));
 
-  updateSignal({ revenuTotal, tde, capaciteTotale, montant });
+  updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode: state.mode });
 }
 
 function dtiChip(tde) {
@@ -626,7 +707,7 @@ function dtiChip(tde) {
   return `<div class="metric-badge badge-red">Trop élevé</div>`;
 }
 
-function updateSignal({ revenuTotal, tde, capaciteTotale, montant }) {
+function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode }) {
   const signal = document.getElementById('signal');
   const verdictEl = document.getElementById('signalVerdict');
   const reasonsEl = document.getElementById('signalReasons');
@@ -634,29 +715,46 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant }) {
   let verdict = '';
   const reasons = [];
 
-  if (revenuTotal <= 0) {
-    verdict = 'Renseignez les revenus du prospect';
-    reasons.push('Aucun revenu saisi — impossible de qualifier le dossier');
-  } else if (capaciteTotale < MIN_PRODUIT) {
-    verdict = 'RDV non recommandé en l\'état';
-    reasons.push(`Capacité totale (${formatMoney(capaciteTotale)}) sous le ticket d'entrée de ${formatMoney(MIN_PRODUIT)}`);
-    reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent le minimum produit');
-  } else if (tde > MAX_DTI*100) {
-    level = 'red';
-    verdict = 'RDV non recommandé en l\'état';
-    reasons.push(`Endettement projet à ${tde.toFixed(1)}% — dépasse la limite HCSF (35%)`);
-    reasons.push('À revoir : réduire le budget ou augmenter l\'apport avant de programmer');
-  } else if (tde <= GREEN_DTI*100 && capaciteTotale >= montant) {
+  if (montant < MIN_PRODUIT) {
+    verdict = 'Budget sous le ticket d\'entrée';
+    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)}`);
+  } else if (mode === 'comptant' && capital <= 0) {
     level = 'green';
-    verdict = 'RDV pertinent — dossier solide';
-    reasons.push(`Endettement maîtrisé (${tde.toFixed(1)}%)`);
-    reasons.push(`Capacité de financement (${formatMoney(capaciteTotale)}) couvre le budget du projet`);
+    verdict = 'RDV pertinent — paiement comptant possible';
+    reasons.push(`L'épargne mobilisée couvre l'intégralité du budget (${formatMoney(montant)})`);
+    reasons.push('Aucun crédit nécessaire — dossier finançable immédiatement');
+  } else if (revenuTotal <= 0) {
+    verdict = 'Renseignez les revenus du prospect';
+    reasons.push(mode === 'comptant'
+      ? `Épargne insuffisante pour un comptant intégral (reliquat de ${formatMoney(capital)}) — revenus requis pour évaluer le financement`
+      : 'Aucun revenu saisi — impossible de qualifier le dossier');
   } else {
-    level = 'orange';
-    verdict = 'RDV possible — dossier à challenger';
-    if (tde > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
-    if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé — ajuster projet ou apport`);
-    if (reasons.length === 0) reasons.push('Dossier finançable, à confirmer avec le courtier');
+    if (mode === 'comptant' && capital > 0) {
+      reasons.push(`Épargne insuffisante pour un comptant intégral — reliquat de ${formatMoney(capital)} à financer à crédit`);
+    } else if (mode === 'credit') {
+      reasons.push('Financement intégral à crédit souhaité par le prospect');
+    }
+
+    if (capaciteTotale < MIN_PRODUIT) {
+      verdict = 'RDV non recommandé en l\'état';
+      reasons.push(`Capacité totale (${formatMoney(capaciteTotale)}) sous le ticket d'entrée de ${formatMoney(MIN_PRODUIT)}`);
+      reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent le minimum produit');
+    } else if (tde > MAX_DTI*100) {
+      level = 'red';
+      verdict = 'RDV non recommandé en l\'état';
+      reasons.push(`Endettement projet à ${tde.toFixed(1)}% — dépasse la limite HCSF (35%)`);
+      reasons.push('À revoir : réduire le budget ou augmenter l\'apport avant de programmer');
+    } else if (tde <= GREEN_DTI*100 && capaciteTotale >= montant) {
+      level = 'green';
+      verdict = 'RDV pertinent — dossier solide';
+      reasons.push(`Endettement maîtrisé (${tde.toFixed(1)}%)`);
+      reasons.push(`Capacité de financement (${formatMoney(capaciteTotale)}) couvre le budget du projet`);
+    } else {
+      level = 'orange';
+      verdict = 'RDV possible — dossier à challenger';
+      if (tde > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
+      if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé — ajuster projet ou apport`);
+    }
   }
 
   signal.classList.remove('s-red','s-orange','s-green');
@@ -734,7 +832,7 @@ function collectPayload() {
   return {
     source: 'qualification-telepro', timestamp: new Date().toISOString(),
     prospect: { nom: g('nom'), prenom: g('prenom'), telephone: g('tel'), email: g('email') },
-    projet: { type: state.projType, montant, epargne_disponible: epargne, apport_mobilise: apport, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital },
+    projet: { type: state.projType, montant, mode_paiement: state.mode, epargne_disponible: epargne, apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital },
     emprunteur1: { statut_pro: state.statut, revenu_net_mensuel: revenu1, autres_revenus: autresRevenus },
     coemprunteur: state.coemprunteur ? { statut_pro: g('statut2'), revenu_net_mensuel: revenu2 } : null,
     charges: { loyer_actuel: loyerBrut, loyer_exclus_dti: isRP, total_credits_en_cours: creditsEnCours },
@@ -783,14 +881,11 @@ function resetForm() {
   document.getElementById('montant').value = 80000;
   document.getElementById('epargneRange').value = 8000;
   document.getElementById('epargneVal').textContent = '8 000';
-  state.apport = 8000; state.epargne = 8000;
-  document.getElementById('dureeRange').value = 25; state.duree = 25; document.getElementById('dureeVal').textContent = '25';
-  document.getElementById('tauxRange').value = 3.9; state.taux = 3.9; document.getElementById('tauxVal').textContent = '3.90';
-  document.getElementById('apportRange').max = 8000;
-  document.getElementById('apportRange').value = 8000;
-  document.getElementById('apportVal').textContent = '8 000';
-  document.getElementById('apportMaxLabel').textContent = '8 000 €';
-  updateApportHint();
+  document.getElementById('dureeRange').value = 25; document.getElementById('dureeVal').textContent = '25';
+  document.getElementById('tauxRange').value = 3.9; document.getElementById('tauxVal').textContent = '3.90';
+  state.duree = 25; state.taux = 3.9; state.epargne = 8000; state.apport = 8000; state.mode = 'mixte';
+  document.querySelectorAll('#modeAchatToggle .toggle-btn').forEach(b=>b.classList.toggle('sel', b.dataset.val === 'mixte'));
+  applyModeConstraints();
   const btn = document.getElementById('btnSubmit');
   btn.innerHTML = 'Envoyer la fiche';
   btn.disabled = false;
