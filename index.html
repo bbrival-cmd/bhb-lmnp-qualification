@@ -333,7 +333,7 @@
       <div class="field">
         <label>Budget du projet <span class="req">*</span></label>
         <div class="amount-wrap">
-          <input type="number" id="montant" placeholder="200000" min="0" value="80000" oninput="onMontantInput()">
+          <input type="number" id="montant" placeholder="200000" min="0" value="65000" oninput="onMontantInput()">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Nos produits démarrent à 40 000 €</span>
@@ -898,7 +898,7 @@ function resetForm() {
   document.getElementById('navFixed').style.display = '';
   document.getElementById('successScreen').classList.remove('active');
   document.querySelectorAll('input[type="text"],input[type="tel"],input[type="email"],input[type="number"],textarea').forEach(el=>el.value='');
-  document.getElementById('montant').value = 80000;
+  document.getElementById('montant').value = 65000;
   document.getElementById('epargneRange').value = 8000;
   document.getElementById('epargneVal').textContent = '8 000';
   document.getElementById('dureeRange').value = 25; document.getElementById('dureeVal').textContent = '25';
