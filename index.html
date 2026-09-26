@@ -407,12 +407,21 @@
         <span class="field-hint">Salaire + revenus fonciers + autres revenus réguliers</span>
       </div>
       <div class="field">
-        <label>Autres revenus (locatifs, etc.)</label>
+        <label>Autres revenus (locatifs existants, etc.)</label>
         <div class="amount-wrap">
           <input type="number" id="autresRevenus" placeholder="0" min="0" oninput="calcLive()">
           <span class="amount-suffix">€</span>
         </div>
+        <span class="field-hint">Revenus déjà perçus, hors projet en cours de qualification</span>
       </div>
+    </div>
+
+    <div class="cash-summary" style="margin-top:13px;">
+      <div class="cash-summary-row">
+        <span class="cash-summary-lbl">Revenu locatif de ce lot (retenu par les banques)</span>
+        <span class="cash-summary-val mono" id="revenuLocatifVal">— €/mois</span>
+      </div>
+      <div class="cash-summary-note">Rendement locatif moyen de 5,5%/an sur nos lots, retenu à 70% par les banques dans le calcul de capacité — s'ajoute automatiquement aux revenus ci-dessus.</div>
     </div>
 
     <div class="divider"></div>
@@ -528,6 +537,12 @@
 const MIN_PRODUIT = 40000;
 const MAX_DTI = 0.35;
 const GREEN_DTI = 0.30;
+const RENDEMENT_LOCATIF = 0.055;   // rendement locatif annuel moyen sur nos lots
+const QUOTITE_LOYERS_BANCAIRE = 0.70; // % des loyers retenu par les banques dans le calcul de capacité
+
+function revenuLocatifRetenu(montant) {
+  return (montant * RENDEMENT_LOCATIF / 12) * QUOTITE_LOYERS_BANCAIRE;
+}
 
 const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte' };
 
@@ -667,7 +682,9 @@ function calcLive() {
   const revenu1 = parseFloat(document.getElementById('revenu1').value)||0;
   const autresRevenus = parseFloat(document.getElementById('autresRevenus').value)||0;
   const revenu2 = state.coemprunteur ? (parseFloat(document.getElementById('revenu2').value)||0) : 0;
-  const revenuTotal = revenu1 + autresRevenus + revenu2;
+  const loyerRetenu = revenuLocatifRetenu(montant);
+  setText('revenuLocatifVal', formatMoney(loyerRetenu) + '/mois');
+  const revenuTotal = revenu1 + autresRevenus + revenu2 + loyerRetenu;
 
   const loyerBrut = parseFloat(document.getElementById('loyer').value)||0;
   const creditsEnCours = parseFloat(document.getElementById('creditsEnCours').value)||0;
@@ -806,7 +823,8 @@ function collectPayload() {
   const capital = Math.max(0, montant - apport);
   const mensualite = Math.round(calcMensualite(capital, taux/100/12, duree*12));
   const revenu1 = gn('revenu1'), autresRevenus = gn('autresRevenus'), revenu2 = state.coemprunteur ? gn('revenu2') : 0;
-  const revenuTotal = revenu1 + autresRevenus + revenu2;
+  const loyerRetenu = revenuLocatifRetenu(montant);
+  const revenuTotal = revenu1 + autresRevenus + revenu2 + loyerRetenu;
   const loyerBrut = gn('loyer');
   const creditsEnCours = gn('creditsEnCours');
   const chargesExistantes = loyerBrut + creditsEnCours;
@@ -824,7 +842,12 @@ function collectPayload() {
   return {
     source: 'qualification-telepro', timestamp: new Date().toISOString(),
     prospect: { nom: g('nom'), prenom: g('prenom'), telephone: g('tel'), email: g('email') },
-    projet: { type: 'investissement_locatif_lmnp', montant, mode_paiement: state.mode, epargne_disponible: epargne, apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital },
+    projet: {
+      type: 'investissement_locatif_lmnp', montant, mode_paiement: state.mode, epargne_disponible: epargne,
+      apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital,
+      rendement_locatif_pct: RENDEMENT_LOCATIF*100, quotite_loyers_retenue_pct: QUOTITE_LOYERS_BANCAIRE*100,
+      revenu_locatif_retenu_mensuel: Math.round(loyerRetenu),
+    },
     emprunteur1: { statut_pro: state.statut, revenu_net_mensuel: revenu1, autres_revenus: autresRevenus },
     coemprunteur: state.coemprunteur ? { statut_pro: g('statut2'), revenu_net_mensuel: revenu2 } : null,
     charges: { loyer_actuel: loyerBrut, total_credits_en_cours: creditsEnCours },
