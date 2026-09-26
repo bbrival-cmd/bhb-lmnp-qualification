@@ -69,6 +69,8 @@
   .signal.s-red{ background:linear-gradient(155deg,var(--navy) 0%, #4a1520 130%); border-color:rgba(214,69,90,.4); }
   .signal.s-orange{ background:linear-gradient(155deg,var(--navy) 0%, #4a3210 130%); border-color:rgba(193,116,15,.4); }
   .signal.s-green{ background:linear-gradient(155deg,var(--navy) 0%, #0f3d2c 130%); border-color:rgba(31,157,111,.4); }
+  @keyframes signalPulse{ 0%{ transform:scale(1); } 35%{ transform:scale(1.012); } 100%{ transform:scale(1); } }
+  .signal.pulse{ animation:signalPulse .45s ease; }
 
   .signal-top{ display:flex; align-items:center; gap:14px; }
   .signal-dot{ width:16px; height:16px; border-radius:50%; flex-shrink:0; box-shadow:0 0 0 5px rgba(255,255,255,.08); }
@@ -333,7 +335,7 @@
       <div class="field">
         <label>Budget du projet <span class="req">*</span></label>
         <div class="amount-wrap">
-          <input type="number" id="montant" placeholder="200000" min="0" value="65000" oninput="onMontantInput()">
+          <input type="text" inputmode="decimal" id="montant" placeholder="200 000" value="65 000" oninput="sanitizeAmountInput(this); onMontantInput();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Nos produits démarrent à 40 000 €</span>
@@ -401,7 +403,7 @@
       <div class="field">
         <label>Revenu net mensuel <span class="req">*</span></label>
         <div class="amount-wrap">
-          <input type="number" id="revenu1" placeholder="0" min="0" oninput="calcLive()">
+          <input type="text" inputmode="decimal" id="revenu1" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Salaire + revenus fonciers + autres revenus réguliers</span>
@@ -409,7 +411,7 @@
       <div class="field">
         <label>Autres revenus (locatifs existants, etc.)</label>
         <div class="amount-wrap">
-          <input type="number" id="autresRevenus" placeholder="0" min="0" oninput="calcLive()">
+          <input type="text" inputmode="decimal" id="autresRevenus" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Revenus déjà perçus, hors projet en cours de qualification</span>
@@ -448,7 +450,7 @@
       <div class="field">
         <label>Revenu net mensuel</label>
         <div class="amount-wrap">
-          <input type="number" id="revenu2" placeholder="0" min="0" oninput="calcLive()">
+          <input type="text" inputmode="decimal" id="revenu2" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
       </div>
@@ -462,7 +464,7 @@
       <div class="field">
         <label>Loyer actuel</label>
         <div class="amount-wrap">
-          <input type="number" id="loyer" placeholder="0" min="0" oninput="calcLive()">
+          <input type="text" inputmode="decimal" id="loyer" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint" id="loyerHint">Résidence personnelle du prospect — laisser à 0 si propriétaire</span>
@@ -470,7 +472,7 @@
       <div class="field">
         <label>Total mensualités crédits en cours</label>
         <div class="amount-wrap">
-          <input type="number" id="creditsEnCours" placeholder="0" min="0" oninput="calcLive()">
+          <input type="text" inputmode="decimal" id="creditsEnCours" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
         <span class="field-hint">Immobilier + conso + pension, tous crédits confondus</span>
@@ -544,7 +546,7 @@ function revenuLocatifRetenu(montant) {
   return (montant * RENDEMENT_LOCATIF / 12) * QUOTITE_LOYERS_BANCAIRE;
 }
 
-const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte' };
+const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null };
 
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('quali_wh');
@@ -586,7 +588,7 @@ function onEpargneInput(v) {
   const epargne = Math.max(0, parseFloat(v)||0);
   state.epargne = epargne;
   document.getElementById('epargneVal').textContent = formatMoney(epargne).replace(' €','');
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   const maxApport = Math.max(0, Math.min(epargne, montant));
   // L'épargne mobilisée se reporte automatiquement dans l'apport, sauf en mode 100% crédit.
   state.apport = (state.mode === 'credit') ? 0 : maxApport;
@@ -594,7 +596,7 @@ function onEpargneInput(v) {
 }
 
 function onApportInput(v) {
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   const maxApport = Math.max(0, Math.min(state.epargne, montant));
   state.apport = Math.min(Math.max(0, parseFloat(v)||0), maxApport);
   document.getElementById('apportVal').textContent = formatMoney(state.apport).replace(' €','');
@@ -604,7 +606,7 @@ function onApportInput(v) {
 }
 
 function applyModeConstraints() {
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   const maxApport = Math.max(0, Math.min(state.epargne, montant));
   const sliderWrap = document.getElementById('apportSliderWrap');
 
@@ -640,7 +642,7 @@ function updateApportHint() {
 }
 
 function updateCashSummary() {
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   const apport = state.apport;
   const reliquat = Math.max(0, montant - apport);
   setText('cashApportVal', formatMoney(apport));
@@ -672,22 +674,22 @@ function capaciteEmpruntMax(revenuTotal, chargesExistantes, tauxAnnuelPct, duree
 }
 
 function calcLive() {
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   const apport = state.apport;
   const duree = state.duree, taux = state.taux;
 
   const capital = Math.max(0, montant - apport);
   const mensualite = calcMensualite(capital, taux/100/12, duree*12);
 
-  const revenu1 = parseFloat(document.getElementById('revenu1').value)||0;
-  const autresRevenus = parseFloat(document.getElementById('autresRevenus').value)||0;
-  const revenu2 = state.coemprunteur ? (parseFloat(document.getElementById('revenu2').value)||0) : 0;
+  const revenu1 = getAmount('revenu1');
+  const autresRevenus = getAmount('autresRevenus');
+  const revenu2 = state.coemprunteur ? (getAmount('revenu2')) : 0;
   const loyerRetenu = revenuLocatifRetenu(montant);
   setText('revenuLocatifVal', formatMoney(loyerRetenu) + '/mois');
   const revenuTotal = revenu1 + autresRevenus + revenu2 + loyerRetenu;
 
-  const loyerBrut = parseFloat(document.getElementById('loyer').value)||0;
-  const creditsEnCours = parseFloat(document.getElementById('creditsEnCours').value)||0;
+  const loyerBrut = getAmount('loyer');
+  const creditsEnCours = getAmount('creditsEnCours');
   const chargesExistantes = loyerBrut + creditsEnCours;
 
   const chargesAvecNouveau = chargesExistantes + mensualite;
@@ -770,6 +772,13 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
     }
   }
 
+  if (state.lastSignalLevel !== null && state.lastSignalLevel !== level) {
+    signal.classList.remove('pulse');
+    void signal.offsetWidth; // relance l'animation même si la classe était déjà retirée
+    signal.classList.add('pulse');
+  }
+  state.lastSignalLevel = level;
+
   signal.classList.remove('s-red','s-orange','s-green');
   signal.classList.add('s-'+level);
   verdictEl.textContent = verdict;
@@ -785,6 +794,24 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
 }
 
 function formatMoney(n) { if (!n && n!==0) return '—'; return Math.round(n).toLocaleString('fr-FR') + ' €'; }
+
+// ── Champs montant : saisie brute pendant la frappe, espaces des milliers à la perte de focus ──
+function getAmount(id) {
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  return parseFloat((el.value || '').replace(/[^\d.]/g, '')) || 0;
+}
+function sanitizeAmountInput(el) {
+  const digits = el.value.replace(/[^\d]/g, '');
+  if (el.value !== digits) el.value = digits;
+}
+function formatAmountOnBlur(el) {
+  const digits = el.value.replace(/[^\d]/g, '');
+  el.value = digits ? Number(digits).toLocaleString('fr-FR') : '';
+}
+function unformatAmountOnFocus(el) {
+  el.value = el.value.replace(/[^\d]/g, '');
+}
 function setText(id, val) { const el = document.getElementById(id); if(el) el.textContent = val; }
 function setHtml(id, val) { const el = document.getElementById(id); if(el) el.innerHTML = val; }
 function formatPhone(input) {
@@ -813,14 +840,14 @@ function validate() {
   if (!nom) { markError('nom'); showToast('Le nom est requis', 'error'); return false; }
   if (!prenom) { showToast('Le prénom est requis', 'error'); return false; }
   if (!tel) { markError('tel'); showToast('Le téléphone est requis', 'error'); return false; }
-  const montant = parseFloat(document.getElementById('montant').value)||0;
+  const montant = getAmount('montant');
   if (montant < 10000) { showToast('Veuillez saisir un budget de projet valide', 'error'); return false; }
   return true;
 }
 
 function collectPayload() {
   const g = id => document.getElementById(id)?.value || '';
-  const gn = id => parseFloat(document.getElementById(id)?.value)||0;
+  const gn = id => getAmount(id);
   const montant = gn('montant'), apport = state.apport, epargne = state.epargne, duree = state.duree, taux = state.taux;
   const capital = Math.max(0, montant - apport);
   const mensualite = Math.round(calcMensualite(capital, taux/100/12, duree*12));
@@ -898,7 +925,7 @@ function resetForm() {
   document.getElementById('navFixed').style.display = '';
   document.getElementById('successScreen').classList.remove('active');
   document.querySelectorAll('input[type="text"],input[type="tel"],input[type="email"],input[type="number"],textarea').forEach(el=>el.value='');
-  document.getElementById('montant').value = 65000;
+  document.getElementById('montant').value = '65 000';
   document.getElementById('epargneRange').value = 8000;
   document.getElementById('epargneVal').textContent = '8 000';
   document.getElementById('dureeRange').value = 25; document.getElementById('dureeVal').textContent = '25';
