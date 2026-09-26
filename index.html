@@ -427,7 +427,7 @@
         <span class="cash-summary-lbl">Revenu locatif de ce lot (retenu par les banques)</span>
         <span class="cash-summary-val mono" id="revenuLocatifVal">— €/mois</span>
       </div>
-      <div class="cash-summary-note">Rendement locatif moyen de 5,5%/an sur nos lots, retenu à 70% par les banques dans le calcul de capacité — s'ajoute automatiquement aux revenus ci-dessus.</div>
+      <div class="cash-summary-note">Rendement locatif moyen de 5,5%/an sur nos lots, retenu à 70% par les banques dans le calcul de capacité, et s'ajoute automatiquement aux revenus ci-dessus.</div>
     </div>
 
     <div class="divider"></div>
@@ -471,7 +471,7 @@
           <input type="text" inputmode="decimal" id="loyer" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
         </div>
-        <span class="field-hint" id="loyerHint">Résidence personnelle du prospect — laisser à 0 si propriétaire</span>
+        <span class="field-hint" id="loyerHint">Résidence personnelle du prospect (laisser à 0 si propriétaire)</span>
       </div>
       <div class="field">
         <label>Total mensualités crédits en cours</label>
@@ -522,7 +522,7 @@
     <div class="wh-config">
       <label>URL du webhook N8N</label>
       <input type="url" class="wh-input" id="webhookUrl" placeholder="https://votre-instance.n8n.cloud/webhook/..." oninput="localStorage.setItem('quali_wh', this.value)">
-      <div class="wh-note">L'envoi se fait par requête réseau directe : fonctionne une fois la page ouverte dans un navigateur normal ou hébergée (GitHub Pages, etc.) — un aperçu en bac à sable peut bloquer cet appel.</div>
+      <div class="wh-note">L'envoi se fait par requête réseau directe : fonctionne une fois la page ouverte dans un navigateur normal ou hébergée (GitHub Pages, etc.). Un aperçu en bac à sable peut bloquer cet appel.</div>
     </div>
   </div>
 
@@ -655,9 +655,9 @@ function updateCashSummary() {
   if (state.mode === 'comptant') {
     note.textContent = reliquat <= 0
       ? "✅ Épargne suffisante pour un règlement comptant intégral."
-      : `⚠️ Épargne insuffisante pour un comptant intégral — estimation du financement du reliquat de ${formatMoney(reliquat)} ci-dessous.`;
+      : `⚠️ Épargne insuffisante pour un comptant intégral : estimation du financement du reliquat de ${formatMoney(reliquat)} ci-dessous.`;
   } else if (state.mode === 'credit') {
-    note.textContent = "🏦 Financement intégral à crédit souhaité — épargne conservée en réserve.";
+    note.textContent = "🏦 Financement intégral à crédit souhaité, épargne conservée en réserve.";
   } else {
     note.textContent = '';
   }
@@ -737,21 +737,21 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
 
   if (mode === 'comptant' && capital <= 0 && montant >= MIN_PRODUIT) {
     level = 'green';
-    verdict = 'RDV pertinent — paiement comptant possible';
+    verdict = 'RDV pertinent : paiement comptant possible';
     reasons.push(`L'épargne mobilisée couvre l'intégralité du budget (${formatMoney(montant)})`);
-    reasons.push('Aucun crédit nécessaire — dossier finançable immédiatement');
+    reasons.push('Aucun crédit nécessaire, dossier finançable immédiatement');
   } else if (montant < MIN_PRODUIT) {
     level = 'orange';
     verdict = 'Budget sous le ticket d\'entrée';
-    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)} — à ajuster avec le prospect`);
+    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)}, à ajuster avec le prospect`);
   } else if (revenuPersonnel <= 0) {
     verdict = 'En attente des revenus du prospect';
     reasons.push(mode === 'comptant'
-      ? `Épargne insuffisante pour un comptant intégral (reliquat de ${formatMoney(capital)}) — revenus à renseigner pour poursuivre l'analyse`
+      ? `Épargne insuffisante pour un comptant intégral (reliquat de ${formatMoney(capital)}), revenus à renseigner pour poursuivre l'analyse`
       : 'Renseignez le revenu net mensuel pour lancer l\'analyse de capacité');
   } else {
     if (mode === 'comptant' && capital > 0) {
-      reasons.push(`Épargne insuffisante pour un comptant intégral — reliquat de ${formatMoney(capital)} à financer à crédit`);
+      reasons.push(`Épargne insuffisante pour un comptant intégral : reliquat de ${formatMoney(capital)} à financer à crédit`);
     } else if (mode === 'credit') {
       reasons.push('Financement intégral à crédit souhaité par le prospect');
     }
@@ -764,18 +764,18 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
     } else if (tdeR > MAX_DTI*100) {
       level = 'red';
       verdict = 'Dossier à retravailler avant le RDV';
-      reasons.push(`Endettement projet à ${tde.toFixed(1)}% — dépasse la limite HCSF (35%)`);
+      reasons.push(`Endettement projet à ${tde.toFixed(1)}%, dépasse la limite HCSF (35%)`);
       reasons.push('Piste : réduire le budget ou augmenter l\'apport, puis reprendre contact');
     } else if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) {
       level = 'green';
-      verdict = 'RDV pertinent — dossier solide';
+      verdict = 'RDV pertinent : dossier solide';
       reasons.push(`Endettement maîtrisé (${tde.toFixed(1)}%)`);
       reasons.push(`Capacité de financement (${formatMoney(capaciteTotale)}) couvre le budget du projet`);
     } else {
       level = 'orange';
-      verdict = 'RDV possible — dossier à challenger';
+      verdict = 'RDV possible : dossier à challenger';
       if (tdeR > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
-      if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé — ajuster projet ou apport`);
+      if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé, ajuster projet ou apport`);
     }
   }
 
@@ -796,7 +796,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   if (level === 'green') {
     ctaText.innerHTML = '<strong>Dossier solide</strong><br>Vous pouvez proposer un rendez-vous au prospect.';
   } else if (level === 'orange') {
-    ctaText.innerHTML = '<strong>Dossier à challenger</strong><br>RDV possible — à confirmer avec le courtier en amont.';
+    ctaText.innerHTML = '<strong>Dossier à challenger</strong><br>RDV possible, à confirmer avec le courtier en amont.';
   }
 }
 
@@ -872,10 +872,10 @@ function collectPayload() {
 
   let scoreLevel = 'rouge', scoreLabel = 'RDV non recommandé en l\'état';
   if (state.mode === 'comptant' && capital <= 0 && montant >= MIN_PRODUIT) {
-    scoreLevel='vert'; scoreLabel='RDV pertinent — paiement comptant possible';
+    scoreLevel='vert'; scoreLabel='RDV pertinent : paiement comptant possible';
   } else if (montant >= MIN_PRODUIT && revenuTotal > 0 && capaciteTotale >= MIN_PRODUIT && tdeR <= MAX_DTI*100) {
-    if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) { scoreLevel='vert'; scoreLabel='RDV pertinent — dossier solide'; }
-    else { scoreLevel='orange'; scoreLabel='RDV possible — dossier à challenger'; }
+    if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) { scoreLevel='vert'; scoreLabel='RDV pertinent : dossier solide'; }
+    else { scoreLevel='orange'; scoreLabel='RDV possible : dossier à challenger'; }
   }
 
   return {
