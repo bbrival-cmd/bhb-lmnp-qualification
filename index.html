@@ -13,7 +13,7 @@
     --navy:#14233f; --navy-2:#1f3a63; --accent:#2aabe3; --accent-ink:#0f6690; --accent-soft:rgba(42,171,227,.12);
     --good:#1f9d6f; --good-soft:rgba(31,157,111,.13); --good-ink:#0f7a55;
     --warn:#c1740f; --warn-soft:rgba(193,116,15,.14); --warn-ink:#8f5606;
-    --bad:#d6455a; --bad-soft:rgba(214,69,90,.14); --bad-ink:#a82f42;
+    --bad:#c2604a; --bad-soft:rgba(194,96,74,.14); --bad-ink:#9c4934;
     --shadow-sm:0 1px 2px rgba(20,30,50,.06), 0 1px 1px rgba(20,30,50,.04);
     --shadow-lg:0 12px 32px rgba(20,30,50,.16);
     --radius:14px; --radius-sm:9px; --radius-lg:20px;
@@ -27,7 +27,7 @@
       --navy:#182a48; --navy-2:#25436f; --accent:#57c2f2; --accent-ink:#bfe9fc; --accent-soft:rgba(87,194,242,.14);
       --good:#34d399; --good-soft:rgba(52,211,153,.15); --good-ink:#8ff0cb;
       --warn:#f5a623; --warn-soft:rgba(245,166,35,.16); --warn-ink:#ffd28a;
-      --bad:#f2677a; --bad-soft:rgba(242,103,122,.16); --bad-ink:#ffb0bc;
+      --bad:#e2957c; --bad-soft:rgba(226,149,124,.16); --bad-ink:#ffcdb8;
       --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-lg:0 16px 36px rgba(0,0,0,.5);
     }
   }
@@ -37,7 +37,7 @@
     --navy:#182a48; --navy-2:#25436f; --accent:#57c2f2; --accent-ink:#bfe9fc; --accent-soft:rgba(87,194,242,.14);
     --good:#34d399; --good-soft:rgba(52,211,153,.15); --good-ink:#8ff0cb;
     --warn:#f5a623; --warn-soft:rgba(245,166,35,.16); --warn-ink:#ffd28a;
-    --bad:#f2677a; --bad-soft:rgba(242,103,122,.16); --bad-ink:#ffb0bc;
+    --bad:#e2957c; --bad-soft:rgba(226,149,124,.16); --bad-ink:#ffcdb8;
     --shadow-sm:0 1px 2px rgba(0,0,0,.35); --shadow-lg:0 16px 36px rgba(0,0,0,.5);
   }
 
@@ -62,21 +62,24 @@
 
   /* ── SCORING BANNER (le voyant) ── */
   .signal{
-    border-radius:var(--radius-lg); padding:20px 22px; box-shadow:var(--shadow-lg);
-    position:sticky; top:10px; z-index:20; border:1px solid transparent;
-    transition:background .35s ease, border-color .35s ease;
+    background:linear-gradient(150deg,var(--navy) 0%,var(--navy-2) 100%);
+    border-radius:var(--radius-lg); padding:20px 22px 20px 19px; box-shadow:var(--shadow-lg);
+    position:sticky; top:10px; z-index:20; border-left:5px solid transparent;
+    transition:border-color .35s ease;
   }
-  .signal.s-red{ background:linear-gradient(155deg,var(--navy) 0%, #4a1520 130%); border-color:rgba(214,69,90,.4); }
-  .signal.s-orange{ background:linear-gradient(155deg,var(--navy) 0%, #4a3210 130%); border-color:rgba(193,116,15,.4); }
-  .signal.s-green{ background:linear-gradient(155deg,var(--navy) 0%, #0f3d2c 130%); border-color:rgba(31,157,111,.4); }
-  @keyframes signalPulse{ 0%{ transform:scale(1); } 35%{ transform:scale(1.012); } 100%{ transform:scale(1); } }
+  .signal.s-neutral{ border-left-color:var(--accent); }
+  .signal.s-red{ border-left-color:var(--bad); }
+  .signal.s-orange{ border-left-color:var(--warn); }
+  .signal.s-green{ border-left-color:var(--good); }
+  @keyframes signalPulse{ 0%{ transform:scale(1); } 35%{ transform:scale(1.01); } 100%{ transform:scale(1); } }
   .signal.pulse{ animation:signalPulse .45s ease; }
 
   .signal-top{ display:flex; align-items:center; gap:14px; }
-  .signal-dot{ width:16px; height:16px; border-radius:50%; flex-shrink:0; box-shadow:0 0 0 5px rgba(255,255,255,.08); }
-  .s-red .signal-dot{ background:var(--bad); box-shadow:0 0 0 5px rgba(214,69,90,.22), 0 0 14px rgba(214,69,90,.6); }
-  .s-orange .signal-dot{ background:var(--warn); box-shadow:0 0 0 5px rgba(193,116,15,.22), 0 0 14px rgba(193,116,15,.6); }
-  .s-green .signal-dot{ background:var(--good); box-shadow:0 0 0 5px rgba(31,157,111,.22), 0 0 14px rgba(31,157,111,.6); }
+  .signal-dot{ width:14px; height:14px; border-radius:50%; flex-shrink:0; box-shadow:0 0 0 4px rgba(255,255,255,.08); }
+  .s-neutral .signal-dot{ background:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); }
+  .s-red .signal-dot{ background:var(--bad); box-shadow:0 0 0 4px rgba(194,96,74,.2); }
+  .s-orange .signal-dot{ background:var(--warn); box-shadow:0 0 0 4px rgba(193,116,15,.2); }
+  .s-green .signal-dot{ background:var(--good); box-shadow:0 0 0 4px rgba(31,157,111,.2); }
   .signal-label{ font-size:9.5px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:rgba(255,255,255,.5); }
   .signal-verdict{ font-size:19px; font-weight:800; color:#fff; margin-top:1px; text-wrap:balance; }
 
@@ -257,12 +260,12 @@
 <div class="container" id="formScreen">
 
   <!-- ═══ LE VOYANT ═══ -->
-  <div class="signal s-red" id="signal">
+  <div class="signal s-neutral" id="signal">
     <div class="signal-top">
       <div class="signal-dot" id="signalDot"></div>
       <div>
         <div class="signal-label">Pertinence du rendez-vous</div>
-        <div class="signal-verdict" id="signalVerdict">Renseignez les revenus du prospect</div>
+        <div class="signal-verdict" id="signalVerdict">En attente des revenus du prospect</div>
       </div>
     </div>
     <div class="signal-reasons" id="signalReasons"></div>
@@ -711,7 +714,7 @@ function calcLive() {
   const capaciteTotale = apport + capaciteCredit;
   setText('signalCapacite', formatMoney(capaciteTotale));
 
-  updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode: state.mode });
+  updateSignal({ revenuTotal, revenuPersonnel: revenu1 + revenu2, tde, capaciteTotale, montant, capital, mode: state.mode });
 }
 
 function dtiChip(tde) {
@@ -720,29 +723,31 @@ function dtiChip(tde) {
   return `<div class="metric-badge badge-red">Trop élevé</div>`;
 }
 
-function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode }) {
+function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, montant, capital, mode }) {
   const signal = document.getElementById('signal');
   const verdictEl = document.getElementById('signalVerdict');
   const reasonsEl = document.getElementById('signalReasons');
-  let level = 'red';
+  // 'neutral' = informations encore incomplètes (pas un refus) ; 'red' = dossier qualifié mais non finançable en l'état.
+  let level = 'neutral';
   let verdict = '';
   const reasons = [];
   // Comparaison sur la valeur arrondie affichée (1 décimale) : 35,0% pile reste accepté, seul un vrai dépassement passe en rouge.
   const tdeR = Math.round(tde * 10) / 10;
 
-  if (montant < MIN_PRODUIT) {
-    verdict = 'Budget sous le ticket d\'entrée';
-    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)}`);
-  } else if (mode === 'comptant' && capital <= 0) {
+  if (mode === 'comptant' && capital <= 0 && montant >= MIN_PRODUIT) {
     level = 'green';
     verdict = 'RDV pertinent — paiement comptant possible';
     reasons.push(`L'épargne mobilisée couvre l'intégralité du budget (${formatMoney(montant)})`);
     reasons.push('Aucun crédit nécessaire — dossier finançable immédiatement');
-  } else if (revenuTotal <= 0) {
-    verdict = 'Renseignez les revenus du prospect';
+  } else if (montant < MIN_PRODUIT) {
+    level = 'orange';
+    verdict = 'Budget sous le ticket d\'entrée';
+    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)} — à ajuster avec le prospect`);
+  } else if (revenuPersonnel <= 0) {
+    verdict = 'En attente des revenus du prospect';
     reasons.push(mode === 'comptant'
-      ? `Épargne insuffisante pour un comptant intégral (reliquat de ${formatMoney(capital)}) — revenus requis pour évaluer le financement`
-      : 'Aucun revenu saisi — impossible de qualifier le dossier');
+      ? `Épargne insuffisante pour un comptant intégral (reliquat de ${formatMoney(capital)}) — revenus à renseigner pour poursuivre l'analyse`
+      : 'Renseignez le revenu net mensuel pour lancer l\'analyse de capacité');
   } else {
     if (mode === 'comptant' && capital > 0) {
       reasons.push(`Épargne insuffisante pour un comptant intégral — reliquat de ${formatMoney(capital)} à financer à crédit`);
@@ -751,14 +756,15 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
     }
 
     if (capaciteTotale < MIN_PRODUIT) {
-      verdict = 'RDV non recommandé en l\'état';
+      level = 'red';
+      verdict = 'Dossier à retravailler avant le RDV';
       reasons.push(`Capacité totale (${formatMoney(capaciteTotale)}) sous le ticket d'entrée de ${formatMoney(MIN_PRODUIT)}`);
-      reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent le minimum produit');
+      reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent encore le minimum produit');
     } else if (tdeR > MAX_DTI*100) {
       level = 'red';
-      verdict = 'RDV non recommandé en l\'état';
+      verdict = 'Dossier à retravailler avant le RDV';
       reasons.push(`Endettement projet à ${tde.toFixed(1)}% — dépasse la limite HCSF (35%)`);
-      reasons.push('À revoir : réduire le budget ou augmenter l\'apport avant de programmer');
+      reasons.push('Piste : réduire le budget ou augmenter l\'apport, puis reprendre contact');
     } else if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) {
       level = 'green';
       verdict = 'RDV pertinent — dossier solide';
@@ -779,12 +785,12 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
   }
   state.lastSignalLevel = level;
 
-  signal.classList.remove('s-red','s-orange','s-green');
+  signal.classList.remove('s-red','s-orange','s-green','s-neutral');
   signal.classList.add('s-'+level);
   verdictEl.textContent = verdict;
   reasonsEl.innerHTML = reasons.map(r => `<div class="signal-reason">${r}</div>`).join('');
 
-  document.getElementById('bookingCta').classList.toggle('hidden', level === 'red');
+  document.getElementById('bookingCta').classList.toggle('hidden', level === 'red' || level === 'neutral');
   const ctaText = document.getElementById('bookingCtaText');
   if (level === 'green') {
     ctaText.innerHTML = '<strong>Dossier solide</strong><br>Vous pouvez proposer un rendez-vous au prospect.';
