@@ -123,7 +123,17 @@
 
   /* ── CARDS ── */
   .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm); }
+  .card-muted{ background:var(--surface-2); box-shadow:none; }
   .card-label{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--ink-faint); margin-bottom:15px; display:flex; align-items:center; gap:7px; }
+  .step-num-badge{
+    display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%;
+    background:var(--accent); color:var(--navy); font-family:var(--font-mono); font-size:10px; font-weight:800;
+    flex-shrink:0; letter-spacing:0;
+  }
+  .card-label-tag{
+    font-size:9px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--ink-faint);
+    background:var(--surface); border:1px solid var(--border); padding:2px 8px; border-radius:20px; margin-left:2px;
+  }
 
   .fg{ display:grid; gap:13px; }
   .fg-2{ grid-template-columns:1fr 1fr; }
@@ -289,33 +299,9 @@
     </div>
   </div>
 
-  <!-- ═══ PARAMÈTRES SIMULATION ═══ -->
-  <div class="card">
-    <div class="card-label">🎚 Paramètres de simulation — ajustables</div>
-    <div class="fg">
-      <div class="field">
-        <label>Durée du prêt</label>
-        <div class="slider-row">
-          <input type="range" id="dureeRange" min="5" max="30" step="1" value="25" oninput="onDureeInput(this.value)">
-          <div class="slider-readout"><span id="dureeVal">25</span> ans</div>
-        </div>
-        <div class="slider-scale"><span>5 ans</span><span>30 ans</span></div>
-      </div>
-      <div class="field">
-        <label>Taux d'intérêt indicatif</label>
-        <div class="slider-row">
-          <input type="range" id="tauxRange" min="1" max="6" step="0.05" value="3.9" oninput="onTauxInput(this.value)">
-          <div class="slider-readout"><span id="tauxVal">3.90</span> %</div>
-        </div>
-        <div class="slider-scale"><span>1%</span><span>6%</span></div>
-      </div>
-      <div class="field-hint">Le taux et la durée influencent la mensualité, l'endettement et la capacité d'emprunt maximale. Testez plusieurs scénarios avec le prospect.</div>
-    </div>
-  </div>
-
   <!-- ═══ CONTACT ═══ -->
   <div class="card">
-    <div class="card-label">👤 Contact prospect</div>
+    <div class="card-label"><span class="step-num-badge">1</span>👤 Contact prospect</div>
     <div class="fg fg-2">
       <div class="field">
         <label>Prénom <span class="req">*</span></label>
@@ -342,15 +328,7 @@
 
   <!-- ═══ PROJET ═══ -->
   <div class="card">
-    <div class="card-label">🏠 Projet d'investissement</div>
-    <div class="field" style="margin-bottom:13px;">
-      <label>Type de projet</label>
-      <div class="toggle-group" id="projTypeToggle">
-        <div class="toggle-btn sel" onclick="selectToggle('projType',this,'locatif')" data-val="locatif">Investissement locatif</div>
-        <div class="toggle-btn" onclick="selectToggle('projType',this,'residence_principale')" data-val="residence_principale">Résidence principale</div>
-        <div class="toggle-btn" onclick="selectToggle('projType',this,'residence_secondaire')" data-val="residence_secondaire">Résidence secondaire</div>
-      </div>
-    </div>
+    <div class="card-label"><span class="step-num-badge">2</span>🏠 Projet d'investissement locatif LMNP</div>
     <div class="fg fg-2">
       <div class="field">
         <label>Budget du projet <span class="req">*</span></label>
@@ -407,7 +385,7 @@
 
   <!-- ═══ SITUATION PRO & REVENUS ═══ -->
   <div class="card">
-    <div class="card-label">💼 Situation professionnelle & revenus</div>
+    <div class="card-label"><span class="step-num-badge">3</span>💼 Situation professionnelle & revenus</div>
     <div class="field" style="margin-bottom:13px;">
       <label>Statut professionnel</label>
       <div class="toggle-group" id="statutToggle">
@@ -470,7 +448,7 @@
 
   <!-- ═══ CHARGES ═══ -->
   <div class="card">
-    <div class="card-label">💳 Charges actuelles</div>
+    <div class="card-label"><span class="step-num-badge">4</span>💳 Charges actuelles</div>
     <div class="fg fg-2">
       <div class="field">
         <label>Loyer actuel</label>
@@ -478,7 +456,7 @@
           <input type="number" id="loyer" placeholder="0" min="0" oninput="calcLive()">
           <span class="amount-suffix">€</span>
         </div>
-        <span class="field-hint" id="loyerHint">Laisser à 0 si propriétaire</span>
+        <span class="field-hint" id="loyerHint">Résidence personnelle du prospect — laisser à 0 si propriétaire</span>
       </div>
       <div class="field">
         <label>Total mensualités crédits en cours</label>
@@ -491,9 +469,33 @@
     </div>
   </div>
 
+  <!-- ═══ PARAMÈTRES SIMULATION (avancé, optionnel) ═══ -->
+  <div class="card card-muted">
+    <div class="card-label">🎚 Hypothèses de simulation <span class="card-label-tag">optionnel</span></div>
+    <div class="fg">
+      <div class="field">
+        <label>Durée du prêt</label>
+        <div class="slider-row">
+          <input type="range" id="dureeRange" min="5" max="30" step="1" value="25" oninput="onDureeInput(this.value)">
+          <div class="slider-readout"><span id="dureeVal">25</span> ans</div>
+        </div>
+        <div class="slider-scale"><span>5 ans</span><span>30 ans</span></div>
+      </div>
+      <div class="field">
+        <label>Taux d'intérêt indicatif</label>
+        <div class="slider-row">
+          <input type="range" id="tauxRange" min="1" max="6" step="0.05" value="3.9" oninput="onTauxInput(this.value)">
+          <div class="slider-readout"><span id="tauxVal">3.90</span> %</div>
+        </div>
+        <div class="slider-scale"><span>1%</span><span>6%</span></div>
+      </div>
+      <div class="field-hint">Valeurs par défaut réalistes déjà appliquées. Ajustez uniquement pour tester un autre scénario avec le prospect.</div>
+    </div>
+  </div>
+
   <!-- ═══ NOTES ═══ -->
   <div class="card">
-    <div class="card-label">📝 Notes de qualification</div>
+    <div class="card-label"><span class="step-num-badge">5</span>📝 Notes de qualification</div>
     <div class="field">
       <textarea id="notes" rows="3" style="resize:vertical;" placeholder="Contexte, motivation, urgence, disponibilité pour rappel..."></textarea>
     </div>
@@ -527,7 +529,7 @@ const MIN_PRODUIT = 40000;
 const MAX_DTI = 0.35;
 const GREEN_DTI = 0.30;
 
-const state = { projType:'locatif', statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte' };
+const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte' };
 
 window.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem('quali_wh');
@@ -540,12 +542,6 @@ function selectToggle(key, el, val) {
   group.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('sel'));
   el.classList.add('sel');
   state[key] = val;
-  if (key === 'projType') {
-    const isRP = (val === 'residence_principale');
-    document.getElementById('loyerHint').textContent = isRP
-      ? "Sera remplacé par le crédit — exclu du calcul d'endettement"
-      : "Laisser à 0 si propriétaire";
-  }
   calcLive();
 }
 
@@ -664,7 +660,6 @@ function calcLive() {
   const montant = parseFloat(document.getElementById('montant').value)||0;
   const apport = state.apport;
   const duree = state.duree, taux = state.taux;
-  const isRP = (state.projType === 'residence_principale');
 
   const capital = Math.max(0, montant - apport);
   const mensualite = calcMensualite(capital, taux/100/12, duree*12);
@@ -675,9 +670,8 @@ function calcLive() {
   const revenuTotal = revenu1 + autresRevenus + revenu2;
 
   const loyerBrut = parseFloat(document.getElementById('loyer').value)||0;
-  const loyerDTI = isRP ? 0 : loyerBrut;
   const creditsEnCours = parseFloat(document.getElementById('creditsEnCours').value)||0;
-  const chargesExistantes = loyerDTI + creditsEnCours;
+  const chargesExistantes = loyerBrut + creditsEnCours;
 
   const chargesAvecNouveau = chargesExistantes + mensualite;
   const tde = revenuTotal > 0 ? (chargesAvecNouveau / revenuTotal) * 100 : 0;
@@ -809,15 +803,13 @@ function collectPayload() {
   const g = id => document.getElementById(id)?.value || '';
   const gn = id => parseFloat(document.getElementById(id)?.value)||0;
   const montant = gn('montant'), apport = state.apport, epargne = state.epargne, duree = state.duree, taux = state.taux;
-  const isRP = (state.projType === 'residence_principale');
   const capital = Math.max(0, montant - apport);
   const mensualite = Math.round(calcMensualite(capital, taux/100/12, duree*12));
   const revenu1 = gn('revenu1'), autresRevenus = gn('autresRevenus'), revenu2 = state.coemprunteur ? gn('revenu2') : 0;
   const revenuTotal = revenu1 + autresRevenus + revenu2;
   const loyerBrut = gn('loyer');
-  const loyerDTI = isRP ? 0 : loyerBrut;
   const creditsEnCours = gn('creditsEnCours');
-  const chargesExistantes = loyerDTI + creditsEnCours;
+  const chargesExistantes = loyerBrut + creditsEnCours;
   const tde = revenuTotal > 0 ? ((chargesExistantes + mensualite) / revenuTotal * 100) : 0;
   const rav = revenuTotal - chargesExistantes - mensualite;
   const capaciteCredit = Math.round(capaciteEmpruntMax(revenuTotal, chargesExistantes, taux, duree));
@@ -832,10 +824,10 @@ function collectPayload() {
   return {
     source: 'qualification-telepro', timestamp: new Date().toISOString(),
     prospect: { nom: g('nom'), prenom: g('prenom'), telephone: g('tel'), email: g('email') },
-    projet: { type: state.projType, montant, mode_paiement: state.mode, epargne_disponible: epargne, apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital },
+    projet: { type: 'investissement_locatif_lmnp', montant, mode_paiement: state.mode, epargne_disponible: epargne, apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital },
     emprunteur1: { statut_pro: state.statut, revenu_net_mensuel: revenu1, autres_revenus: autresRevenus },
     coemprunteur: state.coemprunteur ? { statut_pro: g('statut2'), revenu_net_mensuel: revenu2 } : null,
-    charges: { loyer_actuel: loyerBrut, loyer_exclus_dti: isRP, total_credits_en_cours: creditsEnCours },
+    charges: { loyer_actuel: loyerBrut, total_credits_en_cours: creditsEnCours },
     analyse: {
       revenus_total_mensuel: revenuTotal,
       mensualite_estimee: mensualite,
