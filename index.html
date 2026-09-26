@@ -725,6 +725,8 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
   let level = 'red';
   let verdict = '';
   const reasons = [];
+  // Comparaison sur la valeur arrondie affichée (1 décimale) : 35,0% pile reste accepté, seul un vrai dépassement passe en rouge.
+  const tdeR = Math.round(tde * 10) / 10;
 
   if (montant < MIN_PRODUIT) {
     verdict = 'Budget sous le ticket d\'entrée';
@@ -750,12 +752,12 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
       verdict = 'RDV non recommandé en l\'état';
       reasons.push(`Capacité totale (${formatMoney(capaciteTotale)}) sous le ticket d'entrée de ${formatMoney(MIN_PRODUIT)}`);
       reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent le minimum produit');
-    } else if (tde > MAX_DTI*100) {
+    } else if (tdeR > MAX_DTI*100) {
       level = 'red';
       verdict = 'RDV non recommandé en l\'état';
       reasons.push(`Endettement projet à ${tde.toFixed(1)}% — dépasse la limite HCSF (35%)`);
       reasons.push('À revoir : réduire le budget ou augmenter l\'apport avant de programmer');
-    } else if (tde <= GREEN_DTI*100 && capaciteTotale >= montant) {
+    } else if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) {
       level = 'green';
       verdict = 'RDV pertinent — dossier solide';
       reasons.push(`Endettement maîtrisé (${tde.toFixed(1)}%)`);
@@ -763,7 +765,7 @@ function updateSignal({ revenuTotal, tde, capaciteTotale, montant, capital, mode
     } else {
       level = 'orange';
       verdict = 'RDV possible — dossier à challenger';
-      if (tde > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
+      if (tdeR > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
       if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé — ajuster projet ou apport`);
     }
   }
@@ -829,13 +831,16 @@ function collectPayload() {
   const creditsEnCours = gn('creditsEnCours');
   const chargesExistantes = loyerBrut + creditsEnCours;
   const tde = revenuTotal > 0 ? ((chargesExistantes + mensualite) / revenuTotal * 100) : 0;
+  const tdeR = Math.round(tde * 10) / 10;
   const rav = revenuTotal - chargesExistantes - mensualite;
   const capaciteCredit = Math.round(capaciteEmpruntMax(revenuTotal, chargesExistantes, taux, duree));
   const capaciteTotale = apport + capaciteCredit;
 
   let scoreLevel = 'rouge', scoreLabel = 'RDV non recommandé en l\'état';
-  if (revenuTotal > 0 && capaciteTotale >= MIN_PRODUIT && tde <= MAX_DTI*100) {
-    if (tde <= GREEN_DTI*100 && capaciteTotale >= montant) { scoreLevel='vert'; scoreLabel='RDV pertinent — dossier solide'; }
+  if (state.mode === 'comptant' && capital <= 0 && montant >= MIN_PRODUIT) {
+    scoreLevel='vert'; scoreLabel='RDV pertinent — paiement comptant possible';
+  } else if (montant >= MIN_PRODUIT && revenuTotal > 0 && capaciteTotale >= MIN_PRODUIT && tdeR <= MAX_DTI*100) {
+    if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) { scoreLevel='vert'; scoreLabel='RDV pertinent — dossier solide'; }
     else { scoreLevel='orange'; scoreLabel='RDV possible — dossier à challenger'; }
   }
 
