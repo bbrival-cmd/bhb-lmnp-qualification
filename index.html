@@ -554,8 +554,9 @@ function revenuLocatifRetenu(montant) {
 const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null };
 
 window.addEventListener('DOMContentLoaded', () => {
+  const PROD_WH = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-qualification-telepro';
   const saved = localStorage.getItem('quali_wh');
-  if (saved) document.getElementById('webhookUrl').value = saved;
+  document.getElementById('webhookUrl').value = saved || PROD_WH;
   applyModeConstraints();
 });
 
