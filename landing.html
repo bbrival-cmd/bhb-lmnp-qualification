@@ -130,6 +130,20 @@
   a:focus-visible, button:focus-visible{ outline:3px solid var(--navy); outline-offset:2px; }
   @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
 </style>
+<!-- Meta Pixel : remplacer YOUR_PIXEL_ID par l'ID réel avant mise en ligne -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'YOUR_PIXEL_ID');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"></noscript>
 </head>
 <body>
 
@@ -199,7 +213,7 @@
         <div class="result-icon">🔥</div>
         <div class="result-title">Votre profil saute la file d'attente</div>
         <div class="result-sub">Pas besoin d'attendre l'appel de qualification. Prenez votre créneau maintenant, pendant qu'il est disponible : un conseiller vous y attend directement.</div>
-        <a class="btn-cta" href="https://api.leadconnectorhq.com/widget/bookings/benoit-brival-personal-calendar-qxbqrjmdwqglqbgeea3f8" target="_blank" rel="noopener noreferrer">Je réserve mon créneau maintenant</a>
+        <a class="btn-cta" href="https://api.leadconnectorhq.com/widget/bookings/benoit-brival-personal-calendar-qxbqrjmdwqglqbgeea3f8" target="_blank" rel="noopener noreferrer" onclick="if(typeof fbq==='function')fbq('track','Schedule');">Je réserve mon créneau maintenant</a>
         <div><button class="btn-restart" onclick="restartQuiz()">Recommencer</button></div>
       </div>
 
@@ -293,6 +307,9 @@ function revealResult() {
   document.getElementById('quizForm').style.display = 'none';
   const eligible = !(answers.mode === 'comptant' && answers.epargne === 'moins-10k');
   document.getElementById(eligible ? 'resultEligible' : 'resultDefault').classList.add('show');
+  if (typeof fbq === 'function') {
+    fbq('track', 'Lead', { budget: answers.budget, mode: answers.mode, epargne: answers.epargne, eligible });
+  }
 }
 
 function restartQuiz() {
