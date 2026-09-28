@@ -219,6 +219,17 @@
   .toast.t-success{ background:var(--good-ink); }
   .toast.t-error{ background:var(--bad-ink); }
 
+  /* ── MODAL (questions dossier rouge) ── */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(20,30,50,.55); z-index:250; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.hidden{ display:none; }
+  .modal-card{ background:var(--surface); border-radius:var(--radius-lg); padding:26px; max-width:380px; width:100%; box-shadow:var(--shadow-lg); }
+  .modal-title{ font-size:17px; font-weight:800; color:var(--ink); margin-bottom:6px; }
+  .modal-sub{ font-size:12.5px; color:var(--ink-muted); margin-bottom:18px; line-height:1.5; }
+  .modal-q{ margin-bottom:16px; }
+  .modal-q label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px; }
+  .btn-modal-close{ width:100%; margin-top:6px; padding:12px; border:none; border-radius:40px; background:var(--navy); color:#fff; font-family:var(--font-ui); font-size:13px; font-weight:700; cursor:pointer; }
+  .signal-reopen{ margin-top:10px; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.85); text-decoration:underline; cursor:pointer; background:none; border:none; font-family:var(--font-ui); padding:0; }
+
   .wh-config{ border-radius:var(--radius-sm); background:var(--surface-2); border:1px solid var(--border); padding:13px 15px; margin-top:9px; }
   .wh-config label{ font-size:10.5px; font-weight:700; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:6px; }
   .wh-input{ width:100%; padding:9px 11px; border:1px solid var(--border); border-radius:6px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink); background:var(--surface); outline:none; }
@@ -258,6 +269,28 @@
 </header>
 
 <div class="toast" id="toast"></div>
+
+<div class="modal-overlay hidden" id="redModal">
+  <div class="modal-card">
+    <div class="modal-title">Dossier à retravailler</div>
+    <p class="modal-sub">Avant de clore l'appel, vérifiez ces deux leviers avec le prospect :</p>
+    <div class="modal-q">
+      <label>Peut-on augmenter l'apport ?</label>
+      <div class="toggle-group" id="modalApportToggle">
+        <div class="toggle-btn" onclick="selectModalAnswer('augmenter_apport',this,'oui')" data-val="oui">Oui</div>
+        <div class="toggle-btn" onclick="selectModalAnswer('augmenter_apport',this,'non')" data-val="non">Non</div>
+      </div>
+    </div>
+    <div class="modal-q">
+      <label>Peut-on baisser le budget ?</label>
+      <div class="toggle-group" id="modalBudgetToggle">
+        <div class="toggle-btn" onclick="selectModalAnswer('baisser_budget',this,'oui')" data-val="oui">Oui</div>
+        <div class="toggle-btn" onclick="selectModalAnswer('baisser_budget',this,'non')" data-val="non">Non</div>
+      </div>
+    </div>
+    <button class="btn-modal-close" onclick="closeRedModal()">Enregistrer et fermer</button>
+  </div>
+</div>
 
 <div class="container" id="formScreen">
 
@@ -562,7 +595,16 @@ function revenuLocatifRetenu(montant) {
   return (montant * RENDEMENT_LOCATIF / 12) * QUOTITE_LOYERS_BANCAIRE;
 }
 
-const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null };
+const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null, objections:{ augmenter_apport:null, baisser_budget:null } };
+
+function selectModalAnswer(key, el, val) {
+  const group = el.closest('.toggle-group');
+  group.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  state.objections[key] = val;
+}
+function openRedModal() { document.getElementById('redModal').classList.remove('hidden'); }
+function closeRedModal() { document.getElementById('redModal').classList.add('hidden'); }
 
 window.addEventListener('DOMContentLoaded', () => {
   const PROD_WH = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-qualification-telepro';
@@ -815,12 +857,15 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
     void signal.offsetWidth; // relance l'animation même si la classe était déjà retirée
     signal.classList.add('pulse');
   }
+  const becameRed = level === 'red' && state.lastSignalLevel !== 'red';
   state.lastSignalLevel = level;
 
   signal.classList.remove('s-red','s-orange','s-green','s-neutral');
   signal.classList.add('s-'+level);
   verdictEl.textContent = verdict;
-  reasonsEl.innerHTML = reasons.map(r => `<div class="signal-reason">${r}</div>`).join('');
+  reasonsEl.innerHTML = reasons.map(r => `<div class="signal-reason">${r}</div>`).join('')
+    + (level === 'red' ? '<button class="signal-reopen" onclick="openRedModal()">📋 Répondre aux 2 questions (apport / budget)</button>' : '');
+  if (becameRed) openRedModal();
 
   document.getElementById('bookingCta').classList.toggle('hidden', level === 'red' || level === 'neutral');
   const ctaText = document.getElementById('bookingCtaText');
@@ -932,6 +977,7 @@ function collectPayload() {
       scoring_rdv: scoreLevel,
       scoring_label: scoreLabel,
     },
+    objections_agent: { augmenter_apport: state.objections.augmenter_apport, baisser_budget: state.objections.baisser_budget },
     notes: g('notes'),
   };
 }
@@ -969,6 +1015,9 @@ function resetForm() {
   document.getElementById('dureeRange').value = 25; document.getElementById('dureeVal').textContent = '25';
   document.getElementById('tauxRange').value = 3.9; document.getElementById('tauxVal').textContent = '3.90';
   state.duree = 25; state.taux = 3.9; state.epargne = 8000; state.apport = 8000; state.mode = 'mixte';
+  state.objections = { augmenter_apport:null, baisser_budget:null };
+  document.querySelectorAll('#modalApportToggle .toggle-btn, #modalBudgetToggle .toggle-btn').forEach(b=>b.classList.remove('sel'));
+  closeRedModal();
   document.querySelectorAll('#modeAchatToggle .toggle-btn').forEach(b=>b.classList.toggle('sel', b.dataset.val === 'mixte'));
   applyModeConstraints();
   const btn = document.getElementById('btnSubmit');
