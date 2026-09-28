@@ -92,6 +92,15 @@
   .step-body p{ font-size:13.5px; color:var(--ink-muted); line-height:1.55; }
 
   /* ── QUIZ ── */
+  .urgency-gauge{
+    display:flex; align-items:center; gap:9px; justify-content:center; margin-bottom:14px;
+    padding:9px 16px; background:var(--bg-alt); border:2px solid var(--line); border-radius:40px;
+    font-size:12.5px; font-weight:700; color:var(--ink);
+  }
+  .urgency-gauge[hidden]{ display:none; }
+  .urgency-dot{ width:8px; height:8px; border-radius:50%; background:var(--tick); flex-shrink:0; animation:urgencyPulse 1.6s ease-in-out infinite; }
+  @keyframes urgencyPulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
   .quiz-card{ background:var(--bg); border:2.5px solid var(--line); border-radius:12px; padding:24px 22px; box-shadow:var(--shadow-hard); }
   .quiz-title{ font-size:19px; margin-bottom:6px; }
   .quiz-sub{ font-size:13.5px; color:var(--ink-muted); margin-bottom:20px; line-height:1.5; }
@@ -175,6 +184,10 @@ fbq('track', 'PageView');
   </section>
 
   <section class="section" id="quiz">
+    <div class="urgency-gauge" id="urgencyGauge" hidden>
+      <span class="urgency-dot"></span>
+      <span id="urgencyText">Chargement des demandes en cours…</span>
+    </div>
     <div class="quiz-card">
       <div id="quizForm">
         <div class="quiz-title">Débloquez votre créneau prioritaire</div>
@@ -328,6 +341,21 @@ if (prenom) {
   const p = prenom.charAt(0).toUpperCase()+prenom.slice(1);
   document.getElementById('heroTitle').innerHTML = `${p}, vous venez de faire le premier pas vers un bien qui <mark>vous rapporte</mark>.`;
 }
+
+// Jauge d'urgence : vrai nombre de demandes reçues cette semaine (n8n), pas un chiffre inventé
+fetch('https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-stats')
+  .then(r => r.ok ? r.json() : null)
+  .then(data => {
+    if (!data || typeof data.count !== 'number') return;
+    const gauge = document.getElementById('urgencyGauge');
+    const text = document.getElementById('urgencyText');
+    const n = data.count;
+    text.textContent = n > 0
+      ? `${n} demande${n > 1 ? 's' : ''} de qualification reçue${n > 1 ? 's' : ''} cette semaine — les profils rapides sont recontactés en premier`
+      : `Premières demandes de la semaine — soyez parmi les premiers recontactés`;
+    gauge.hidden = false;
+  })
+  .catch(() => {}); // silencieux : la page fonctionne sans la jauge si l'appel échoue
 </script>
 </body>
 </html>
