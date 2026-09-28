@@ -423,6 +423,17 @@
       </div>
     </div>
 
+    <div class="fg fg-2" style="margin-top:13px;">
+      <div class="field">
+        <label>Impôt sur le revenu cette année</label>
+        <div class="amount-wrap">
+          <input type="text" inputmode="decimal" id="impotRevenu" placeholder="0" oninput="sanitizeAmountInput(this); calcLive();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
+          <span class="amount-suffix">€</span>
+        </div>
+        <span class="field-hint">Montant approximatif payé ou dû, révélateur du potentiel d'optimisation LMNP</span>
+      </div>
+    </div>
+
     <div class="cash-summary" style="margin-top:13px;">
       <div class="cash-summary-row">
         <span class="cash-summary-lbl">Revenu locatif de ce lot (retenu par les banques)</span>
@@ -907,7 +918,7 @@ function collectPayload() {
       rendement_locatif_pct: RENDEMENT_LOCATIF*100, quotite_loyers_retenue_pct: QUOTITE_LOYERS_BANCAIRE*100,
       revenu_locatif_retenu_mensuel: Math.round(loyerRetenu),
     },
-    emprunteur1: { statut_pro: state.statut, revenu_net_mensuel: revenu1, autres_revenus: autresRevenus },
+    emprunteur1: { statut_pro: state.statut, revenu_net_mensuel: revenu1, autres_revenus: autresRevenus, impot_revenu_annuel: gn('impotRevenu') },
     coemprunteur: state.coemprunteur ? { statut_pro: g('statut2'), revenu_net_mensuel: revenu2 } : null,
     charges: { loyer_actuel: loyerBrut, total_credits_en_cours: creditsEnCours },
     analyse: {
