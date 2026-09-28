@@ -313,7 +313,7 @@
       <div>
         <div class="signal-stat-val mono" id="signalTicket">40 000 €</div>
         <div class="signal-stat-lbl">Ticket d'entrée produit</div>
-        <div class="signal-stat-sub">budget minimum requis</div>
+        <div class="signal-stat-sub">prix minimum requis</div>
       </div>
     </div>
     <div class="booking-cta hidden" id="bookingCta">
@@ -371,7 +371,7 @@
     <div class="card-label"><span class="step-num-badge">2</span>🏠 Projet d'investissement locatif LMNP</div>
     <div class="fg fg-2">
       <div class="field">
-        <label>Budget du projet <span class="req">*</span></label>
+        <label>Prix du bien visé <span class="req">*</span></label>
         <div class="amount-wrap">
           <input type="text" inputmode="decimal" id="montant" placeholder="200 000" value="65 000" oninput="sanitizeAmountInput(this); onMontantInput();" onblur="formatAmountOnBlur(this)" onfocus="unformatAmountOnFocus(this)">
           <span class="amount-suffix">€</span>
@@ -407,7 +407,7 @@
         <div class="slider-readout"><span id="apportVal">8 000</span> €</div>
       </div>
       <div class="slider-scale"><span>0 €</span><span id="apportMaxLabel">8 000 €</span></div>
-      <div class="field-hint" id="apportHint">Base : 10% du budget du projet. Ajustez selon l'épargne réellement mobilisable.</div>
+      <div class="field-hint" id="apportHint">Base : 10% du prix du bien visé. Ajustez selon l'épargne réellement mobilisable.</div>
     </div>
 
     <div class="cash-summary" style="margin-top:13px;">
@@ -811,12 +811,12 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   if (mode === 'comptant' && capital <= 0 && montant >= MIN_PRODUIT) {
     level = 'green';
     verdict = 'RDV pertinent : paiement comptant possible';
-    reasons.push(`L'épargne mobilisée couvre l'intégralité du budget (${formatMoney(montant)})`);
+    reasons.push(`L'épargne mobilisée couvre l'intégralité du prix du bien (${formatMoney(montant)})`);
     reasons.push('Aucun crédit nécessaire, dossier finançable immédiatement');
   } else if (montant < MIN_PRODUIT) {
     level = 'orange';
-    verdict = 'Budget sous le ticket d\'entrée';
-    reasons.push(`Budget (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)}, à ajuster avec le prospect`);
+    verdict = 'Prix du bien sous le ticket d\'entrée';
+    reasons.push(`Prix du bien (${formatMoney(montant)}) inférieur au minimum produit de ${formatMoney(MIN_PRODUIT)}, à ajuster avec le prospect`);
   } else if (revenuPersonnel <= 0) {
     verdict = 'En attente des revenus du prospect';
     reasons.push(mode === 'comptant'
@@ -838,17 +838,17 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
       level = 'red';
       verdict = 'Dossier à retravailler avant le RDV';
       reasons.push(`Endettement projet à ${tde.toFixed(1)}%, dépasse la limite HCSF (35%)`);
-      reasons.push('Piste : réduire le budget ou augmenter l\'apport, puis reprendre contact');
+      reasons.push('Piste : réduire le prix du bien ou augmenter l\'apport, puis reprendre contact');
     } else if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) {
       level = 'green';
       verdict = 'RDV pertinent : dossier solide';
       reasons.push(`Endettement maîtrisé (${tde.toFixed(1)}%)`);
-      reasons.push(`Capacité de financement (${formatMoney(capaciteTotale)}) couvre le budget du projet`);
+      reasons.push(`Capacité de financement (${formatMoney(capaciteTotale)}) couvre le prix du bien visé`);
     } else {
       level = 'orange';
       verdict = 'RDV possible : dossier à challenger';
       if (tdeR > GREEN_DTI*100) reasons.push(`Endettement à ${tde.toFixed(1)}%, proche de la limite (35%)`);
-      if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au budget visé, ajuster projet ou apport`);
+      if (capaciteTotale < montant) reasons.push(`Capacité (${formatMoney(capaciteTotale)}) inférieure au prix du bien visé, ajuster projet ou apport`);
     }
   }
 
@@ -924,7 +924,7 @@ function validate() {
   if (!prenom) { showToast('Le prénom est requis', 'error'); return false; }
   if (!tel) { markError('tel'); showToast('Le téléphone est requis', 'error'); return false; }
   const montant = getAmount('montant');
-  if (montant < 10000) { showToast('Veuillez saisir un budget de projet valide', 'error'); return false; }
+  if (montant < 10000) { showToast('Veuillez saisir un prix de bien valide', 'error'); return false; }
   return true;
 }
 
