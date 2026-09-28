@@ -312,23 +312,23 @@
     <div class="fg fg-2">
       <div class="field">
         <label>Prénom <span class="req">*</span></label>
-        <input type="text" id="prenom" placeholder="Jean">
+        <input type="text" id="prenom" placeholder="Jean" oninput="updateBookingLink()">
       </div>
       <div class="field">
         <label>Nom <span class="req">*</span></label>
-        <input type="text" id="nom" placeholder="DUPONT" oninput="this.value=this.value.toUpperCase()">
+        <input type="text" id="nom" placeholder="DUPONT" oninput="this.value=this.value.toUpperCase(); updateBookingLink();">
         <span class="field-err">Champ requis</span>
       </div>
     </div>
     <div class="fg fg-2" style="margin-top:13px;">
       <div class="field">
         <label>Téléphone <span class="req">*</span></label>
-        <input type="tel" id="tel" placeholder="06 12 34 56 78" oninput="formatPhone(this)" maxlength="14">
+        <input type="tel" id="tel" placeholder="06 12 34 56 78" oninput="formatPhone(this); updateBookingLink();" maxlength="14">
         <span class="field-err">Numéro requis</span>
       </div>
       <div class="field">
         <label>Email</label>
-        <input type="email" id="email" placeholder="jean.dupont@email.fr">
+        <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink()">
       </div>
     </div>
   </div>
@@ -679,7 +679,25 @@ function capaciteEmpruntMax(revenuTotal, chargesExistantes, tauxAnnuelPct, duree
   return mensualiteMax * (1 - Math.pow(1+i, -n)) / i;
 }
 
+function updateBookingLink() {
+  const btn = document.getElementById('btnBooking');
+  if (!btn) return;
+  const base = 'https://api.leadconnectorhq.com/widget/bookings/benoit-brival-personal-calendar-qxbqrjmdwqglqbgeea3f8';
+  const prenom = (document.getElementById('prenom')?.value || '').trim();
+  const nom = (document.getElementById('nom')?.value || '').trim();
+  const tel = (document.getElementById('tel')?.value || '').replace(/\s/g, '');
+  const email = (document.getElementById('email')?.value || '').trim();
+  const params = new URLSearchParams();
+  if (prenom) params.set('first_name', prenom);
+  if (nom) params.set('last_name', nom);
+  if (tel) params.set('phone', tel);
+  if (email) params.set('email', email);
+  const qs = params.toString();
+  btn.href = qs ? base + '?' + qs : base;
+}
+
 function calcLive() {
+  updateBookingLink();
   const montant = getAmount('montant');
   const apport = state.apport;
   const duree = state.duree, taux = state.taux;
