@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nos résidences LMNP — Cabinet BHB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --bg-alt:#f4f1e9; --line:#314975;
+    --ink:#1f2c47; --ink-muted:#55617a; --ink-faint:#898068;
+    --navy:#314975; --taupe:#898068;
+    --accent:#f0aa00; --accent-ink:#1f2c47;
+    --tick:#898068; --tick-soft:#f2ece0;
+    --font-ui:'Montserrat',Arial,-apple-system,sans-serif;
+    --shadow-hard:4px 4px 0 var(--line);
+    --shadow-hard-sm:3px 3px 0 var(--line);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#182238; --bg-alt:#1f2b45; --line:#b5aa8f;
+      --ink:#eef0f4; --ink-muted:#b7bccb; --ink-faint:#c9c2af;
+      --navy:#5a72ad; --taupe:#c9c2af;
+      --accent:#f0aa00; --accent-ink:#1f2c47;
+      --tick:#f0aa00; --tick-soft:#2a3550;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#182238; --bg-alt:#1f2b45; --line:#b5aa8f;
+    --ink:#eef0f4; --ink-muted:#b7bccb; --ink-faint:#c9c2af;
+    --navy:#5a72ad; --taupe:#c9c2af;
+    --accent:#f0aa00; --accent-ink:#1f2c47;
+    --tick:#f0aa00; --tick-soft:#2a3550;
+    color-scheme: dark;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-ui);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  img{ max-width:100%; display:block; }
+  [hidden]{ display:none !important; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
+
+  .topbar{ border-bottom:2px solid var(--line); padding:16px 0; }
+  .topbar .wrap{ display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-weight:800; font-size:16px; color:var(--navy); letter-spacing:-0.01em; }
+  .brand span{ color:var(--accent); }
+  .topbar a.back{ font-size:12.5px; font-weight:700; color:var(--ink-muted); text-decoration:none; }
+
+  .hero{ padding:44px 0 30px; border-bottom:2px solid var(--line); background:var(--bg-alt); }
+  .hero h1{ font-size:clamp(26px,5vw,38px); font-weight:800; line-height:1.12; margin:0 0 12px; text-wrap:balance; }
+  .hero h1 mark{ background:var(--accent); color:var(--accent-ink); padding:0 6px; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  .hero p{ font-size:15px; color:var(--ink-muted); line-height:1.6; max-width:640px; margin:0; }
+
+  .section-label{ font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--taupe); margin:0 0 8px; }
+  .grid-section{ padding:40px 0; }
+  .cards-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  @media (max-width:720px){ .cards-grid{ grid-template-columns:1fr; } }
+
+  .rcard{ border:2px solid var(--line); border-radius:14px; overflow:hidden; background:var(--bg); box-shadow:var(--shadow-hard-sm); display:flex; flex-direction:column; }
+  .rcard-photo{ position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--bg-alt); cursor:pointer; }
+  .rcard-photo img{ width:100%; height:100%; object-fit:cover; }
+  .rcard-badge{ position:absolute; top:10px; left:10px; background:var(--navy); color:#fff; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:20px; }
+  .rcard-thumbs{ display:flex; gap:6px; padding:6px; background:var(--bg-alt); }
+  .rcard-thumb{ flex:1; aspect-ratio:1/1; border-radius:8px; overflow:hidden; cursor:pointer; border:1.5px solid var(--line); }
+  .rcard-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .rcard-body{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .rcard-title{ font-size:15px; font-weight:800; line-height:1.3; }
+  .rcard-ville{ font-size:12px; color:var(--ink-muted); font-weight:600; }
+  .rcard-accroche{ font-size:12.5px; color:var(--ink-muted); line-height:1.5; flex:1; }
+  .rcard-metrics{ display:flex; gap:8px; }
+  .rcard-metric{ flex:1; background:var(--tick-soft); border-radius:8px; padding:7px 8px; text-align:center; }
+  .rcard-metric-val{ font-size:14px; font-weight:800; color:var(--navy); }
+  .rcard-metric-lbl{ font-size:9.5px; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; margin-top:1px; }
+  .rcard-btn{ margin-top:2px; width:100%; padding:10px; border:2px solid var(--line); border-radius:40px; background:var(--bg); color:var(--navy); font-family:var(--font-ui); font-size:12px; font-weight:800; cursor:pointer; transition:transform .12s; }
+  .rcard-btn:hover{ transform:translateY(-1px); background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+
+  .lightbox{ position:fixed; inset:0; background:rgba(15,20,35,.88); z-index:400; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.hidden{ display:none; }
+  .lightbox img{ max-width:100%; max-height:85vh; border-radius:10px; }
+  .lightbox-close{ position:absolute; top:18px; right:18px; width:38px; height:38px; border-radius:50%; border:none; background:#fff; font-size:18px; cursor:pointer; }
+
+  .faq-section{ padding:40px 0; border-top:2px solid var(--line); background:var(--bg-alt); }
+  .faq-item{ border-top:2px solid var(--line); padding:16px 0; }
+  .faq-item:first-child{ border-top:none; padding-top:0; }
+  .faq-q{ font-size:15px; font-weight:800; margin-bottom:6px; display:flex; gap:8px; }
+  .faq-a{ font-size:13.5px; color:var(--ink-muted); line-height:1.6; padding-left:24px; }
+
+  .callback-section{ padding:44px 0 56px; border-top:2px solid var(--line); }
+  .callback-card{ border:2px solid var(--line); border-radius:16px; padding:28px; box-shadow:var(--shadow-hard); max-width:480px; margin:0 auto; }
+  .callback-card h2{ font-size:20px; font-weight:800; margin:0 0 6px; }
+  .callback-card p{ font-size:13px; color:var(--ink-muted); margin:0 0 18px; line-height:1.5; }
+  .cb-field{ margin-bottom:14px; }
+  .cb-field label{ display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:5px; }
+  .cb-field input{ width:100%; padding:11px 13px; border:2px solid var(--line); border-radius:8px; font-family:var(--font-ui); font-size:14px; background:var(--bg); color:var(--ink); }
+  .cb-residence-tag{ display:inline-flex; align-items:center; gap:6px; background:var(--tick-soft); color:var(--navy); font-size:12px; font-weight:700; padding:5px 10px; border-radius:20px; margin-bottom:14px; }
+  .cb-residence-tag button{ background:none; border:none; color:var(--navy); cursor:pointer; font-size:12px; padding:0; font-weight:800; }
+  .btn-callback{ width:100%; padding:14px; border:none; border-radius:40px; background:var(--accent); color:var(--accent-ink); font-family:var(--font-ui); font-size:14px; font-weight:800; cursor:pointer; box-shadow:var(--shadow-hard-sm); transition:transform .12s; }
+  .btn-callback:hover:not(:disabled){ transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--line); }
+  .btn-callback:disabled{ opacity:.6; cursor:default; }
+  .cb-success{ text-align:center; padding:20px 0; }
+  .cb-success .check{ font-size:36px; margin-bottom:8px; }
+  .cb-success h3{ font-size:16px; margin:0 0 6px; }
+  .cb-success p{ font-size:13px; color:var(--ink-muted); margin:0; }
+
+  footer{ border-top:2px solid var(--line); padding:22px 0; text-align:center; }
+  footer .foot-brand{ font-weight:800; color:var(--navy); font-size:13px; }
+  footer a{ color:var(--ink-muted); font-size:11.5px; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Cabinet <span>BHB</span></div>
+    <a class="back" href="https://www.cabinetbhb.fr">www.cabinetbhb.fr →</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Une sélection de résidences <mark>LMNP</mark> prêtes à investir</h1>
+    <p>10 programmes sélectionnés par nos conseillers parmi notre catalogue partenaire : résidences étudiantes, résidences affaires, résidences de tourisme et EHPAD. Rendements et prix indicatifs — le détail complet vous est communiqué lors de votre échange avec un conseiller.</p>
+  </div>
+</div>
+
+<div class="grid-section">
+  <div class="wrap">
+    <div class="section-label">Nos résidences</div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+</div>
+
+<div class="faq-section">
+  <div class="wrap" style="max-width:720px;">
+    <div class="section-label">Questions fréquentes</div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Que se passe-t-il si le gestionnaire de la résidence fait faillite ?</div>
+      <div class="faq-a">Le bail commercial est signé avec l'exploitant, pas avec la résidence elle-même. En cas de défaillance, un nouvel exploitant reprend généralement la gestion (c'est le fonds de commerce qui a de la valeur) ; dans l'intervalle, votre conseiller vous accompagne pour sécuriser la transition. C'est un risque réel du LMNP, que nous évoquons sans le minimiser lors de l'analyse de chaque dossier.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Les loyers sont-ils vraiment garantis ?</div>
+      <div class="faq-a">Le bail commercial fixe un loyer contractuel dû par l'exploitant, que le bien soit occupé ou non — c'est la logique du statut LMNP géré. Ce loyer est réévalué périodiquement (indexation) et négocié au renouvellement du bail, généralement tous les 9 à 11 ans.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Peut-on revendre le bien facilement si besoin ?</div>
+      <div class="faq-a">La revente d'un lot LMNP se fait sur un marché plus restreint que la résidence principale classique, avec un délai généralement plus long. C'est un placement à envisager sur le moyen-long terme (8-10 ans minimum), pas un actif liquide à très court terme.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Quelle fiscalité réelle avec le statut LMNP ?</div>
+      <div class="faq-a">Le régime réel permet d'amortir le bien et le mobilier, ce qui réduit fortement (souvent à zéro pendant plusieurs années) l'impôt sur les loyers perçus. Le montant exact dépend de votre situation fiscale personnelle — c'est précisément ce que votre conseiller patrimonial analyse avec vous avant toute recommandation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Pourquoi le ticket d'entrée démarre à 40 000 € ?</div>
+      <div class="faq-a">C'est le prix des lots les plus accessibles de notre catalogue (studios en résidence étudiante ou EHPAD). Le prix varie ensuite selon la ville, le type de résidence et la surface, jusqu'à plusieurs centaines de milliers d'euros pour les biens en zone tendue.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">🙋 Faut-il habiter près du bien pour investir ?</div>
+      <div class="faq-a">Non. La gestion est entièrement déléguée à l'exploitant de la résidence (accueil, entretien, recherche de locataires). Vous n'avez ni visite, ni gestion locative à assurer vous-même, où que vous soyez basé en France.</div>
+    </div>
+  </div>
+</div>
+
+<div class="callback-section">
+  <div class="wrap">
+    <div class="callback-card">
+      <div id="cbForm">
+        <h2>Être rappelé par un conseiller</h2>
+        <p>Laissez-nous votre prénom et votre numéro, un conseiller patrimonial vous rappelle pour approfondir le projet qui vous intéresse.</p>
+        <div id="cbResidenceTag" class="cb-residence-tag" hidden>
+          🏠 <span id="cbResidenceName"></span>
+          <button type="button" onclick="clearResidence()">✕</button>
+        </div>
+        <div class="cb-field">
+          <label>Prénom</label>
+          <input type="text" id="cbPrenom" placeholder="Jean">
+        </div>
+        <div class="cb-field">
+          <label>Téléphone</label>
+          <input type="tel" id="cbTel" placeholder="06 12 34 56 78">
+        </div>
+        <button type="button" class="btn-callback" id="cbSubmit" onclick="submitCallback()">📞 Être rappelé</button>
+      </div>
+      <div id="cbSuccess" class="cb-success" hidden>
+        <div class="check">✅</div>
+        <h3>Demande envoyée</h3>
+        <p>Un conseiller du Cabinet BHB vous recontacte très prochainement.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-brand">Cabinet BHB — Gestion Conseil Patrimoine</div>
+  <a href="https://www.cabinetbhb.fr">www.cabinetbhb.fr</a>
+</footer>
+
+<div class="lightbox hidden" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+const RESIDENCES = [
+  { folder:'01-studea-marseille', name:"STUDEA Marseille Croix d'Azur", ville:'Marseille', type:'Résidence étudiante', rendement:'6,75', prix:'47 620', accroche:"À deux pas de la fac Saint-Charles, studios entièrement équipés.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'02-appartcity-marseille-euromed', name:"Appart'City Classic Marseille Euromed", ville:'Marseille', type:'Résidence affaires', rendement:'8,50', prix:'58 458', accroche:"Quartier d'affaires Euroméditerranée, forte demande locative.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'03-ombriere-ehpad', name:"L'Ombrière", ville:"Saint-Jean-d'Angle (17)", type:'EHPAD', rendement:'5,50', prix:'78 789', accroche:"Résidence médicalisée en Charente-Maritime, exploitant DOMIDEP.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'commun.jpg',l:'Espace de vie'}] },
+  { folder:'04-cottages-valjoly', name:'Les Cottages de Valjoly', ville:'Eppe-Sauvage (59)', type:'Résidence de tourisme', rendement:'10,08', prix:'49 000', accroche:"Cottages au bord du lac, dans le parc naturel de l'Avesnois.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Séjour'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'05-garden-city-toulon', name:'Garden & City Toulon', ville:'Toulon', type:'Résidence étudiante', rendement:'5,84', prix:'50 080', accroche:"Architecture contemporaine, proche campus et transports.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'06-alpages-corbier', name:'Les Alpages du Corbier', ville:'Villarembert (73)', type:'Résidence de tourisme', rendement:'5,53', prix:'59 500', accroche:"Pieds des pistes en Savoie, piscine et espace détente inclus.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'commun.jpg',l:'Cuisine / séjour'}] },
+  { folder:'07-appartcity-clichy', name:"Appart'City Clichy", ville:'Clichy (92)', type:'Résidence affaires', rendement:'5,36', prix:'201 850', accroche:"Aux portes de Paris, forte tension locative francilienne.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'08-paul-cezanne-ehpad', name:'Paul Cézanne', ville:'Malijai (04)', type:'EHPAD', rendement:'7,12', prix:'104 939', accroche:"Résidence médicalisée en Provence, exploitant DOMIDEP.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'commun.jpg',l:'Salon commun'},{f:'commun2.jpg',l:'Espace de vie'}] },
+  { folder:'09-voiles-blanches', name:'Les Voiles Blanches', ville:'Batz-sur-Mer (44)', type:'Résidence de tourisme', rendement:'5,85', prix:'53 000', accroche:"Bord de mer en Loire-Atlantique, piscine chauffée.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Cuisine / séjour'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+  { folder:'10-appartcity-limoges', name:"Appart'City Classic Limoges", ville:'Limoges', type:'Résidence affaires', rendement:'8,51', prix:'52 811', accroche:"Centre-ville, rendement parmi les plus attractifs du réseau.", photos:[{f:'exterieur.jpg',l:'Extérieur'},{f:'chambre.jpg',l:'Chambre'},{f:'salle-de-bain.jpg',l:'Salle de bain'}] },
+];
+
+const ASSET_BASE = 'lmnp-residences/';
+
+function renderCards(){
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = RESIDENCES.map((r, idx) => {
+    const [main, ...rest] = r.photos;
+    const mainSrc = ASSET_BASE + r.folder + '/' + main.f;
+    const thumbs = rest.map(p => `<div class="rcard-thumb" onclick="openLightbox('${ASSET_BASE + r.folder + '/' + p.f}')"><img src="${ASSET_BASE + r.folder + '/' + p.f}" alt="${p.l}" loading="lazy"></div>`).join('');
+    return `<div class="rcard">
+      <div class="rcard-photo" onclick="openLightbox('${mainSrc}')">
+        <span class="rcard-badge">${r.type}</span>
+        <img src="${mainSrc}" alt="${r.name}" loading="lazy">
+      </div>
+      <div class="rcard-thumbs">${thumbs}</div>
+      <div class="rcard-body">
+        <div>
+          <div class="rcard-title">${r.name}</div>
+          <div class="rcard-ville">📍 ${r.ville}</div>
+        </div>
+        <div class="rcard-accroche">${r.accroche}</div>
+        <div class="rcard-metrics">
+          <div class="rcard-metric"><div class="rcard-metric-val">${r.rendement} %</div><div class="rcard-metric-lbl">Rendement</div></div>
+          <div class="rcard-metric"><div class="rcard-metric-val">${r.prix} €</div><div class="rcard-metric-lbl">À partir de</div></div>
+        </div>
+        <button class="rcard-btn" onclick="selectResidence('${r.name.replace(/'/g,"\\'")}')">Être informé sur cette résidence</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderCards();
+
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.remove('hidden');
+}
+function closeLightbox(e){
+  if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')){
+    document.getElementById('lightbox').classList.add('hidden');
+  }
+}
+
+function selectResidence(name){
+  document.getElementById('cbResidenceName').textContent = name;
+  document.getElementById('cbResidenceTag').hidden = false;
+  document.getElementById('callbackAnchor')?.scrollIntoView();
+  document.querySelector('.callback-section').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function clearResidence(){
+  document.getElementById('cbResidenceTag').hidden = true;
+  document.getElementById('cbResidenceName').textContent = '';
+}
+
+const RAPPEL_WH = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-demande-rappel';
+
+async function submitCallback(){
+  const prenom = document.getElementById('cbPrenom').value.trim();
+  const tel = document.getElementById('cbTel').value.trim();
+  if (!prenom){ alert('Merci d\'indiquer votre prénom'); return; }
+  if (!tel){ alert('Merci d\'indiquer votre numéro de téléphone'); return; }
+  const residence = document.getElementById('cbResidenceTag').hidden ? '' : document.getElementById('cbResidenceName').textContent;
+
+  const btn = document.getElementById('cbSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Envoi...';
+  try{
+    const r = await fetch(RAPPEL_WH, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prenom, telephone: tel, residence_interet: residence })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    document.getElementById('cbForm').hidden = true;
+    document.getElementById('cbSuccess').hidden = false;
+  }catch(e){
+    alert('Une erreur est survenue, merci de réessayer.');
+    btn.disabled = false;
+    btn.textContent = '📞 Être rappelé';
+  }
+}
+</script>
+</body>
+</html>
