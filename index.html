@@ -108,6 +108,15 @@
   }
   .btn-booking:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.28); }
 
+  .info-mail-row{ margin-top:14px; padding-top:14px; border-top:1px dashed var(--border); display:flex; flex-direction:column; gap:6px; }
+  .btn-info-mail{
+    display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:10px 16px; border-radius:40px; width:100%;
+    border:1.5px solid var(--accent); background:transparent; color:var(--accent); font-family:var(--font-ui); font-size:12.5px; font-weight:700;
+    cursor:pointer; transition:background .15s, color .15s;
+  }
+  .btn-info-mail:hover:not(:disabled){ background:var(--accent); color:#fff; }
+  .btn-info-mail:disabled{ opacity:.6; cursor:default; }
+
   /* ── LIVE METRICS ── */
   .metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
   @media (max-width:520px){ .metrics{ grid-template-columns:1fr; } }
@@ -384,6 +393,10 @@
         <label>Email</label>
         <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink()">
       </div>
+    </div>
+    <div class="info-mail-row">
+      <button type="button" class="btn-info-mail" id="btnInfoMail" onclick="sendInfoEmail()">📧 Envoyer un mail d'information au prospect</button>
+      <span class="field-hint">Si le prospect veut un support avant de caler le RDV — prénom, nom et email requis.</span>
     </div>
   </div>
 
@@ -1047,6 +1060,38 @@ async function submitForm() {
   }
 }
 
+const INFO_MAIL_WH = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-mail-info';
+
+async function sendInfoEmail() {
+  const prenom = document.getElementById('prenom').value.trim();
+  const nom = document.getElementById('nom').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!prenom) { showToast('Le prénom est requis pour envoyer le mail', 'error'); return; }
+  if (!nom) { markError('nom'); showToast('Le nom est requis pour envoyer le mail', 'error'); return; }
+  if (!emailOk) { showToast('Un email valide du prospect est requis', 'error'); return; }
+
+  const btn = document.getElementById('btnInfoMail');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<div class="spinner"></div> Envoi...';
+  btn.disabled = true;
+  try {
+    const r = await fetch(INFO_MAIL_WH, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prenom, nom, email, telephone: document.getElementById('tel').value.trim() })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    showToast('Mail d\'information envoyé à ' + email, 'success');
+    btn.innerHTML = '✓ Mail envoyé';
+    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 4000);
+  } catch (e) {
+    showToast('Erreur lors de l\'envoi du mail d\'information', 'error');
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+}
+
 function resetForm() {
   document.getElementById('formScreen').style.display = '';
   document.getElementById('navFixed').style.display = '';
@@ -1066,6 +1111,9 @@ function resetForm() {
   const btn = document.getElementById('btnSubmit');
   btn.innerHTML = 'Envoyer la fiche';
   btn.disabled = false;
+  const btnInfo = document.getElementById('btnInfoMail');
+  btnInfo.innerHTML = '📧 Envoyer un mail d\'information au prospect';
+  btnInfo.disabled = false;
   calcLive();
 }
 </script>
