@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nos résidences LMNP — Cabinet BHB</title>
+<title>Nos résidences LMNP · Cabinet BHB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
@@ -46,10 +46,10 @@
   [hidden]{ display:none !important; }
   .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
 
-  .topbar{ border-bottom:2px solid var(--line); padding:16px 0; }
+  .topbar{ border-bottom:2px solid var(--line); padding:12px 0; }
   .topbar .wrap{ display:flex; align-items:center; justify-content:space-between; }
-  .brand{ font-weight:800; font-size:16px; color:var(--navy); letter-spacing:-0.01em; }
-  .brand span{ color:var(--accent); }
+  .brand{ display:flex; align-items:center; background:#314975; padding:6px 14px; border-radius:8px; }
+  .brand img{ height:26px; width:auto; display:block; }
   .topbar a.back{ font-size:12.5px; font-weight:700; color:var(--ink-muted); text-decoration:none; }
 
   .hero{ padding:44px 0 30px; border-bottom:2px solid var(--line); background:var(--bg-alt); }
@@ -79,6 +79,22 @@
   .rcard-metric-lbl{ font-size:9.5px; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; margin-top:1px; }
   .rcard-btn{ margin-top:2px; width:100%; padding:10px; border:2px solid var(--line); border-radius:40px; background:var(--bg); color:var(--navy); font-family:var(--font-ui); font-size:12px; font-weight:800; cursor:pointer; transition:transform .12s; }
   .rcard-btn:hover{ transform:translateY(-1px); background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+
+  .fab-popup{
+    position:fixed; bottom:20px; right:20px; z-index:300; width:300px; max-width:calc(100vw - 32px);
+    border:2px solid var(--line); border-radius:14px; background:var(--bg); box-shadow:var(--shadow-hard);
+    padding:18px; animation:fabIn .35s ease;
+  }
+  .fab-popup.hidden{ display:none; }
+  @keyframes fabIn{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+  .fab-close{ position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; border:none; background:var(--bg-alt); color:var(--ink-muted); font-size:13px; cursor:pointer; }
+  .fab-title{ font-size:14px; font-weight:800; margin:0 0 4px; padding-right:20px; }
+  .fab-sub{ font-size:12px; color:var(--ink-muted); margin:0 0 12px; line-height:1.4; }
+  .fab-popup input{ width:100%; padding:9px 11px; border:2px solid var(--line); border-radius:8px; font-family:var(--font-ui); font-size:13px; background:var(--bg); color:var(--ink); margin-bottom:8px; }
+  .fab-popup .btn-callback{ padding:11px; font-size:12.5px; }
+  .fab-success{ text-align:center; padding:6px 0; }
+  .fab-success .check{ font-size:24px; margin-bottom:4px; }
+  .fab-success p{ font-size:12.5px; color:var(--ink-muted); margin:0; }
 
   .lightbox{ position:fixed; inset:0; background:rgba(15,20,35,.88); z-index:400; display:flex; align-items:center; justify-content:center; padding:24px; }
   .lightbox.hidden{ display:none; }
@@ -117,7 +133,7 @@
 
 <div class="topbar">
   <div class="wrap">
-    <div class="brand">Cabinet <span>BHB</span></div>
+    <div class="brand"><img src="https://raw.githubusercontent.com/bbrival-cmd/bhb-lmnp-qualification/main/logo-bhb-white.png" alt="Cabinet BHB"></div>
     <a class="back" href="https://www.cabinetbhb.fr">www.cabinetbhb.fr →</a>
   </div>
 </div>
@@ -125,7 +141,7 @@
 <div class="hero">
   <div class="wrap">
     <h1>Une sélection de résidences <mark>LMNP</mark> prêtes à investir</h1>
-    <p>10 programmes sélectionnés par nos conseillers parmi notre catalogue partenaire : résidences étudiantes, résidences affaires, résidences de tourisme et EHPAD. Rendements et prix indicatifs — le détail complet vous est communiqué lors de votre échange avec un conseiller.</p>
+    <p>10 programmes sélectionnés par nos conseillers parmi notre catalogue partenaire : résidences étudiantes, résidences affaires, résidences de tourisme et EHPAD. Rendements et prix indicatifs, le détail complet vous est communiqué lors de votre échange avec un conseiller.</p>
   </div>
 </div>
 
@@ -145,7 +161,7 @@
     </div>
     <div class="faq-item">
       <div class="faq-q">🙋 Les loyers sont-ils vraiment garantis ?</div>
-      <div class="faq-a">Le bail commercial fixe un loyer contractuel dû par l'exploitant, que le bien soit occupé ou non — c'est la logique du statut LMNP géré. Ce loyer est réévalué périodiquement (indexation) et négocié au renouvellement du bail, généralement tous les 9 à 11 ans.</div>
+      <div class="faq-a">Le bail commercial fixe un loyer contractuel dû par l'exploitant, que le bien soit occupé ou non : c'est la logique du statut LMNP géré. Ce loyer est réévalué périodiquement (indexation) et négocié au renouvellement du bail, généralement tous les 9 à 11 ans.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">🙋 Peut-on revendre le bien facilement si besoin ?</div>
@@ -153,7 +169,7 @@
     </div>
     <div class="faq-item">
       <div class="faq-q">🙋 Quelle fiscalité réelle avec le statut LMNP ?</div>
-      <div class="faq-a">Le régime réel permet d'amortir le bien et le mobilier, ce qui réduit fortement (souvent à zéro pendant plusieurs années) l'impôt sur les loyers perçus. Le montant exact dépend de votre situation fiscale personnelle — c'est précisément ce que votre conseiller patrimonial analyse avec vous avant toute recommandation.</div>
+      <div class="faq-a">Le régime réel permet d'amortir le bien et le mobilier, ce qui réduit fortement (souvent à zéro pendant plusieurs années) l'impôt sur les loyers perçus. Le montant exact dépend de votre situation fiscale personnelle : c'est précisément ce que votre conseiller patrimonial analyse avec vous avant toute recommandation.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">🙋 Pourquoi le ticket d'entrée démarre à 40 000 € ?</div>
@@ -196,9 +212,24 @@
 </div>
 
 <footer>
-  <div class="foot-brand">Cabinet BHB — Gestion Conseil Patrimoine</div>
+  <div class="foot-brand">Cabinet BHB · Gestion Conseil Patrimoine</div>
   <a href="https://www.cabinetbhb.fr">www.cabinetbhb.fr</a>
 </footer>
+
+<div class="fab-popup hidden" id="fabPopup">
+  <button class="fab-close" onclick="closeFabPopup()" aria-label="Fermer">✕</button>
+  <div id="fabForm">
+    <div class="fab-title">Une question sur nos résidences ?</div>
+    <p class="fab-sub">Laissez vos coordonnées, un conseiller vous rappelle rapidement.</p>
+    <input type="text" id="fabPrenom" placeholder="Prénom">
+    <input type="tel" id="fabTel" placeholder="Téléphone">
+    <button type="button" class="btn-callback" id="fabSubmit" onclick="submitFabCallback()">📞 Être rappelé</button>
+  </div>
+  <div id="fabSuccess" class="fab-success" hidden>
+    <div class="check">✅</div>
+    <p>Merci, un conseiller vous recontacte bientôt.</p>
+  </div>
+</div>
 
 <div class="lightbox hidden" id="lightbox" onclick="closeLightbox(event)">
   <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
@@ -291,12 +322,58 @@ async function submitCallback(){
     if (!r.ok) throw new Error('HTTP ' + r.status);
     document.getElementById('cbForm').hidden = true;
     document.getElementById('cbSuccess').hidden = false;
+    markRappelSubmitted();
   }catch(e){
     alert('Une erreur est survenue, merci de réessayer.');
     btn.disabled = false;
     btn.textContent = '📞 Être rappelé';
   }
 }
+
+function markRappelSubmitted(){
+  try{ localStorage.setItem('lmnp_rappel_submitted', '1'); }catch(e){}
+}
+function rappelAlreadyHandled(){
+  try{
+    return localStorage.getItem('lmnp_rappel_submitted') === '1' || sessionStorage.getItem('lmnp_popup_dismissed') === '1';
+  }catch(e){ return false; }
+}
+
+function closeFabPopup(){
+  document.getElementById('fabPopup').classList.add('hidden');
+  try{ sessionStorage.setItem('lmnp_popup_dismissed', '1'); }catch(e){}
+}
+
+async function submitFabCallback(){
+  const prenom = document.getElementById('fabPrenom').value.trim();
+  const tel = document.getElementById('fabTel').value.trim();
+  if (!prenom){ alert('Merci d\'indiquer votre prénom'); return; }
+  if (!tel){ alert('Merci d\'indiquer votre numéro de téléphone'); return; }
+
+  const btn = document.getElementById('fabSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Envoi...';
+  try{
+    const r = await fetch(RAPPEL_WH, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prenom, telephone: tel, residence_interet: '' })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    document.getElementById('fabForm').hidden = true;
+    document.getElementById('fabSuccess').hidden = false;
+    markRappelSubmitted();
+    setTimeout(() => { document.getElementById('fabPopup').classList.add('hidden'); }, 4000);
+  }catch(e){
+    alert('Une erreur est survenue, merci de réessayer.');
+    btn.disabled = false;
+    btn.textContent = '📞 Être rappelé';
+  }
+}
+
+setTimeout(() => {
+  if (rappelAlreadyHandled()) return;
+  document.getElementById('fabPopup').classList.remove('hidden');
+}, 15000);
 </script>
 </body>
 </html>
