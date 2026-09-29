@@ -237,6 +237,11 @@
     display:flex; align-items:center; justify-content:center;
   }
   .modal-close-x:hover{ background:var(--border); color:var(--ink); }
+  .modal-tag{ display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.04em; padding:3px 9px; border-radius:20px; margin-bottom:8px; }
+  .modal-tag-rouge{ background:rgba(194,96,74,.14); color:var(--bad); }
+  .modal-tag-negatif{ background:rgba(120,40,40,.16); color:#7a2a2a; }
+  :root:not([data-theme="light"]) .modal-tag-negatif{ background:rgba(220,110,110,.18); color:#e08a8a; }
+  :root[data-theme="dark"] .modal-tag-negatif{ background:rgba(220,110,110,.18); color:#e08a8a; }
   .modal-title{ font-size:15px; font-weight:800; color:var(--ink); margin-bottom:5px; padding-right:20px; }
   .modal-sub{ font-size:11.5px; color:var(--ink-muted); margin-bottom:15px; line-height:1.5; }
   .modal-q{ margin-bottom:13px; }
@@ -287,8 +292,9 @@
 <div class="modal-overlay hidden" id="redModal">
   <div class="modal-card">
     <button class="modal-close-x" onclick="closeRedModal()" aria-label="Fermer">✕</button>
-    <div class="modal-title">Dossier à retravailler</div>
-    <p class="modal-sub">Avant de clore l'appel, vérifiez ces deux leviers avec le prospect :</p>
+    <div class="modal-tag" id="modalTag"></div>
+    <div class="modal-title" id="modalTitle">Dossier à retravailler</div>
+    <p class="modal-sub" id="modalSub">Avant de clore l'appel, vérifiez ces deux leviers avec le prospect :</p>
     <div class="modal-q">
       <label>Peut-on augmenter l'apport ?</label>
       <div class="toggle-group" id="modalApportToggle">
@@ -618,7 +624,23 @@ function selectModalAnswer(key, el, val) {
   el.classList.add('sel');
   state.objections[key] = val;
 }
-function openRedModal() { document.getElementById('redModal').classList.remove('hidden'); }
+function openRedModal() {
+  const tagEl = document.getElementById('modalTag');
+  const titleEl = document.getElementById('modalTitle');
+  const subEl = document.getElementById('modalSub');
+  if (state.redType === 'negatif') {
+    tagEl.textContent = 'NÉGATIF';
+    tagEl.className = 'modal-tag modal-tag-negatif';
+    titleEl.textContent = 'Dossier non finançable en l\'état';
+    subEl.textContent = 'La capacité totale ne couvre pas le ticket d\'entrée. Avant de clore l\'appel, vérifiez ces deux leviers avec le prospect :';
+  } else {
+    tagEl.textContent = 'ROUGE';
+    tagEl.className = 'modal-tag modal-tag-rouge';
+    titleEl.textContent = 'Dossier à retravailler';
+    subEl.textContent = 'L\'endettement dépasse la limite HCSF. Avant de clore l\'appel, vérifiez ces deux leviers avec le prospect :';
+  }
+  document.getElementById('redModal').classList.remove('hidden');
+}
 function closeRedModal() { document.getElementById('redModal').classList.add('hidden'); }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -819,6 +841,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   // 'neutral' = informations encore incomplètes (pas un refus) ; 'red' = dossier qualifié mais non finançable en l'état.
   let level = 'neutral';
   let verdict = '';
+  let redType = null; // 'negatif' = capacité totale sous le ticket d'entrée (non finançable en l'état) ; 'rouge' = endettement au-delà de la limite HCSF (rework possible)
   const reasons = [];
   // Comparaison sur la valeur arrondie affichée (1 décimale) : 35,0% pile reste accepté, seul un vrai dépassement passe en rouge.
   const tdeR = Math.round(tde * 10) / 10;
@@ -846,12 +869,14 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
 
     if (capaciteTotale < MIN_PRODUIT) {
       level = 'red';
-      verdict = 'Dossier à retravailler avant le RDV';
+      redType = 'negatif';
+      verdict = 'Dossier NÉGATIF : non finançable en l\'état';
       reasons.push(`Capacité totale (${formatMoney(capaciteTotale)}) sous le ticket d'entrée de ${formatMoney(MIN_PRODUIT)}`);
       reasons.push('Ni l\'épargne ni la capacité d\'emprunt ne couvrent encore le minimum produit');
     } else if (tdeR > MAX_DTI*100) {
       level = 'red';
-      verdict = 'Dossier à retravailler avant le RDV';
+      redType = 'rouge';
+      verdict = 'Dossier ROUGE : endettement au-delà de la limite';
       reasons.push(`Endettement projet à ${tde.toFixed(1)}%, dépasse la limite HCSF (35%)`);
       reasons.push('Piste : réduire le prix du bien ou augmenter l\'apport, puis reprendre contact');
     } else if (tdeR <= GREEN_DTI*100 && capaciteTotale >= montant) {
@@ -874,6 +899,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   }
   const becameRed = level === 'red' && state.lastSignalLevel !== 'red';
   state.lastSignalLevel = level;
+  state.redType = redType;
 
   signal.classList.remove('s-red','s-orange','s-green','s-neutral');
   signal.classList.add('s-'+level);
@@ -991,6 +1017,7 @@ function collectPayload() {
       ticket_entree_min: MIN_PRODUIT,
       scoring_rdv: scoreLevel,
       scoring_label: scoreLabel,
+      type_dossier_rouge: scoreLevel === 'rouge' ? (state.redType || 'rouge') : null,
     },
     objections_agent: { augmenter_apport: state.objections.augmenter_apport, baisser_budget: state.objections.baisser_budget },
     notes: g('notes'),
