@@ -89,11 +89,20 @@
   .modal-overlay.hidden{ display:none; }
   .detail-modal{ background:var(--surface); border-radius:18px; max-width:720px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:var(--shadow); position:relative; }
   .modal-x{ position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,.9); color:#20263a; font-size:16px; cursor:pointer; z-index:5; }
-  .modal-gallery{ position:relative; aspect-ratio:16/9; background:#000; }
-  .modal-gallery img{ width:100%; height:100%; object-fit:cover; }
-  .modal-dots{ position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:6px; }
-  .modal-dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5); cursor:pointer; }
-  .modal-dot.active{ background:#fff; }
+  .modal-gallery{ position:relative; aspect-ratio:16/9; background:#000; touch-action:pan-y; overflow:hidden; }
+  .modal-gallery img{ width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none; }
+  .modal-dots{ position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:8px; z-index:2; }
+  .modal-dot{ width:20px; height:20px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .modal-dot::after{ content:''; width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5); }
+  .modal-dot.active::after{ background:#fff; }
+  .modal-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:2; width:38px; height:38px; border-radius:50%;
+    border:none; background:rgba(0,0,0,.4); color:#fff; font-size:22px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-arrow-prev{ left:10px; }
+  .modal-arrow-next{ right:10px; }
+  .modal-arrow[hidden]{ display:none; }
   .modal-body{ padding:28px 30px 32px; }
   .modal-tag{ display:inline-block; background:var(--navy); color:#fff; font-size:10.5px; font-weight:700; padding:5px 12px; border-radius:20px; margin-bottom:10px; }
   .modal-body h3{ font-size:24px; font-weight:600; margin:0 0 4px; }
@@ -219,8 +228,10 @@
 <div class="modal-overlay hidden" id="detailOverlay" onclick="closeDetailIfBackdrop(event)">
   <div class="detail-modal">
     <button class="modal-x" onclick="closeDetail()">✕</button>
-    <div class="modal-gallery">
+    <div class="modal-gallery" id="modalGallery">
       <img id="modalImg" src="" alt="">
+      <button class="modal-arrow modal-arrow-prev" onclick="event.stopPropagation(); prevModalImg()" aria-label="Photo précédente" hidden>‹</button>
+      <button class="modal-arrow modal-arrow-next" onclick="event.stopPropagation(); nextModalImg()" aria-label="Photo suivante" hidden>›</button>
       <div class="modal-dots" id="modalDots"></div>
     </div>
     <div class="modal-body">
@@ -366,8 +377,37 @@ function renderModalGallery(){
   document.getElementById('modalDots').innerHTML = r.photos.map((p,i) =>
     `<span class="modal-dot ${i===modalIdx?'active':''}" onclick="event.stopPropagation(); setModalIdx(${i})"></span>`
   ).join('');
+  const multi = r.photos.length > 1;
+  document.querySelector('.modal-arrow-prev').hidden = !multi;
+  document.querySelector('.modal-arrow-next').hidden = !multi;
 }
 function setModalIdx(i){ modalIdx = i; renderModalGallery(); }
+function prevModalImg(){
+  if (!modalResidence) return;
+  modalIdx = (modalIdx - 1 + modalResidence.photos.length) % modalResidence.photos.length;
+  renderModalGallery();
+}
+function nextModalImg(){
+  if (!modalResidence) return;
+  modalIdx = (modalIdx + 1) % modalResidence.photos.length;
+  renderModalGallery();
+}
+
+let touchStartX = null, touchStartY = null;
+const galleryEl = document.getElementById('modalGallery');
+galleryEl.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+galleryEl.addEventListener('touchend', (e) => {
+  if (touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+    if (dx < 0) nextModalImg(); else prevModalImg();
+  }
+  touchStartX = null; touchStartY = null;
+});
 function closeDetail(){ document.getElementById('detailOverlay').classList.add('hidden'); }
 function closeDetailIfBackdrop(e){ if (e.target.id === 'detailOverlay') closeDetail(); }
 function requestFromModal(){
