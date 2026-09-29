@@ -220,12 +220,26 @@
   .toast.t-error{ background:var(--bad-ink); }
 
   /* ── MODAL (questions dossier rouge) ── */
-  .modal-overlay{ position:fixed; inset:0; background:rgba(20,30,50,.55); z-index:250; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay{
+    position:fixed; top:90px; right:18px; z-index:250; width:300px; max-width:calc(100vw - 36px);
+    pointer-events:none; /* seule la carte capte les clics, le reste de la page reste utilisable */
+  }
   .modal-overlay.hidden{ display:none; }
-  .modal-card{ background:var(--surface); border-radius:var(--radius-lg); padding:26px; max-width:380px; width:100%; box-shadow:var(--shadow-lg); }
-  .modal-title{ font-size:17px; font-weight:800; color:var(--ink); margin-bottom:6px; }
-  .modal-sub{ font-size:12.5px; color:var(--ink-muted); margin-bottom:18px; line-height:1.5; }
-  .modal-q{ margin-bottom:16px; }
+  .modal-card{
+    background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-lg); padding:20px;
+    box-shadow:var(--shadow-lg); pointer-events:auto; position:relative;
+    animation:modalSlideIn .25s ease;
+  }
+  @keyframes modalSlideIn{ from{ opacity:0; transform:translateX(16px); } to{ opacity:1; transform:translateX(0); } }
+  .modal-close-x{
+    position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; border:none;
+    background:var(--surface-2); color:var(--ink-faint); font-size:14px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close-x:hover{ background:var(--border); color:var(--ink); }
+  .modal-title{ font-size:15px; font-weight:800; color:var(--ink); margin-bottom:5px; padding-right:20px; }
+  .modal-sub{ font-size:11.5px; color:var(--ink-muted); margin-bottom:15px; line-height:1.5; }
+  .modal-q{ margin-bottom:13px; }
   .modal-q label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px; }
   .btn-modal-close{ width:100%; margin-top:6px; padding:12px; border:none; border-radius:40px; background:var(--navy); color:#fff; font-family:var(--font-ui); font-size:13px; font-weight:700; cursor:pointer; }
   .signal-reopen{ margin-top:10px; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.85); text-decoration:underline; cursor:pointer; background:none; border:none; font-family:var(--font-ui); padding:0; }
@@ -272,6 +286,7 @@
 
 <div class="modal-overlay hidden" id="redModal">
   <div class="modal-card">
+    <button class="modal-close-x" onclick="closeRedModal()" aria-label="Fermer">✕</button>
     <div class="modal-title">Dossier à retravailler</div>
     <p class="modal-sub">Avant de clore l'appel, vérifiez ces deux leviers avec le prospect :</p>
     <div class="modal-q">
