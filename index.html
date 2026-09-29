@@ -907,6 +907,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   reasonsEl.innerHTML = reasons.map(r => `<div class="signal-reason">${r}</div>`).join('')
     + (level === 'red' ? '<button class="signal-reopen" onclick="openRedModal()">📋 Répondre aux 2 questions (apport / budget)</button>' : '');
   if (becameRed) openRedModal();
+  if (level !== 'red') closeRedModal();
 
   document.getElementById('bookingCta').classList.toggle('hidden', level === 'red' || level === 'neutral');
   const ctaText = document.getElementById('bookingCtaText');
