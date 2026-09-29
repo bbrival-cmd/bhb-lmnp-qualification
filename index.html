@@ -116,6 +116,7 @@
   }
   .btn-info-mail:hover:not(:disabled){ background:var(--accent); color:#fff; }
   .btn-info-mail:disabled{ opacity:.6; cursor:default; }
+  .btn-info-mail.sent{ border-color:var(--good); color:var(--good-ink); background:var(--good-soft); opacity:1; }
 
   /* ── LIVE METRICS ── */
   .metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
@@ -391,7 +392,7 @@
       </div>
       <div class="field">
         <label>Email</label>
-        <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink()">
+        <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink(); resetInfoMailState();">
       </div>
     </div>
     <div class="info-mail-row">
@@ -629,7 +630,7 @@ function revenuLocatifRetenu(montant) {
   return (montant * RENDEMENT_LOCATIF / 12) * QUOTITE_LOYERS_BANCAIRE;
 }
 
-const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null, objections:{ augmenter_apport:null, baisser_budget:null } };
+const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null, objections:{ augmenter_apport:null, baisser_budget:null }, infoMailSent:false };
 
 function selectModalAnswer(key, el, val) {
   const group = el.closest('.toggle-group');
@@ -1062,7 +1063,18 @@ async function submitForm() {
 
 const INFO_MAIL_WH = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-mail-info';
 
+function resetInfoMailState() {
+  if (!state.infoMailSent) return;
+  state.infoMailSent = false;
+  const btn = document.getElementById('btnInfoMail');
+  btn.innerHTML = '📧 Envoyer un mail d\'information au prospect';
+  btn.disabled = false;
+  btn.classList.remove('sent');
+}
+
 async function sendInfoEmail() {
+  if (state.infoMailSent) { showToast('Le mail a déjà été envoyé à ce prospect', 'error'); return; }
+
   const prenom = document.getElementById('prenom').value.trim();
   const nom = document.getElementById('nom').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -1072,6 +1084,7 @@ async function sendInfoEmail() {
   if (!emailOk) { showToast('Un email valide du prospect est requis', 'error'); return; }
 
   const btn = document.getElementById('btnInfoMail');
+  if (btn.disabled) return; // garde-fou anti double-clic
   const original = btn.innerHTML;
   btn.innerHTML = '<div class="spinner"></div> Envoi...';
   btn.disabled = true;
@@ -1082,9 +1095,11 @@ async function sendInfoEmail() {
       body: JSON.stringify({ prenom, nom, email, telephone: document.getElementById('tel').value.trim() })
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
+    state.infoMailSent = true;
     showToast('Mail d\'information envoyé à ' + email, 'success');
-    btn.innerHTML = '✓ Mail envoyé';
-    setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 4000);
+    btn.innerHTML = '✓ Mail déjà envoyé à ce prospect';
+    btn.classList.add('sent');
+    btn.disabled = true; // reste bloqué tant que l'email n'est pas modifié
   } catch (e) {
     showToast('Erreur lors de l\'envoi du mail d\'information', 'error');
     btn.innerHTML = original;
@@ -1104,6 +1119,7 @@ function resetForm() {
   document.getElementById('tauxRange').value = 3.9; document.getElementById('tauxVal').textContent = '3.90';
   state.duree = 25; state.taux = 3.9; state.epargne = 8000; state.apport = 8000; state.mode = 'mixte';
   state.objections = { augmenter_apport:null, baisser_budget:null };
+  state.infoMailSent = false;
   document.querySelectorAll('#modalApportToggle .toggle-btn, #modalBudgetToggle .toggle-btn').forEach(b=>b.classList.remove('sel'));
   closeRedModal();
   document.querySelectorAll('#modeAchatToggle .toggle-btn').forEach(b=>b.classList.toggle('sel', b.dataset.val === 'mixte'));
@@ -1114,6 +1130,7 @@ function resetForm() {
   const btnInfo = document.getElementById('btnInfoMail');
   btnInfo.innerHTML = '📧 Envoyer un mail d\'information au prospect';
   btnInfo.disabled = false;
+  btnInfo.classList.remove('sent');
   calcLive();
 }
 </script>
