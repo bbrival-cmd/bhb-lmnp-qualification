@@ -1,0 +1,818 @@
+{
+ "updated_at": "2026-09-30",
+ "base_url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/lmnp-residences/",
+ "residences": [
+  {
+   "id": "cvp-01",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "01-studea-marseille",
+   "name": "Résidence Le Campus Bleu",
+   "ville": "Marseille",
+   "departement": "13",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "Résidence étudiante",
+   "rendement": 6.75,
+   "prix": 47620,
+   "loyer_mensuel_estime": 268,
+   "accroche": "À deux pas des facultés, studios entièrement équipés.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-02",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "02-appartcity-marseille-euromed",
+   "name": "Résidence Les Docks d'Affaires",
+   "ville": "Marseille",
+   "departement": "13",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "Résidence affaires",
+   "rendement": 8.5,
+   "prix": 58458,
+   "loyer_mensuel_estime": 414,
+   "accroche": "Quartier d'affaires en plein essor, forte demande locative.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-03",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "03-ehpad-saint-victoret",
+   "name": "Résidence Les Jardins de Provence",
+   "ville": "Saint-Victoret (13)",
+   "departement": "13",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "EHPAD",
+   "rendement": 6.5,
+   "prix": 146430,
+   "loyer_mensuel_estime": 793,
+   "accroche": "Résidence médicalisée dans les Bouches-du-Rhône, cadre paysager.",
+   "points_forts": [
+    "Secteur porté par le vieillissement démographique",
+    "Baux longs, bien peu sensible aux cycles économiques",
+    "Aucune gestion : l'exploitant médical assure la totalité du fonctionnement"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Espace de vie"
+    }
+   ]
+  },
+  {
+   "id": "cvp-04",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "04-appartcity-nice",
+   "name": "Résidence Le Belvédère Azur",
+   "ville": "Nice",
+   "departement": "06",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "Résidence affaires",
+   "rendement": 5.77,
+   "prix": 85070,
+   "loyer_mensuel_estime": 409,
+   "accroche": "Sur la Côte d'Azur, forte attractivité touristique et professionnelle.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-05",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "05-garden-city-toulon",
+   "name": "Résidence Les Terrasses du Mourillon",
+   "ville": "Toulon",
+   "departement": "83",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "Résidence étudiante",
+   "rendement": 5.84,
+   "prix": 50080,
+   "loyer_mensuel_estime": 244,
+   "accroche": "Architecture contemporaine, proche campus et transports.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-06",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "06-alpages-corbier",
+   "name": "Les Chalets de l'Étoile",
+   "ville": "Villarembert (73)",
+   "departement": "73",
+   "region": "Auvergne-Rhône-Alpes",
+   "type": "Résidence de tourisme",
+   "rendement": 5.53,
+   "prix": 59500,
+   "loyer_mensuel_estime": 274,
+   "accroche": "Pieds des pistes en Savoie, piscine et espace détente inclus.",
+   "points_forts": [
+    "Rendement parmi les plus élevés du marché LMNP",
+    "Possibilité selon bail de séjourner quelques semaines par an",
+    "Bail commercial : l'exploitant gère tout (ménage, clientèle, entretien)"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Cuisine / séjour"
+    }
+   ]
+  },
+  {
+   "id": "cvp-07",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "07-appartcity-clichy",
+   "name": "Résidence Les Portes de Paris",
+   "ville": "Clichy (92)",
+   "departement": "92",
+   "region": "Île-de-France",
+   "type": "Résidence affaires",
+   "rendement": 5.36,
+   "prix": 201850,
+   "loyer_mensuel_estime": 902,
+   "accroche": "Aux portes de Paris, forte tension locative francilienne.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-08",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "08-paul-cezanne-ehpad",
+   "name": "Résidence Les Oliviers de Provence",
+   "ville": "Malijai (04)",
+   "departement": "04",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "EHPAD",
+   "rendement": 7.12,
+   "prix": 104939,
+   "loyer_mensuel_estime": 623,
+   "accroche": "Résidence médicalisée en Provence, cadre calme et verdoyant.",
+   "points_forts": [
+    "Secteur porté par le vieillissement démographique",
+    "Baux longs, bien peu sensible aux cycles économiques",
+    "Aucune gestion : l'exploitant médical assure la totalité du fonctionnement"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Salon commun"
+    },
+    {
+     "f": "commun2.jpg",
+     "l": "Espace de vie"
+    }
+   ]
+  },
+  {
+   "id": "cvp-09",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "09-voiles-blanches",
+   "name": "Le Hameau des Salines",
+   "ville": "Batz-sur-Mer (44)",
+   "departement": "44",
+   "region": "Pays de la Loire",
+   "type": "Résidence de tourisme",
+   "rendement": 5.85,
+   "prix": 53000,
+   "loyer_mensuel_estime": 258,
+   "accroche": "Bord de mer en Loire-Atlantique, piscine chauffée.",
+   "points_forts": [
+    "Rendement parmi les plus élevés du marché LMNP",
+    "Possibilité selon bail de séjourner quelques semaines par an",
+    "Bail commercial : l'exploitant gère tout (ménage, clientèle, entretien)"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Cuisine / séjour"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-10",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "10-appartcity-limoges",
+   "name": "Résidence Le Clos Limousin",
+   "ville": "Limoges",
+   "departement": "87",
+   "region": "Nouvelle-Aquitaine",
+   "type": "Résidence affaires",
+   "rendement": 8.51,
+   "prix": 52811,
+   "loyer_mensuel_estime": 375,
+   "accroche": "Centre-ville, rendement parmi les plus attractifs de la sélection.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-11",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "11-lille-lambret",
+   "name": "Résidence Le Campus des Flandres",
+   "ville": "Lille",
+   "departement": "59",
+   "region": "Hauts-de-France",
+   "type": "Résidence étudiante",
+   "rendement": 5.75,
+   "prix": 58956,
+   "loyer_mensuel_estime": 282,
+   "accroche": "En plein cœur de la métropole lilloise, proche des grandes écoles.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-12",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "12-cherbourg",
+   "name": "Résidence Le Cap Cotentin",
+   "ville": "Cherbourg",
+   "departement": "50",
+   "region": "Normandie",
+   "type": "Résidence affaires",
+   "rendement": 5.0,
+   "prix": 74145,
+   "loyer_mensuel_estime": 309,
+   "accroche": "Centre-ville portuaire, clientèle affaires et militaire récurrente.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-13",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "13-saint-cyr-ecole",
+   "name": "Résidence Le Parc Saint-Louis",
+   "ville": "Saint-Cyr-l'École (78)",
+   "departement": "78",
+   "region": "Île-de-France",
+   "type": "Résidence affaires",
+   "rendement": 7.32,
+   "prix": 51500,
+   "loyer_mensuel_estime": 314,
+   "accroche": "Aux portes de Versailles, excellent rendement pour l'Île-de-France.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-14",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "14-le-mans",
+   "name": "Résidence Les Arcades du Mans",
+   "ville": "Le Mans",
+   "departement": "72",
+   "region": "Pays de la Loire",
+   "type": "Résidence affaires",
+   "rendement": 6.23,
+   "prix": 123957,
+   "loyer_mensuel_estime": 644,
+   "accroche": "Centre-ville, à proximité de la gare TGV Paris-Montparnasse.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Accueil"
+    },
+    {
+     "f": "commun2.jpg",
+     "l": "Espace petit-déjeuner"
+    }
+   ]
+  },
+  {
+   "id": "cvp-15",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "15-valence",
+   "name": "Résidence Le Rhodania",
+   "ville": "Valence",
+   "departement": "26",
+   "region": "Auvergne-Rhône-Alpes",
+   "type": "Résidence affaires",
+   "rendement": 6.52,
+   "prix": 52000,
+   "loyer_mensuel_estime": 283,
+   "accroche": "Ville en développement, bien desservie par le TGV.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-16",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "16-saint-nazaire",
+   "name": "Résidence L'Estuaire",
+   "ville": "Saint-Nazaire",
+   "departement": "44",
+   "region": "Pays de la Loire",
+   "type": "Résidence affaires",
+   "rendement": 6.32,
+   "prix": 54000,
+   "loyer_mensuel_estime": 284,
+   "accroche": "Bassin d'emploi industriel dynamique, forte demande professionnelle.",
+   "points_forts": [
+    "Clientèle professionnelle récurrente, peu saisonnière",
+    "Emplacement urbain bien desservi",
+    "Bail commercial : loyers versés par l'exploitant, zéro gestion"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-17",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "17-le-val-ehpad",
+   "name": "Résidence Les Terrasses du Var",
+   "ville": "Le Val (83)",
+   "departement": "83",
+   "region": "Provence-Alpes-Côte d'Azur",
+   "type": "EHPAD",
+   "rendement": 6.47,
+   "prix": 106105,
+   "loyer_mensuel_estime": 572,
+   "accroche": "Résidence médicalisée provençale, cadre fleuri et paisible.",
+   "points_forts": [
+    "Secteur porté par le vieillissement démographique",
+    "Baux longs, bien peu sensible aux cycles économiques",
+    "Aucune gestion : l'exploitant médical assure la totalité du fonctionnement"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Salle à manger"
+    }
+   ]
+  },
+  {
+   "id": "cvp-18",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "18-bergerac",
+   "name": "Le Domaine des Vignes",
+   "ville": "Bergerac",
+   "departement": "24",
+   "region": "Nouvelle-Aquitaine",
+   "type": "Résidence de tourisme",
+   "rendement": 8.19,
+   "prix": 48000,
+   "loyer_mensuel_estime": 328,
+   "accroche": "Au cœur du vignoble du Périgord, piscine et espace détente.",
+   "points_forts": [
+    "Rendement parmi les plus élevés du marché LMNP",
+    "Possibilité selon bail de séjourner quelques semaines par an",
+    "Bail commercial : l'exploitant gère tout (ménage, clientèle, entretien)"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-19",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "19-carcassonne",
+   "name": "Résidence La Cité Sud",
+   "ville": "Carcassonne",
+   "departement": "11",
+   "region": "Occitanie",
+   "type": "Résidence de tourisme",
+   "rendement": 8.05,
+   "prix": 55500,
+   "loyer_mensuel_estime": 372,
+   "accroche": "Proche de la cité médiévale, piscine intérieure chauffée.",
+   "points_forts": [
+    "Rendement parmi les plus élevés du marché LMNP",
+    "Possibilité selon bail de séjourner quelques semaines par an",
+    "Bail commercial : l'exploitant gère tout (ménage, clientèle, entretien)"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-20",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "20-etretat",
+   "name": "Château des Falaises",
+   "ville": "Étretat",
+   "departement": "76",
+   "region": "Normandie",
+   "type": "Résidence de tourisme",
+   "rendement": 6.59,
+   "prix": 43000,
+   "loyer_mensuel_estime": 236,
+   "accroche": "Château normand entièrement rénové, à deux pas des falaises.",
+   "points_forts": [
+    "Rendement parmi les plus élevés du marché LMNP",
+    "Possibilité selon bail de séjourner quelques semaines par an",
+    "Bail commercial : l'exploitant gère tout (ménage, clientèle, entretien)"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Séjour"
+    }
+   ]
+  },
+  {
+   "id": "cvp-21",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "21-clermont-ferrand",
+   "name": "Résidence Le Quartier Latin",
+   "ville": "Clermont-Ferrand",
+   "departement": "63",
+   "region": "Auvergne-Rhône-Alpes",
+   "type": "Résidence étudiante",
+   "rendement": 5.5,
+   "prix": 63320,
+   "loyer_mensuel_estime": 290,
+   "accroche": "Proche des campus universitaires auvergnats.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    }
+   ]
+  },
+  {
+   "id": "cvp-22",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "22-reims",
+   "name": "Résidence Le Clos Champenois",
+   "ville": "Reims",
+   "departement": "51",
+   "region": "Grand Est",
+   "type": "Résidence étudiante",
+   "rendement": 5.52,
+   "prix": 76000,
+   "loyer_mensuel_estime": 350,
+   "accroche": "Résidence moderne au cœur de la capitale champenoise.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-23",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "23-nantes",
+   "name": "Résidence Le Campus Atlantique",
+   "ville": "Nantes",
+   "departement": "44",
+   "region": "Pays de la Loire",
+   "type": "Résidence étudiante",
+   "rendement": 4.1,
+   "prix": 108335,
+   "loyer_mensuel_estime": 370,
+   "accroche": "Résidence neuve en plein centre, proche des grandes écoles.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "salle-de-bain.jpg",
+     "l": "Salle de bain"
+    }
+   ]
+  },
+  {
+   "id": "cvp-24",
+   "source": "celavipierre",
+   "disponible": true,
+   "folder": "24-echirolles",
+   "name": "Résidence Le Campus Alpin",
+   "ville": "Échirolles (38)",
+   "departement": "38",
+   "region": "Auvergne-Rhône-Alpes",
+   "type": "Résidence étudiante",
+   "rendement": 5.0,
+   "prix": 87969,
+   "loyer_mensuel_estime": 367,
+   "accroche": "Aux portes de Grenoble, proche des campus scientifiques.",
+   "points_forts": [
+    "Demande locative structurelle (pénurie de logements étudiants)",
+    "Ticket d'entrée accessible, studio meublé clé en main",
+    "Bail commercial avec un exploitant spécialisé : aucune gestion locative"
+   ],
+   "photos": [
+    {
+     "f": "exterieur.jpg",
+     "l": "Extérieur"
+    },
+    {
+     "f": "chambre.jpg",
+     "l": "Chambre"
+    },
+    {
+     "f": "commun.jpg",
+     "l": "Salle de sport"
+    }
+   ]
+  }
+ ]
+}
