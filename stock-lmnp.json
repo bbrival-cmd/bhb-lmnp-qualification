@@ -1,6 +1,6 @@
 {
  "updated_at": "2026-09-30",
- "count": 276,
+ "count": 265,
  "residences": [
   {
    "id": "r3bba0a25",
@@ -1286,39 +1286,6 @@
     },
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r18846fa8/2.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r9a5c7af0",
-   "name": "Résidence L'Atelier des Pins",
-   "ville": "Biot",
-   "cp": "06410",
-   "departement": "06",
-   "region": "Provence-Alpes-Côte d'Azur",
-   "type": "Résidence étudiante",
-   "prix": 62000,
-   "rendement": 5.75,
-   "loyer_mensuel_estime": 297,
-   "lots_dispo": 1,
-   "typologies": [
-    "Studio"
-   ],
-   "fin_bail": 2032,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r9a5c7af0/0.jpg",
-     "l": "Résidence"
-    },
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r9a5c7af0/1.jpg",
-     "l": "Résidence"
-    },
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r9a5c7af0/2.jpg",
      "l": "Résidence"
     }
    ],
@@ -3239,31 +3206,6 @@
    "disponible": true
   },
   {
-   "id": "r84cb462d",
-   "name": "Résidence L'Escale de la Fontaine",
-   "ville": "Pau",
-   "cp": "64000",
-   "departement": "64",
-   "region": "Nouvelle-Aquitaine",
-   "type": "Résidence affaires",
-   "prix": 46781,
-   "rendement": 6.4,
-   "loyer_mensuel_estime": 250,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Résidence affaires gérée, clientèle professionnelle récurrente.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r84cb462d/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
    "id": "r611f6084",
    "name": "Résidence Les Studios du Levant",
    "ville": "Saint-Étienne",
@@ -4291,31 +4233,6 @@
    "disponible": true
   },
   {
-   "id": "re9bebbb2",
-   "name": "Résidence Les Studios de la Fontaine",
-   "ville": "Clermont-Ferrand",
-   "cp": "63000",
-   "departement": "63",
-   "region": "Auvergne-Rhône-Alpes",
-   "type": "Résidence étudiante",
-   "prix": 173358,
-   "rendement": 4.4,
-   "loyer_mensuel_estime": 645,
-   "lots_dispo": 1,
-   "typologies": [
-    "3 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/re9bebbb2/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
    "id": "rfc9f00ae",
    "name": "Résidence Le Campus Saint-Clair",
    "ville": "Massy",
@@ -4335,31 +4252,6 @@
    "photos": [
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/rfc9f00ae/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "rcdd97954",
-   "name": "Résidence La Villa des Platanes",
-   "ville": "Cholet",
-   "cp": "49300",
-   "departement": "49",
-   "region": "Pays de la Loire",
-   "type": "Résidence seniors",
-   "prix": 163519,
-   "rendement": 5.2,
-   "loyer_mensuel_estime": 717,
-   "lots_dispo": 1,
-   "typologies": [
-    "2 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Résidence services seniors, secteur porté par la démographie.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/rcdd97954/0.jpg",
      "l": "Résidence"
     }
    ],
@@ -4744,31 +4636,6 @@
    "disponible": true
   },
   {
-   "id": "r98fed73e",
-   "name": "Résidence Les Terrasses du Parc",
-   "ville": "La   Rochelle",
-   "cp": "17000",
-   "departement": "17",
-   "region": "Nouvelle-Aquitaine",
-   "type": "Résidence seniors",
-   "prix": 164863,
-   "rendement": 4.7,
-   "loyer_mensuel_estime": 647,
-   "lots_dispo": 1,
-   "typologies": [
-    "2 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Résidence services seniors, secteur porté par la démographie.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r98fed73e/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
    "id": "r452b20e2",
    "name": "Résidence L'Atelier du Soleil",
    "ville": "Chelles",
@@ -4838,31 +4705,6 @@
    "photos": [
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/rdbb7758f/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r46785471",
-   "name": "Résidence Le Parc du Levant",
-   "ville": "Nîmes",
-   "cp": "30000",
-   "departement": "30",
-   "region": "Occitanie",
-   "type": "EHPAD",
-   "prix": 204833,
-   "rendement": 4.8,
-   "loyer_mensuel_estime": 819,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Chambre en établissement médicalisé, bail long avec exploitant spécialisé.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r46785471/0.jpg",
      "l": "Résidence"
     }
    ],
@@ -5138,57 +4980,6 @@
    "photos": [
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r57cb21c1/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r892a6a42",
-   "name": "Résidence Le Hameau Mirabeau",
-   "ville": "Dinan",
-   "cp": "22100",
-   "departement": "22",
-   "region": "Bretagne",
-   "type": "Résidence de tourisme",
-   "prix": 39795,
-   "rendement": 6.3,
-   "loyer_mensuel_estime": 209,
-   "lots_dispo": 6,
-   "typologies": [
-    "1 p.",
-    "2 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Résidence de tourisme gérée, bail commercial avec exploitant.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r892a6a42/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r89530ffe",
-   "name": "Résidence Le Carré Montclair",
-   "ville": "Aulnoy-Lez-Valenciennes",
-   "cp": "59300",
-   "departement": "59",
-   "region": "Hauts-de-France",
-   "type": "Résidence étudiante",
-   "prix": 51492,
-   "rendement": 5.5,
-   "loyer_mensuel_estime": 236,
-   "lots_dispo": 2,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r89530ffe/0.jpg",
      "l": "Résidence"
     }
    ],
@@ -5869,31 +5660,6 @@
    "photos": [
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r1fe1da67/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r4fa01342",
-   "name": "Résidence Le Carré du Moulin",
-   "ville": "Clermont-Ferrand",
-   "cp": "63000",
-   "departement": "63",
-   "region": "Auvergne-Rhône-Alpes",
-   "type": "Résidence étudiante",
-   "prix": 47221,
-   "rendement": 5.0,
-   "loyer_mensuel_estime": 197,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r4fa01342/0.jpg",
      "l": "Résidence"
     }
    ],
@@ -7333,31 +7099,6 @@
    "disponible": true
   },
   {
-   "id": "r9e4a3075",
-   "name": "Résidence Le Clos des Sources",
-   "ville": "Agde",
-   "cp": "34300",
-   "departement": "34",
-   "region": "Occitanie",
-   "type": "Résidence de tourisme",
-   "prix": 97811,
-   "rendement": 5.3,
-   "loyer_mensuel_estime": 432,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Résidence de tourisme gérée, bail commercial avec exploitant.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r9e4a3075/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
    "id": "rf0a6fba2",
    "name": "Résidence Les Cèdres Horizon",
    "ville": "Courtenay",
@@ -7556,31 +7297,6 @@
    "photos": [
     {
      "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/rc1bc07d8/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "r4a8c021b",
-   "name": "Résidence Le Quartier Montclair",
-   "ville": "Vanves",
-   "cp": "92170",
-   "departement": "92",
-   "region": "Île-de-France",
-   "type": "Résidence étudiante",
-   "prix": 127164,
-   "rendement": 4.3,
-   "loyer_mensuel_estime": 456,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://bbrival-cmd.github.io/bhb-lmnp-qualification/stock-photos/r4a8c021b/0.jpg",
      "l": "Résidence"
     }
    ],
