@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Relecture proposition · Cabinet BHB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ec; --surface:#ffffff; --line:#e4ddc9; --field:#fbfaf6; --soft:#f1ede2;
+    --ink:#20263a; --ink-muted:#5b6272; --ink-faint:#8d8570;
+    --navy:#314975; --gold:#898068; --accent:#f0aa00; --accent-ink:#20263a;
+    --ok:#2f7d4f; --ok-bg:#e6f2ea; --err:#b3261e; --warn-bg:#fdf3dc;
+    --font-display:'Fraunces',Georgia,serif; --font-ui:'Montserrat',Arial,sans-serif;
+    --shadow-sm:0 6px 16px rgba(32,38,58,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d; --soft:#262c3f;
+      --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+      --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --ok-bg:#1f3529; --err:#f08a80; --warn-bg:#3a321c;
+      --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d; --soft:#262c3f;
+    --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+    --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --ok-bg:#1f3529; --err:#f08a80; --warn-bg:#3a321c;
+    --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-ui); font-size:15px; }
+  [hidden]{ display:none !important; }
+  .wrap{ max-width:980px; margin:0 auto; padding:0 20px; }
+  .nav{ background:#314975; padding:12px 0; }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .nav img{ height:30px; }
+  .nav a{ color:#fff; font-size:12px; font-weight:700; text-decoration:none; opacity:.85; }
+  h1{ font-family:var(--font-display); font-weight:600; font-size:clamp(24px,4.2vw,34px); margin:30px 0 8px; line-height:1.15; }
+  h2{ font-family:var(--font-display); font-weight:600; font-size:22px; margin:34px 0 14px; }
+  .sub{ color:var(--ink-muted); margin:0 0 20px; display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:14px; }
+  .badge{ display:inline-block; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:800; }
+  .badge.draft{ background:var(--warn-bg); color:var(--ink); }
+  .badge.sent{ background:var(--ok-bg); color:var(--ok); }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow-sm); }
+  .label{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:800; margin:0 0 10px; }
+  .resume{ line-height:1.6; margin:0 0 14px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+  .chip{ background:var(--soft); border-radius:20px; padding:6px 12px; font-size:12.5px; font-weight:600; }
+  .chip b{ color:var(--navy); }
+  .chip.no{ text-decoration:line-through; color:var(--ink-faint); }
+  .attn{ margin:12px 0 0; padding:12px 14px; background:var(--warn-bg); border-radius:10px; font-size:13.5px; line-height:1.55; }
+  .attn ul{ margin:6px 0 0; padding-left:18px; }
+
+  .items{ display:grid; gap:16px; }
+  .item{ display:grid; grid-template-columns:230px 1fr; gap:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow-sm); transition:opacity .2s; }
+  .item.busy{ opacity:.45; pointer-events:none; }
+  @media (max-width:680px){ .item{ grid-template-columns:1fr; } .item .photo{ aspect-ratio:16/10; } }
+  .photo{ position:relative; background:var(--soft); min-height:100%; }
+  .photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .num{ position:absolute; top:10px; left:10px; width:28px; height:28px; border-radius:50%; background:var(--accent); color:var(--accent-ink); display:grid; place-items:center; font-weight:800; font-size:13px; }
+  .body{ padding:16px 18px; display:flex; flex-direction:column; gap:8px; }
+  .kicker{ font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:800; }
+  .name{ font-family:var(--font-display); font-size:19px; font-weight:600; margin:0; }
+  .figs{ display:flex; flex-wrap:wrap; gap:6px 16px; font-size:13px; color:var(--ink-muted); }
+  .figs b{ color:var(--ink); }
+  .why{ font-size:14px; line-height:1.55; font-style:italic; color:var(--ink-muted); margin:0; }
+  .pf{ margin:0; padding-left:18px; font-size:13.5px; line-height:1.6; }
+  .row-actions{ display:flex; justify-content:flex-end; margin-top:auto; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:30px; padding:10px 18px; font:inherit; font-weight:800; font-size:13px; cursor:pointer; text-decoration:none; }
+  .btn-ghost{ background:transparent; border:1.5px solid var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--navy); }
+  .btn-ghost:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); padding:15px 28px; font-size:15.5px; }
+  .btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
+  .btn-wa{ background:#25d366; color:#0b2e17; }
+  .btn-navy{ background:var(--navy); color:#fff; }
+  textarea, input{ width:100%; font:inherit; color:var(--ink); background:var(--field); border:1.5px solid var(--line); border-radius:9px; padding:11px 12px; }
+  textarea{ min-height:120px; resize:vertical; line-height:1.55; font-size:14px; }
+  textarea:focus{ outline:none; border-color:var(--navy); }
+  .send{ margin:26px 0 12px; }
+  .send-foot{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-top:14px; }
+  .send-foot small{ color:var(--ink-muted); }
+  .done{ border-color:var(--ok); }
+  .copy-row{ display:flex; gap:8px; margin:8px 0 16px; }
+  .copy-row input{ flex:1; min-width:0; font-size:13px; }
+  .wa-text{ min-height:110px; font-size:13.5px; }
+  .btns{ display:flex; flex-wrap:wrap; gap:10px; }
+  .track{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+  @media (max-width:600px){ .track{ grid-template-columns:1fr; } }
+  .stat{ background:var(--soft); border-radius:10px; padding:12px 14px; }
+  .stat b{ display:block; font-size:20px; color:var(--navy); }
+  .stat span{ font-size:12px; color:var(--ink-muted); font-weight:600; }
+  .msg{ padding:60px 0; text-align:center; color:var(--ink-muted); }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#20263a; color:#fff; padding:11px 20px; border-radius:30px; font-weight:700; font-size:13.5px; box-shadow:0 8px 24px rgba(0,0,0,.25); z-index:50; }
+  .error{ color:var(--err); font-weight:600; }
+  footer{ text-align:center; color:var(--ink-faint); font-size:12px; padding:30px 0 40px; }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap"><img src="logo-bhb-white.png" alt="Cabinet BHB"><a href="proposition-commerciale.html">+ Nouvelle proposition</a></div></nav>
+
+<main class="wrap">
+  <div id="state" class="msg">Chargement de la proposition…</div>
+
+  <div id="app" hidden>
+    <h1 id="title"></h1>
+    <div class="sub" id="sub"></div>
+
+    <section class="card" id="cahierCard">
+      <p class="label">Cahier des charges extrait de la visio</p>
+      <p class="resume" id="resume"></p>
+      <div class="chips" id="chips"></div>
+      <div class="attn" id="attn" hidden><b>Points d'attention à traiter au prochain appel</b><ul id="attnList"></ul></div>
+    </section>
+
+    <h2>Les 5 résidences proposées</h2>
+    <div class="items" id="items"></div>
+
+    <section class="card send" id="sendCard">
+      <p class="label">Mot personnel en tête de la proposition</p>
+      <textarea id="mot" maxlength="800"></textarea>
+      <div class="send-foot">
+        <small id="sendTo"></small>
+        <button class="btn btn-primary" id="validate">Valider et envoyer au client</button>
+      </div>
+      <p class="error" id="sendErr" hidden></p>
+    </section>
+
+    <section class="card send done" id="doneCard" hidden>
+      <p class="label" style="color:var(--ok)">✓ Proposition envoyée par email</p>
+      <p style="margin:0 0 4px;font-weight:700">Lien de la sélection client</p>
+      <div class="copy-row"><input id="clientUrl" readonly><button class="btn btn-ghost" data-copy="clientUrl">Copier</button></div>
+      <p style="margin:0 0 4px;font-weight:700">Message WhatsApp</p>
+      <textarea class="wa-text" id="waText" readonly></textarea>
+      <div class="btns" style="margin-top:10px">
+        <button class="btn btn-navy" data-copy="waText">Copier le message</button>
+        <a class="btn btn-wa" id="waLink" target="_blank" rel="noopener">Ouvrir WhatsApp</a>
+        <a class="btn btn-ghost" id="previewLink" target="_blank" rel="noopener">Voir la page client</a>
+      </div>
+      <div class="track" id="track"></div>
+    </section>
+  </div>
+</main>
+<footer>Lien personnel au commercial — ne pas transmettre au client.</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const API = 'https://n8n.srv1404527.hstgr.cloud/webhook/';
+const T = new URLSearchParams(location.search).get('t') || '';
+const $ = id => document.getElementById(id);
+const esc = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
+const pct = n => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' %';
+const fdate = s => s ? new Date(s).toLocaleString('fr-FR', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+let D = null;
+
+function toast(m){ const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2200); }
+async function api(path, opts){
+  const r = await fetch(API + path, opts);
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok || !d.ok) throw new Error(d.error || 'Erreur réseau, réessayez.');
+  return d;
+}
+
+async function load(){
+  if (!T) { $('state').textContent = 'Lien incomplet.'; return; }
+  try { D = await api('lmnp-proposition?t=' + encodeURIComponent(T)); }
+  catch (e) { $('state').textContent = e.message; return; }
+  if (D.role !== 'admin') { $('state').textContent = 'Lien non valide pour la relecture.'; return; }
+  $('state').hidden = true; $('app').hidden = false;
+  render();
+}
+
+function render(){
+  const sent = D.statut === 'envoyee';
+  document.title = 'Proposition ' + D.prenom + ' ' + D.nom + ' · Cabinet BHB';
+  $('title').textContent = 'Proposition pour ' + D.prenom + ' ' + D.nom;
+  $('sub').innerHTML = `<span class="badge ${sent ? 'sent' : 'draft'}">${sent ? 'Envoyée le ' + fdate(D.sent_at) : 'Brouillon — à valider'}</span>
+    <span>${esc(D.email)}</span>${D.telephone ? '<span>' + esc(D.telephone) + '</span>' : ''}`;
+
+  const c = D.cahier || {};
+  $('resume').textContent = c.resume || '';
+  const chips = [];
+  if (c.budget_max || c.budget_min) chips.push(`Budget <b>${c.budget_min ? eur(c.budget_min) + ' – ' : '≤ '}${eur(c.budget_max || c.budget_min)}</b>`);
+  if (c.apport) chips.push(`Apport <b>${eur(c.apport)}</b>`);
+  if (c.financement) chips.push(`Financement <b>${esc(c.financement)}</b>`);
+  if (c.rendement_cible) chips.push(`Rendement visé <b>≥ ${pct(c.rendement_cible)}</b>`);
+  if (c.horizon_ans) chips.push(`Horizon <b>${c.horizon_ans} ans</b>`);
+  if (c.objectif) chips.push(`Objectif <b>${esc(c.objectif.replace(/_/g, ' '))}</b>`);
+  if (c.profil_risque) chips.push(`Profil <b>${esc(c.profil_risque)}</b>`);
+  (c.types_preferes || []).forEach(x => chips.push('✓ ' + esc(x)));
+  (c.zones_preferees || []).forEach(x => chips.push('📍 ' + esc(x)));
+  const no = [...(c.types_exclus || []), ...(c.zones_exclues || [])].map(x => `<span class="chip no">${esc(x)}</span>`);
+  $('chips').innerHTML = chips.map(x => `<span class="chip">${x}</span>`).join('') + no.join('');
+  const attn = c.points_attention || [];
+  $('attn').hidden = !attn.length;
+  $('attnList').innerHTML = attn.map(a => `<li>${esc(a)}</li>`).join('');
+
+  renderItems();
+
+  if (!$('mot').value) $('mot').value = D.mot_perso || `Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet. Prenez le temps de les découvrir ; je vous appelle dans les prochains jours pour en parler ensemble.`;
+  $('sendTo').textContent = 'Envoi à ' + D.email + ' — réponse vers ' + D.commercial_email;
+  $('sendCard').hidden = sent;
+  $('doneCard').hidden = !sent;
+  if (sent && D.client_url) fillDone({ client_url: D.client_url });
+}
+
+function renderItems(){
+  const sent = D.statut === 'envoyee';
+  $('items').innerHTML = D.selection.map((p, i) => `
+    <article class="item" id="item${i}">
+      <div class="photo"><img src="${esc(p.photos[0].url)}" alt="${esc(p.name)}" loading="lazy"><span class="num">${i + 1}</span></div>
+      <div class="body">
+        <div class="kicker">${esc(p.type)} · ${esc(p.ville)}</div>
+        <h3 class="name">${esc(p.name)}</h3>
+        <div class="figs"><span>Prix <b>${eur(p.prix)}</b></span><span>Rentabilité <b>${pct(p.rendement)}</b></span><span>Loyer ≈ <b>${eur(p.loyer_mensuel_estime)}/mois</b></span></div>
+        <p class="why">${esc(p.pourquoi)}</p>
+        <ul class="pf">${(p.points_forts || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        ${sent ? '' : `<div class="row-actions"><button class="btn btn-ghost" data-replace="${i}" ${D.remplacements_dispo ? '' : 'disabled title="Plus de projet de remplacement pertinent"'}>🔄 Remplacer</button></div>`}
+      </div>
+    </article>`).join('');
+}
+
+document.addEventListener('click', async e => {
+  const rep = e.target.closest('[data-replace]');
+  if (rep) {
+    const i = Number(rep.dataset.replace);
+    const card = $('item' + i); card.classList.add('busy');
+    try {
+      const d = await api('lmnp-proposition-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, action: 'replace', index: i }) });
+      D.selection[i] = d.item; D.remplacements_dispo = d.remplacements_dispo;
+      renderItems(); toast('Projet remplacé');
+    } catch (err) { card.classList.remove('busy'); toast(err.message); }
+    return;
+  }
+  const cp = e.target.closest('[data-copy]');
+  if (cp) {
+    const el = $(cp.dataset.copy);
+    try { await navigator.clipboard.writeText(el.value); } catch (_) { el.select(); document.execCommand('copy'); }
+    toast('Copié');
+  }
+});
+
+$('validate').addEventListener('click', async () => {
+  if (!confirm(`Envoyer la proposition par email à ${D.email} ?`)) return;
+  const b = $('validate'); b.disabled = true; b.textContent = 'Envoi en cours…'; $('sendErr').hidden = true;
+  try {
+    const d = await api('lmnp-proposition-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, action: 'validate', mot_perso: $('mot').value }) });
+    D.statut = 'envoyee'; D.sent_at = new Date().toISOString(); D.mot_perso = $('mot').value;
+    render(); fillDone(d); toast('Proposition envoyée');
+    $('doneCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) {
+    b.disabled = false; b.textContent = 'Valider et envoyer au client';
+    $('sendErr').textContent = err.message; $('sendErr').hidden = false;
+  }
+});
+
+function fillDone(d){
+  $('clientUrl').value = d.client_url;
+  const wa = d.whatsapp_text || `Bonjour ${D.prenom}, comme convenu suite à notre échange, voici votre sélection personnalisée de 5 résidences LMNP : ${d.client_url}\nJe reste à votre disposition pour en discuter.\n${D.commercial_nom} – Cabinet BHB`;
+  $('waText').value = wa;
+  const tel = (D.telephone || '').replace(/[^\d+]/g, '').replace(/^0(\d{9})$/, '33$1').replace(/^\+/, '');
+  $('waLink').href = d.whatsapp_url || ('https://wa.me/' + tel + '?text=' + encodeURIComponent(wa));
+  $('previewLink').href = d.client_url;
+  const names = Object.fromEntries(D.selection.map(p => [p.id, p.name]));
+  const ints = (D.interets || []).map(i => i.residence_id === 'rappel' ? 'Demande de rappel' : (names[i.residence_id] || 'Projet'));
+  $('track').innerHTML = `
+    <div class="stat"><b>${D.views || 0}</b><span>ouverture${(D.views || 0) > 1 ? 's' : ''} de la page</span></div>
+    <div class="stat"><b>${fdate(D.last_view)}</b><span>dernière consultation</span></div>
+    <div class="stat"><b>${ints.length}</b><span>${ints.length ? esc(ints.join(' · ')) : 'intérêt signalé'}</span></div>`;
+}
+
+load();
+</script>
+</body>
+</html>
