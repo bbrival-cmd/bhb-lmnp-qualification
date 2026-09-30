@@ -213,7 +213,7 @@ function renderItems(){
   const sent = D.statut === 'envoyee';
   $('items').innerHTML = D.selection.map((p, i) => `
     <article class="item" id="item${i}">
-      <div class="photo"><img src="${esc(p.photos[0].url)}" alt="${esc(p.name)}" loading="lazy"><span class="num">${i + 1}</span></div>
+      <div class="photo"><img src="${esc(p.photos[0].url)}" alt="${esc(p.name)}"><span class="num">${i + 1}</span></div>
       <div class="body">
         <div class="kicker">${esc(p.type)} · ${esc(p.ville)}</div>
         <h3 class="name">${esc(p.name)}</h3>
