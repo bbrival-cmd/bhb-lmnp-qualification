@@ -175,7 +175,7 @@ function render(){
     return `
     <article class="fiche" id="f-${esc(p.id)}">
       <div class="gallery" data-g="${i}">
-        <span class="g-num">${i + 1} / ${D.selection.length}</span>
+        ${multi ? `<span class="g-num">1 / ${p.photos.length}</span>` : ''}
         ${p.photos.map((ph, k) => `<img src="${esc(ph.url)}" alt="${esc(p.name)} — ${esc(ph.l)}" class="${k ? '' : 'on'}" ${k ? 'loading="lazy"' : ''} data-l="${esc(ph.l)}">`).join('')}
         <span class="g-cap">${esc(p.photos[0].l)}</span>
         ${multi ? `<button class="g-arrow g-prev" aria-label="Photo précédente">‹</button><button class="g-arrow g-next" aria-label="Photo suivante">›</button>
@@ -208,6 +208,7 @@ function setupGallery(g){
     imgs.forEach((im, k) => im.classList.toggle('on', k === i));
     dots.forEach((d, k) => d.classList.toggle('on', k === i));
     cap.textContent = imgs[i].dataset.l;
+    const num = g.querySelector('.g-num'); if (num) num.textContent = (i + 1) + ' / ' + imgs.length;
   };
   g.querySelector('.g-prev').addEventListener('click', () => go(i - 1));
   g.querySelector('.g-next').addEventListener('click', () => go(i + 1));
