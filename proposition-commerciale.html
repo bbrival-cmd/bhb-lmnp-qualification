@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Proposition commerciale · Cabinet BHB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ec; --surface:#ffffff; --line:#e4ddc9; --field:#fbfaf6;
+    --ink:#20263a; --ink-muted:#5b6272; --ink-faint:#8d8570;
+    --navy:#314975; --gold:#898068; --accent:#f0aa00; --accent-ink:#20263a;
+    --ok:#2f7d4f; --err:#b3261e;
+    --font-display:'Fraunces',Georgia,serif; --font-ui:'Montserrat',Arial,sans-serif;
+    --shadow-sm:0 6px 16px rgba(32,38,58,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d;
+      --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+      --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --err:#f08a80;
+      --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d;
+    --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+    --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --err:#f08a80;
+    --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-ui); font-size:15px; }
+  [hidden]{ display:none !important; }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 20px; }
+  .nav{ background:#314975; padding:12px 0; }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .nav img{ height:30px; }
+  .nav span{ color:#fff; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.85; }
+  h1{ font-family:var(--font-display); font-weight:600; font-size:clamp(26px,4.4vw,36px); margin:34px 0 6px; line-height:1.15; }
+  .lead{ color:var(--ink-muted); margin:0 0 26px; line-height:1.6; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+  .card h2{ font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin:0 0 14px; display:flex; align-items:center; gap:10px; }
+  .step{ display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--navy); color:#fff; font-size:12px; }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:600px){ .grid{ grid-template-columns:1fr; } }
+  label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink-muted); margin-bottom:6px; }
+  input, textarea{ width:100%; font:inherit; color:var(--ink); background:var(--field); border:1.5px solid var(--line); border-radius:9px; padding:11px 12px; }
+  input:focus, textarea:focus{ outline:none; border-color:var(--navy); }
+  textarea{ min-height:180px; resize:vertical; line-height:1.5; font-size:14px; }
+  .drop{ border:2px dashed var(--line); border-radius:12px; padding:22px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; margin-bottom:12px; }
+  .drop.over{ border-color:var(--accent); background:rgba(240,170,0,.08); }
+  .drop strong{ display:block; margin-bottom:4px; }
+  .drop small{ color:var(--ink-faint); }
+  .file-ok{ color:var(--ok); font-weight:700; font-size:13px; margin-top:8px; }
+  .meta{ display:flex; justify-content:space-between; font-size:12px; color:var(--ink-faint); margin-top:6px; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:30px; padding:15px 28px; font:inherit; font-weight:800; cursor:pointer; }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); width:100%; font-size:16px; }
+  .btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
+  .error{ color:var(--err); font-weight:600; margin:12px 0 0; }
+  .loading{ text-align:center; padding:40px 20px; }
+  .spinner{ width:46px; height:46px; margin:0 auto 18px; border:4px solid var(--line); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .steps{ list-style:none; padding:0; margin:18px auto 0; max-width:360px; text-align:left; }
+  .steps li{ padding:6px 0; color:var(--ink-faint); font-weight:600; font-size:14px; }
+  .steps li.on{ color:var(--ink); }
+  .steps li.done{ color:var(--ok); }
+  .recent a{ color:var(--navy); font-weight:700; text-decoration:none; }
+  .recent li{ padding:6px 0; font-size:14px; }
+  .recent small{ color:var(--ink-faint); }
+  footer{ text-align:center; color:var(--ink-faint); font-size:12px; padding:20px 0 40px; }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap"><img src="logo-bhb-white.png" alt="Cabinet BHB"><span>Outil commercial</span></div></nav>
+
+<main class="wrap">
+  <div id="formView">
+    <h1>Préparer une proposition</h1>
+    <p class="lead">Déposez le compte-rendu de votre visio : l'outil en extrait le cahier des charges du client et sélectionne 5 résidences dans le stock disponible. Vous relirez la sélection avant tout envoi.</p>
+
+    <form id="form" novalidate>
+      <section class="card">
+        <h2><span class="step">1</span> Vous</h2>
+        <div class="grid">
+          <div><label for="commercial_nom">Votre nom</label><input id="commercial_nom" autocomplete="name" required></div>
+          <div><label for="commercial_email">Votre email</label><input id="commercial_email" type="email" placeholder="prenom.nom@cabinetbhb.com" required></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">2</span> Le client</h2>
+        <div class="grid">
+          <div><label for="prenom">Prénom</label><input id="prenom" required></div>
+          <div><label for="nom">Nom</label><input id="nom" required></div>
+          <div><label for="email">Email</label><input id="email" type="email" required></div>
+          <div><label for="telephone">Téléphone (pour WhatsApp)</label><input id="telephone" type="tel" placeholder="06 12 34 56 78"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">3</span> Compte-rendu de la visio</h2>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Déposer un fichier de transcription">
+          <strong>Glissez ici la transcription ou les notes Google Meet</strong>
+          <small>.docx, .pdf, .txt, .vtt, .srt, .md — ou cliquez pour choisir un fichier</small>
+          <div class="file-ok" id="fileOk" hidden></div>
+        </div>
+        <input type="file" id="file" accept=".txt,.vtt,.srt,.md,.docx,.pdf" hidden>
+        <label for="transcript">… ou collez le texte directement</label>
+        <textarea id="transcript" placeholder="Collez ici la transcription ou la synthèse Gemini du rendez-vous…"></textarea>
+        <div class="meta"><span>200 caractères minimum</span><span id="count">0 caractère</span></div>
+      </section>
+
+      <button class="btn btn-primary" id="submit" type="submit">Générer la sélection</button>
+      <p class="error" id="error" role="alert" hidden></p>
+    </form>
+
+    <section class="card recent" id="recentCard" hidden style="margin-top:26px">
+      <h2>Vos dernières propositions</h2>
+      <ul id="recent" style="list-style:none;padding:0;margin:0"></ul>
+    </section>
+  </div>
+
+  <div id="loadingView" class="card loading" hidden style="margin-top:34px">
+    <div class="spinner" aria-hidden="true"></div>
+    <h1 style="margin-top:0;font-size:24px">Sélection en cours…</h1>
+    <p class="lead" style="margin:0">Environ 30 secondes. Ne fermez pas cette page.</p>
+    <ul class="steps" id="steps">
+      <li>Lecture du compte-rendu</li>
+      <li>Extraction du cahier des charges</li>
+      <li>Recherche dans le stock disponible</li>
+      <li>Rédaction des argumentaires personnalisés</li>
+    </ul>
+  </div>
+</main>
+<footer>Cabinet BHB · usage interne</footer>
+
+<script>
+const API = 'https://n8n.srv1404527.hstgr.cloud/webhook/';
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+
+// Mémorise l'identité du commercial
+const me = store.get('bhb_commercial', {});
+$('commercial_nom').value = me.nom || '';
+$('commercial_email').value = me.email || '';
+
+// Dernières propositions
+function renderRecent(){
+  const list = store.get('bhb_propositions', []);
+  $('recentCard').hidden = !list.length;
+  $('recent').innerHTML = list.slice(0, 8).map(p =>
+    `<li><a href="proposition-revue.html?t=${encodeURIComponent(p.t)}">${escapeHtml(p.client)}</a> <small>· ${new Date(p.at).toLocaleDateString('fr-FR')}</small></li>`).join('');
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+renderRecent();
+
+// Compteur
+const ta = $('transcript');
+const updateCount = () => { const n = ta.value.trim().length; $('count').textContent = n.toLocaleString('fr-FR') + (n > 1 ? ' caractères' : ' caractère'); };
+ta.addEventListener('input', updateCount);
+
+// Dépôt de fichier
+const drop = $('drop'), fileInput = $('file');
+drop.addEventListener('click', () => fileInput.click());
+drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => { if (e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) readFile(fileInput.files[0]); });
+
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+
+async function readFile(f){
+  const ext = f.name.split('.').pop().toLowerCase();
+  const ok = $('fileOk'); ok.hidden = false; ok.style.color = ''; ok.textContent = 'Lecture de ' + f.name + '…';
+  try {
+    let text = '';
+    if (ext === 'docx') {
+      if (!window.mammoth) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js');
+      text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+    } else if (ext === 'pdf') {
+      if (!window.pdfjsLib) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+      const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const c = await (await pdf.getPage(i)).getTextContent();
+        text += c.items.map(it => it.str).join(' ') + '\n';
+      }
+    } else {
+      text = await f.text();
+      if (ext === 'vtt' || ext === 'srt') text = text.replace(/^WEBVTT.*$/m, '').replace(/^\d+\s*$/gm, '').replace(/^[\d:.,]+ --> [\d:.,]+.*$/gm, '').replace(/\n{2,}/g, '\n');
+    }
+    ta.value = text.trim(); updateCount();
+    ok.textContent = '✓ ' + f.name + ' chargé';
+  } catch (e) {
+    ok.textContent = 'Impossible de lire ce fichier — copiez-collez le texte à la place.'; ok.style.color = 'var(--err)';
+  }
+}
+
+// Envoi
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const payload = {
+    commercial_nom: $('commercial_nom').value.trim(), commercial_email: $('commercial_email').value.trim(),
+    prenom: $('prenom').value.trim(), nom: $('nom').value.trim(), email: $('email').value.trim(),
+    telephone: $('telephone').value.trim(), transcript: ta.value.trim(),
+  };
+  const err = [];
+  if (!payload.commercial_nom) err.push('votre nom');
+  if (!/@cabinetbhb\.com$/i.test(payload.commercial_email)) err.push('votre email @cabinetbhb.com');
+  if (!payload.prenom || !payload.nom) err.push('le prénom et le nom du client');
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(payload.email)) err.push("l'email du client");
+  if (payload.transcript.length < 200) err.push('le compte-rendu (200 caractères minimum)');
+  if (err.length) return showError('À compléter : ' + err.join(', ') + '.');
+  store.set('bhb_commercial', { nom: payload.commercial_nom, email: payload.commercial_email });
+
+  $('formView').hidden = true; $('loadingView').hidden = false; window.scrollTo(0, 0);
+  const lis = [...document.querySelectorAll('#steps li')]; let k = 0;
+  const tick = () => { lis.forEach((li, i) => { li.className = i < k ? 'done' : i === k ? 'on' : ''; if (i < k) li.textContent = '✓ ' + li.textContent.replace(/^✓ /, ''); }); };
+  tick(); const timer = setInterval(() => { if (k < lis.length - 1) { k++; tick(); } }, 7000);
+
+  try {
+    const r = await fetch(API + 'lmnp-proposition-generer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'La génération a échoué. Réessayez dans un instant.');
+    const list = store.get('bhb_propositions', []);
+    list.unshift({ t: d.admin_token, client: payload.prenom + ' ' + payload.nom, at: Date.now() });
+    store.set('bhb_propositions', list.slice(0, 20));
+    location.href = d.review_url;
+  } catch (e2) {
+    clearInterval(timer);
+    $('loadingView').hidden = true; $('formView').hidden = false;
+    showError(e2.message);
+  }
+});
+function showError(m){ const el = $('error'); el.textContent = m; el.hidden = false; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+</script>
+</body>
+</html>
