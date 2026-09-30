@@ -261,7 +261,7 @@ $('validate').addEventListener('click', async () => {
 
 function fillDone(d){
   $('clientUrl').value = d.client_url;
-  const wa = d.whatsapp_text || `Bonjour ${D.prenom} 👋\n\nComme convenu, voici votre *sélection personnalisée de 5 résidences LMNP*, choisies selon votre projet :\n\n👉 ${d.client_url}\n\nPour chaque résidence : prix, rentabilité, loyer estimé et pourquoi elle vous correspond.\nUn projet vous plaît ? Cliquez sur _« Ce projet m'intéresse »_, je suis prévenu immédiatement.\n\nÀ très vite,\n*${D.commercial_nom}*\nCabinet BHB`;
+  const wa = d.whatsapp_text || `Bonjour ${D.prenom},\n\nComme convenu, voici votre *sélection personnalisée de 5 résidences LMNP*, choisies selon votre projet :\n\n${d.client_url}\n\nPour chaque résidence : prix, rentabilité, loyer estimé et pourquoi elle vous correspond.\nUn projet vous plaît ? Cliquez sur _« Ce projet m'intéresse »_, je suis prévenu immédiatement.\n\nÀ très vite,\n*${D.commercial_nom}*\nCabinet BHB`;
   $('waText').value = wa;
   const tel = (D.telephone || '').replace(/[^\d+]/g, '').replace(/^0(\d{9})$/, '33$1').replace(/^\+/, '');
   $('waLink').href = d.whatsapp_url || ('https://wa.me/' + tel + '?text=' + encodeURIComponent(wa));
