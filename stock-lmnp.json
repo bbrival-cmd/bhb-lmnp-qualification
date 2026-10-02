@@ -1,6 +1,6 @@
 {
  "updated_at": "2026-09-30",
- "count": 265,
+ "count": 263,
  "residences": [
   {
    "id": "r3bba0a25",
@@ -5899,31 +5899,6 @@
    "disponible": true
   },
   {
-   "id": "r6d3385ca",
-   "name": "Résidence Le Carré de l'Horloge",
-   "ville": "Anzin",
-   "cp": "59410",
-   "departement": "59",
-   "region": "Hauts-de-France",
-   "type": "Résidence étudiante",
-   "prix": 64418,
-   "rendement": 6.2,
-   "loyer_mensuel_estime": 336,
-   "lots_dispo": 1,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Studio meublé en résidence étudiante gérée, demande locative structurelle.",
-   "photos": [
-    {
-     "url": "https://selection.cabinetbhb.fr/stock-photos/r6d3385ca/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
    "id": "rbd937e94",
    "name": "Résidence Le Domaine des Chênes",
    "ville": "Avignon",
@@ -7679,31 +7654,6 @@
    "photos": [
     {
      "url": "https://selection.cabinetbhb.fr/stock-photos/rda06af97/0.jpg",
-     "l": "Résidence"
-    }
-   ],
-   "disponible": true
-  },
-  {
-   "id": "re6464b55",
-   "name": "Résidence La Roseraie du Prieuré",
-   "ville": "Montblanc",
-   "cp": "34290",
-   "departement": "34",
-   "region": "Occitanie",
-   "type": "EHPAD",
-   "prix": 82087,
-   "rendement": 6.5,
-   "loyer_mensuel_estime": 446,
-   "lots_dispo": 2,
-   "typologies": [
-    "1 p."
-   ],
-   "fin_bail": null,
-   "accroche": "Chambre en établissement médicalisé, bail long avec exploitant spécialisé.",
-   "photos": [
-    {
-     "url": "https://selection.cabinetbhb.fr/stock-photos/re6464b55/0.jpg",
      "l": "Résidence"
     }
    ],
