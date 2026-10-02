@@ -97,6 +97,25 @@
   .msg{ padding:60px 0; text-align:center; color:var(--ink-muted); }
   .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#20263a; color:#fff; padding:11px 20px; border-radius:30px; font-weight:700; font-size:13.5px; box-shadow:0 8px 24px rgba(0,0,0,.25); z-index:50; }
   .error{ color:var(--err); font-weight:600; }
+  .brief{ border:2px solid var(--navy); margin-bottom:18px; }
+  .brief-head{ display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:6px; }
+  .verdict{ padding:6px 14px; border-radius:20px; font-weight:800; font-size:13px; }
+  .v-chaud{ background:#e3f4e8; color:#1f7a44; } .v-tiede{ background:#fdf3dc; color:#8a6100; }
+  .v-froid{ background:#e3ebf8; color:#2f4f8f; } .v-a_requalifier{ background:#fbe4e2; color:#a3261e; }
+  .brief h3{ font-family:var(--font-display); font-size:20px; margin:0; }
+  .brief .raison{ color:var(--ink-muted); margin:4px 0 14px; line-height:1.55; }
+  .brief-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 24px; }
+  @media (max-width:760px){ .brief-grid{ grid-template-columns:1fr; } }
+  .brief-block h4{ font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin:0 0 6px; }
+  .brief-block p, .brief-block li{ font-size:14px; line-height:1.55; margin:0; }
+  .brief-block ul{ margin:0; padding-left:18px; }
+  .brief-block li + li{ margin-top:4px; }
+  .brief .full{ grid-column:1 / -1; }
+  .alerte{ margin-top:8px; background:var(--warn-bg); border-radius:8px; padding:8px 12px; font-size:13.5px; font-weight:600; }
+  .obj{ background:var(--soft); border-radius:10px; padding:10px 12px; margin-bottom:8px; font-size:14px; line-height:1.5; }
+  .obj b{ display:block; margin-bottom:3px; }
+  .next{ background:var(--navy); color:#fff; border-radius:10px; padding:12px 14px; font-weight:700; font-size:14.5px; line-height:1.5; }
+  .brief-wait{ color:var(--ink-muted); font-size:14px; margin:0; }
   footer{ text-align:center; color:var(--ink-faint); font-size:12px; padding:30px 0 40px; }
 </style>
 </head>
@@ -109,6 +128,8 @@
   <div id="app" hidden>
     <h1 id="title"></h1>
     <div class="sub" id="sub"></div>
+
+    <section class="card brief" id="briefCard"></section>
 
     <section class="card" id="cahierCard">
       <p class="label">Cahier des charges extrait de la visio</p>
@@ -200,6 +221,7 @@ function render(){
   $('attn').hidden = !attn.length;
   $('attnList').innerHTML = attn.map(a => `<li>${esc(a)}</li>`).join('');
 
+  renderBrief(D.brief);
   renderItems();
 
   if (!$('mot').value) $('mot').value = D.mot_perso || `Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet. Prenez le temps de les découvrir ; je vous appelle dans les prochains jours pour en parler ensemble.`;
@@ -207,6 +229,29 @@ function render(){
   $('sendCard').hidden = sent;
   $('doneCard').hidden = !sent;
   if (sent && D.client_url) fillDone({ client_url: D.client_url });
+}
+
+function renderBrief(b){
+  const el = $('briefCard');
+  if (!b) { el.innerHTML = '<p class="label">🎯 Brief commercial</p><p class="brief-wait">Brief en cours de rédaction : rechargez la page dans une minute.</p>'; return; }
+  const V = { chaud: '🟢 Chaud', tiede: '🟡 Tiède', froid: '🔵 Froid', a_requalifier: '🔴 À requalifier' };
+  const li = a => (a || []).map(x => `<li>${esc(x)}</li>`).join('');
+  const clean = t => esc((t || '').replace(/^[«"“\s]+|[»"”\s]+$/g, ''));
+  el.innerHTML = `
+    <p class="label">🎯 Brief commercial — à lire avant d'appeler</p>
+    <div class="brief-head"><span class="verdict v-${esc(b.verdict?.niveau)}">${V[b.verdict?.niveau] || ''}</span><h3>${esc(b.verdict?.titre)}</h3></div>
+    <p class="raison">${esc(b.verdict?.raison)}</p>
+    <div class="brief-grid">
+      <div class="brief-block"><h4>Profil</h4><p>${esc(b.profil)}</p></div>
+      <div class="brief-block"><h4>Budget</h4><p>${esc(b.budget?.synthese)}</p>${b.budget?.alerte ? `<div class="alerte">⚠️ ${esc(b.budget.alerte)}</div>` : ''}</div>
+      <div class="brief-block"><h4>Leviers de décision</h4><ul>${li(b.leviers)}</ul></div>
+      <div class="brief-block"><h4>Angle d'attaque</h4><p>${esc(b.angle)}</p></div>
+      <div class="brief-block full"><h4>Objections et réponses</h4>${(b.objections || []).map(o => `<div class="obj"><b>« ${clean(o.objection)} »</b>→ ${esc(o.reponse)}</div>`).join('')}</div>
+      <div class="brief-block"><h4>Résidences à pousser</h4><ul>${(b.residences_prioritaires || []).map(r => `<li><b>${esc(r.nom)}</b> — ${esc(r.pourquoi)}</li>`).join('')}</ul></div>
+      <div class="brief-block"><h4>Questions à poser</h4><ul>${li(b.questions)}</ul></div>
+      <div class="brief-block full"><h4>Vigilance</h4><ul>${li(b.vigilance)}</ul></div>
+      <div class="brief-block full"><h4>Prochaine action</h4><div class="next">${esc(b.prochaine_action)}</div></div>
+    </div>`;
 }
 
 function renderItems(){
