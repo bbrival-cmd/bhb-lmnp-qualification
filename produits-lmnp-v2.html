@@ -63,6 +63,21 @@
   .grid-section{ padding:54px 0 20px; }
   .grid-heading{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:26px; flex-wrap:wrap; gap:8px; }
   .grid-heading h2{ font-size:26px; font-weight:600; margin:0; }
+  .price-filter{ margin-top:18px; max-width:520px; background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.35); border-radius:16px; padding:12px 18px 16px; backdrop-filter:blur(6px); }
+  .price-head{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; color:#fff; font-size:12.5px; font-weight:700; margin-bottom:10px; }
+  .price-head b{ font-size:15px; color:var(--accent); }
+  .price-reset{ background:none; border:none; color:rgba(255,255,255,.75); font:inherit; font-size:12px; text-decoration:underline; cursor:pointer; padding:0; }
+  .range{ position:relative; height:26px; }
+  .range-track, .range-fill{ position:absolute; top:11px; height:4px; border-radius:4px; }
+  .range-track{ left:0; right:0; background:rgba(255,255,255,.3); }
+  .range-fill{ background:var(--accent); }
+  .range input{ position:absolute; left:0; top:0; width:100%; height:26px; margin:0; background:none; pointer-events:none; -webkit-appearance:none; appearance:none; }
+  .range input::-webkit-slider-thumb{ -webkit-appearance:none; pointer-events:auto; width:22px; height:22px; border-radius:50%; background:#fff; border:3px solid var(--accent); cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.3); }
+  .range input::-moz-range-thumb{ pointer-events:auto; width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid var(--accent); cursor:pointer; }
+  .range input::-moz-range-track{ background:none; }
+  .range input:focus-visible::-webkit-slider-thumb{ outline:3px solid #fff; outline-offset:2px; }
+  .empty-state{ grid-column:1/-1; text-align:center; padding:40px 20px; color:var(--ink-muted); }
+  .empty-state button{ margin-top:12px; }
   .grid-count{ font-size:12.5px; color:var(--ink-faint); font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
 
   .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
@@ -165,6 +180,14 @@
       <h1>96 résidences LMNP sélectionnées pour investir sereinement</h1>
       <p>Résidences étudiantes, affaires, de tourisme, seniors et EHPAD partout en France. Photos réelles, rendements et prix indicatifs.</p>
       <div class="filters" id="filters"></div>
+      <div class="price-filter">
+        <div class="price-head"><span>Prix : <b id="priceLabel">0 € – 250 000 €</b></span><button class="price-reset" id="priceReset" onclick="resetPrice()" hidden>Réinitialiser</button></div>
+        <div class="range">
+          <div class="range-track"></div><div class="range-fill" id="rangeFill"></div>
+          <input type="range" id="priceMin" min="0" max="250000" step="5000" value="0" aria-label="Prix minimum">
+          <input type="range" id="priceMax" min="0" max="250000" step="5000" value="250000" aria-label="Prix maximum">
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -376,13 +399,40 @@ let visibleCount = 9;
 const STEP = 9;
 
 function filteredList(){
-  return activeFilter === 'Toutes' ? RESIDENCES : RESIDENCES.filter(r => r.type === activeFilter);
+  return RESIDENCES.filter(r => (activeFilter === 'Toutes' || r.type === activeFilter) && inPrice(r));
 }
+
+// Filtre prix (curseur double, 0 – 250 000 €)
+const PRICE_MAX = 250000;
+let priceMin = 0, priceMax = PRICE_MAX;
+const prixNum = r => parseInt(String(r.prix).replace(/\D/g, ''), 10) || 0;
+const inPrice = r => { const p = prixNum(r); return p >= priceMin && (priceMax >= PRICE_MAX || p <= priceMax); };
+const fmtEur = n => n.toLocaleString('fr-FR') + ' €';
+function updatePriceUI(){
+  document.getElementById('priceLabel').textContent = fmtEur(priceMin) + ' – ' + (priceMax >= PRICE_MAX ? fmtEur(PRICE_MAX) + ' et +' : fmtEur(priceMax));
+  const f = document.getElementById('rangeFill');
+  f.style.left = (priceMin / PRICE_MAX * 100) + '%'; f.style.right = (100 - priceMax / PRICE_MAX * 100) + '%';
+  document.getElementById('priceReset').hidden = priceMin === 0 && priceMax === PRICE_MAX;
+}
+function onPrice(e){
+  const mn = document.getElementById('priceMin'), mx = document.getElementById('priceMax');
+  let a = +mn.value, b = +mx.value;
+  if (a > b - 5000) { if (e && e.target === mn) a = Math.max(0, b - 5000); else b = Math.min(PRICE_MAX, a + 5000); mn.value = a; mx.value = b; }
+  priceMin = a; priceMax = b; visibleCount = STEP;
+  updatePriceUI(); renderFilters(); renderCards();
+}
+function resetPrice(){
+  document.getElementById('priceMin').value = 0; document.getElementById('priceMax').value = PRICE_MAX; onPrice();
+}
+document.addEventListener('DOMContentLoaded', () => {
+  ['priceMin', 'priceMax'].forEach(id => document.getElementById(id).addEventListener('input', onPrice));
+  updatePriceUI();
+});
 
 function renderFilters(){
   const el = document.getElementById('filters');
   el.innerHTML = TYPES.map(t => {
-    const count = t === 'Toutes' ? RESIDENCES.length : RESIDENCES.filter(r => r.type === t).length;
+    const count = RESIDENCES.filter(r => (t === 'Toutes' || r.type === t) && inPrice(r)).length;
     return `<button class="filter-chip ${t === activeFilter ? 'active' : ''}" onclick="setFilter('${t.replace(/'/g,"\\'")}')">${t} (${count})</button>`;
   }).join('');
 }
@@ -399,6 +449,11 @@ function renderCards(){
   const shown = list.slice(0, visibleCount);
   document.getElementById('gridCount').textContent = shown.length + ' / ' + list.length + ' résidences';
   const grid = document.getElementById('cardsGrid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><p>Aucune résidence ne correspond à ces critères.</p><button class="filter-chip active" onclick="resetPrice(); setFilter(\'Toutes\')">Voir toutes les résidences</button></div>';
+    const btn0 = document.getElementById('btnMore'); btn0.disabled = true; btn0.textContent = 'Aucune résidence à afficher';
+    return;
+  }
   grid.innerHTML = shown.map(r => {
     const src = photoSrc(r, 0);
     return `<div class="card" onclick='openDetail(${JSON.stringify(r.folder)})'>
