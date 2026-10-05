@@ -119,6 +119,8 @@
   .next{ background:var(--navy); color:#fff; border-radius:10px; padding:12px 14px; font-weight:700; font-size:14.5px; line-height:1.5; }
   .brief-wait{ color:var(--ink-muted); font-size:14px; margin:0; }
   footer{ text-align:center; color:var(--ink-faint); font-size:12px; padding:30px 0 40px; }
+  .r2-note{ margin:12px 0 0; font-size:13.5px; line-height:1.5; color:var(--ink-muted, #5b6272); }
+  .r2-note a{ color:var(--navy, #314975); font-weight:700; }
 </style>
 </head>
 <body>
@@ -148,8 +150,12 @@
       <textarea id="mot" maxlength="800"></textarea>
       <div class="send-foot">
         <small id="sendTo"></small>
-        <button class="btn btn-primary" id="validate">Valider et envoyer au client</button>
+        <div class="btns">
+          <button class="btn btn-ghost" id="present">Présenter en R2 (sans envoyer)</button>
+          <button class="btn btn-primary" id="validate">Valider et envoyer au client</button>
+        </div>
       </div>
+      <p class="r2-note" id="r2Note" hidden>Sélection prête pour le R2 : rien n'a été envoyé au client. <a id="presentLink" target="_blank" rel="noopener">Ouvrir la sélection à présenter à l'écran</a>. Après le rendez-vous, envoyez-la avec le bouton ci-dessus.</p>
       <p class="error" id="sendErr" hidden></p>
     </section>
 
@@ -199,10 +205,10 @@ async function load(){
 }
 
 function render(){
-  const sent = D.statut === 'envoyee';
+  const sent = D.statut === 'envoyee', presented = D.statut === 'presentee';
   document.title = 'Proposition ' + D.prenom + ' ' + D.nom + ' · Cabinet BHB';
   $('title').textContent = 'Proposition pour ' + D.prenom + ' ' + D.nom;
-  $('sub').innerHTML = `<span class="badge ${sent ? 'sent' : 'draft'}">${sent ? 'Envoyée le ' + fdate(D.sent_at) : 'Brouillon — à valider'}</span>
+  $('sub').innerHTML = `<span class="badge ${sent ? 'sent' : 'draft'}">${sent ? 'Envoyée le ' + fdate(D.sent_at) : presented ? 'Prête pour le R2 — non envoyée' : 'Brouillon — à valider'}</span>
     <span>${esc(D.email)}</span>${D.telephone ? '<span>' + esc(D.telephone) + '</span>' : ''}`;
 
   const c = D.cahier || {};
@@ -229,6 +235,9 @@ function render(){
   if (!$('mot').value) $('mot').value = D.mot_perso || `Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet. Prenez le temps de les découvrir ; je vous appelle dans les prochains jours pour en parler ensemble.`;
   $('sendTo').textContent = 'Envoi à ' + D.email + ' — réponse vers ' + D.commercial_email;
   $('sendCard').hidden = sent;
+  $('present').hidden = presented; $('r2Note').hidden = !presented;
+  if (presented && D.client_url) $('presentLink').href = D.client_url;
+  $('validate').textContent = presented ? 'Envoyer au client (après le R2)' : 'Valider et envoyer au client';
   $('doneCard').hidden = !sent;
   if (sent && D.client_url) fillDone({ client_url: D.client_url });
 }
@@ -301,9 +310,20 @@ $('validate').addEventListener('click', async () => {
     render(); fillDone(d); toast('Proposition envoyée');
     $('doneCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
-    b.disabled = false; b.textContent = 'Valider et envoyer au client';
+    b.disabled = false; b.textContent = D.statut === 'presentee' ? 'Envoyer au client (après le R2)' : 'Valider et envoyer au client';
     $('sendErr').textContent = err.message; $('sendErr').hidden = false;
   }
+});
+
+$('present').addEventListener('click', async () => {
+  const b = $('present'); b.disabled = true; b.textContent = 'Préparation…'; $('sendErr').hidden = true;
+  try {
+    const d = await api('lmnp-proposition-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, action: 'present', mot_perso: $('mot').value }) });
+    D.statut = 'presentee'; D.client_url = d.client_url; D.mot_perso = $('mot').value;
+    render(); toast('Sélection prête pour le R2 — rien n\'a été envoyé');
+    window.open(d.client_url, '_blank', 'noopener');
+  } catch (err) { $('sendErr').textContent = err.message; $('sendErr').hidden = false; }
+  b.disabled = false; b.textContent = 'Présenter en R2 (sans envoyer)';
 });
 
 function fillDone(d){

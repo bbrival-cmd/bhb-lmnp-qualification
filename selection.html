@@ -169,7 +169,8 @@ async function load(){
     D = await r.json();
     if (!r.ok || !D.ok || D.role !== 'client') throw new Error();
   } catch (e) { $('state').textContent = "Cette sélection n'est plus disponible. Contactez votre conseiller Cabinet BHB."; return; }
-  $('state').hidden = true; $('app').hidden = false; $('navCall').hidden = false;
+  $('state').hidden = true; $('app').hidden = false; $('navCall').hidden = !!D.presentation;
+  if (D.presentation) document.querySelector('.cta').hidden = true;   // présentation en R2 : pas de boutons d'action
   document.title = D.prenom + ', votre sélection LMNP · Cabinet BHB';
   $('title').textContent = D.prenom + ', voici les 5 résidences sélectionnées pour vous';
   $('noteText').textContent = D.mot_perso || "Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet.";
@@ -202,9 +203,9 @@ function render(){
         </div>
         <div class="why"><h3>Pourquoi pour vous</h3><p>${esc(p.pourquoi)}</p></div>
         <ul class="pf">${(p.points_forts || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
-        <div class="actions">${done
+        ${D.presentation ? '' : `<div class="actions">${done
           ? '<span class="btn btn-done">✓ Votre conseiller est prévenu</span>'
-          : `<button class="btn btn-outline" data-interest="${esc(p.id)}">Ce projet m'intéresse</button>`}</div>
+          : `<button class="btn btn-outline" data-interest="${esc(p.id)}">Ce projet m'intéresse</button>`}</div>`}
       </div>
     </article>`; }).join('');
   document.querySelectorAll('.gallery').forEach(setupGallery);
