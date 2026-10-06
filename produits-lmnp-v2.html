@@ -93,8 +93,11 @@
   .card-body{ padding:14px 4px 0; }
   .card-title{ font-family:var(--font-display); font-size:18px; font-weight:600; margin:0 0 3px; line-height:1.25; }
   .card-ville{ font-size:12px; color:var(--ink-muted); font-weight:600; margin-bottom:6px; }
-  .card-price{ font-size:12.5px; color:var(--ink-faint); font-weight:700; }
+  .card-price{ font-size:12.5px; color:var(--ink-faint); font-weight:700; margin-bottom:10px; }
   .card-price b{ color:var(--navy); font-size:14px; }
+  .card-points{ list-style:none; margin:0; padding:10px 0 0; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:6px; }
+  .card-points li{ display:flex; align-items:flex-start; gap:7px; font-size:11.5px; color:var(--ink-muted); line-height:1.4; }
+  .card-points li::before{ content:'✓'; flex-shrink:0; width:14px; height:14px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-size:9px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
 
   .pager{ display:flex; justify-content:center; margin:40px 0 10px; }
   .btn-more{ padding:13px 30px; border:1.5px solid var(--navy); border-radius:30px; background:transparent; color:var(--navy); font-family:var(--font-ui); font-size:13px; font-weight:800; cursor:pointer; }
@@ -129,6 +132,9 @@
   .modal-metric{ flex:1; background:var(--bg); border-radius:10px; padding:12px; text-align:center; }
   .modal-metric-val{ font-size:19px; font-weight:800; color:var(--navy); }
   .modal-metric-lbl{ font-size:10px; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+  .modal-points{ list-style:none; margin:0 0 22px; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .modal-points li{ display:flex; align-items:flex-start; gap:9px; font-size:13px; color:var(--ink); line-height:1.5; }
+  .modal-points li::before{ content:'✓'; flex-shrink:0; width:18px; height:18px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
   .btn-modal-cta{ width:100%; padding:14px; border:none; border-radius:30px; background:var(--accent); color:var(--accent-ink); font-family:var(--font-ui); font-size:13.5px; font-weight:800; cursor:pointer; }
 
   .faq-section{ padding:60px 0; border-top:1px solid var(--line); }
@@ -268,6 +274,7 @@
         <div class="modal-metric"><div class="modal-metric-val" id="modalRend"></div><div class="modal-metric-lbl">Rendement</div></div>
         <div class="modal-metric"><div class="modal-metric-val" id="modalPrix"></div><div class="modal-metric-lbl">À partir de</div></div>
       </div>
+      <ul class="modal-points" id="modalPoints"></ul>
       <button class="btn-modal-cta" id="modalCta" onclick="requestFromModal()">Être informé sur cette résidence</button>
     </div>
   </div>
@@ -416,6 +423,40 @@ const RESIDENCES = [
 
 const ASSET_BASE = 'lmnp-residences/';
 const photoSrc = (r, i) => r.photos[i].url || (ASSET_BASE + r.folder + '/' + r.photos[i].f);
+
+const TYPE_POINTS = {
+  'Résidence étudiante': "Demande locative structurelle portée par les effectifs étudiants",
+  'Résidence affaires': "Clientèle professionnelle récurrente, taux d'occupation stable à l'année",
+  'Résidence de tourisme': "Zone touristique attractive, bon potentiel de valorisation locative",
+  'EHPAD': "Secteur porté par le vieillissement démographique, besoin structurellement croissant",
+  'Résidence seniors': "Demande croissante liée au vieillissement de la population, secteur porteur",
+};
+
+function getPositivePoints(r){
+  const points = [];
+  const rend = parseFloat(String(r.rendement || '0').replace(',', '.'));
+  const prixNum = parseInt(String(r.prix || '0').replace(/\s/g, ''), 10);
+  const accroche = r.accroche || '';
+
+  if (rend >= 7) points.push(`Rendement élevé de ${r.rendement} %, nettement au-dessus de la moyenne du marché`);
+  else if (rend >= 5.5) points.push(`Rendement solide de ${r.rendement} %, dans la fourchette haute du LMNP géré`);
+  else points.push(`Rendement de ${r.rendement} %, profil patrimonial prudent et sécurisant`);
+
+  points.push(TYPE_POINTS[r.type] || "Bien positionné sur un segment porteur du marché locatif meublé");
+
+  const bailMatch = accroche.match(/bail commercial jusqu'en (\d{4})/i);
+  const lotMatch = accroche.match(/(\d+)\s*lots?\s*disponibles?/i);
+  const loyerMatch = accroche.match(/loyer estimé[^0-9]*([\d\s]+)\s*€/i);
+  const bailFarEnough = bailMatch && parseInt(bailMatch[1], 10) >= new Date().getFullYear() + 2;
+
+  if (bailFarEnough) points.push(`Bail commercial sécurisé jusqu'en ${bailMatch[1]}, visibilité locative à long terme`);
+  else if (lotMatch && parseInt(lotMatch[1], 10) > 1) points.push(`${lotMatch[1]} lots disponibles, large choix de typologies`);
+  else if (prixNum && prixNum < 60000) points.push(`Ticket d'entrée accessible dès ${r.prix} €, idéal pour un premier investissement`);
+  else if (loyerMatch) points.push(`Loyer mensuel estimé à ${loyerMatch[1].trim()} €, bonne visibilité sur le cash-flow`);
+  else points.push("Gestion locative entièrement déléguée à l'exploitant, zéro contrainte au quotidien");
+
+  return points;
+}
 const TYPES = ['Toutes','Résidence étudiante','Résidence affaires','Résidence de tourisme','Résidence seniors','EHPAD'];
 let activeFilter = 'Toutes';
 let visibleCount = 9;
@@ -479,6 +520,7 @@ function renderCards(){
   }
   grid.innerHTML = shown.map(r => {
     const src = photoSrc(r, 0);
+    const points = getPositivePoints(r);
     return `<div class="card" onclick='openDetail(${JSON.stringify(r.folder)})'>
       <div class="card-photo">
         <span class="card-tag">${r.type}</span>
@@ -489,6 +531,7 @@ function renderCards(){
         <div class="card-title">${r.name}</div>
         <div class="card-ville">📍 ${r.ville}</div>
         <div class="card-price">À partir de <b>${r.prix} €</b></div>
+        <ul class="card-points">${points.map(p => `<li>${p}</li>`).join('')}</ul>
       </div>
     </div>`;
   }).join('');
@@ -521,6 +564,7 @@ function openDetail(folder){
   document.getElementById('modalAccroche').textContent = r.accroche;
   document.getElementById('modalRend').textContent = r.rendement + ' %';
   document.getElementById('modalPrix').textContent = r.prix + ' €';
+  document.getElementById('modalPoints').innerHTML = getPositivePoints(r).map(p => `<li>${p}</li>`).join('');
   renderModalGallery();
   document.getElementById('detailOverlay').classList.remove('hidden');
 }
