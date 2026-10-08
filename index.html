@@ -93,6 +93,14 @@
   .signal-stat-lbl{ font-size:9.5px; font-weight:600; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.5px; margin-top:1px; }
   .signal-stat-sub{ font-size:10.5px; color:rgba(255,255,255,.4); margin-top:2px; }
 
+  .lieu-rdv-block{ margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14); }
+  .lieu-rdv-block.hidden{ display:none; }
+  .lieu-rdv-label{ display:block; font-size:12.5px; font-weight:700; color:#fff; margin-bottom:3px; }
+  .lieu-rdv-block .field-hint{ color:rgba(255,255,255,.65); display:block; margin-bottom:2px; }
+  .lieu-rdv-block .toggle-btn{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.3); color:rgba(255,255,255,.85); }
+  .lieu-rdv-block .toggle-btn:hover{ border-color:var(--accent); color:#fff; }
+  .lieu-rdv-block .toggle-btn.sel{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+
   .booking-cta{
     margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14);
     display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
@@ -107,6 +115,7 @@
     box-shadow:0 4px 14px rgba(0,0,0,.2);
   }
   .btn-booking:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.28); }
+  .btn-booking.hidden{ display:none; }
 
   .info-mail-row{ margin-top:14px; padding-top:14px; border-top:1px dashed var(--border); display:flex; flex-direction:column; gap:6px; }
   .btn-info-mail{
@@ -345,6 +354,14 @@
         <div class="signal-stat-val mono" id="signalTicket">40 000 €</div>
         <div class="signal-stat-lbl">Ticket d'entrée produit</div>
         <div class="signal-stat-sub">prix minimum requis</div>
+      </div>
+    </div>
+    <div class="lieu-rdv-block hidden" id="lieuRdvBlock">
+      <label class="lieu-rdv-label">📍 Lieu du rendez-vous <span class="req">*</span></label>
+      <span class="field-hint">À demander systématiquement au prospect avant de proposer un créneau.</span>
+      <div class="toggle-group" id="lieuRdvToggle" style="margin-top:8px;">
+        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'domicile')" data-val="domicile">🏠 Domicile</div>
+        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'travail')" data-val="travail">🏢 Lieu de travail</div>
       </div>
     </div>
     <div class="booking-cta hidden" id="bookingCta">
@@ -634,7 +651,7 @@ function revenuLocatifRetenu(montant) {
   return (montant * RENDEMENT_LOCATIF / 12) * QUOTITE_LOYERS_BANCAIRE;
 }
 
-const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null, objections:{ augmenter_apport:null, baisser_budget:null }, infoMailSent:false };
+const state = { statut:'CDI', coemprunteur:false, duree:25, taux:3.9, epargne:8000, apport:8000, mode:'mixte', lastSignalLevel:null, objections:{ augmenter_apport:null, baisser_budget:null }, infoMailSent:false, lieuRdv:null };
 
 function selectModalAnswer(key, el, val) {
   const group = el.closest('.toggle-group');
@@ -800,6 +817,7 @@ function updateBookingLink() {
   if (nom) params.set('last_name', nom);
   if (tel) params.set('phone', tel);
   if (email) params.set('email', email);
+  if (state.lieuRdv) params.set('lieu_rdv', state.lieuRdv === 'domicile' ? 'Domicile' : 'Lieu de travail');
   const qs = params.toString();
   btn.href = qs ? base + '?' + qs : base;
 }
@@ -927,12 +945,25 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   if (becameRed) openRedModal();
   if (level !== 'red') closeRedModal();
 
-  document.getElementById('bookingCta').classList.toggle('hidden', level === 'red' || level === 'neutral');
+  const qualifie = level === 'green' || level === 'orange';
+  document.getElementById('lieuRdvBlock').classList.toggle('hidden', !qualifie);
+  const bookingCta = document.getElementById('bookingCta');
   const ctaText = document.getElementById('bookingCtaText');
-  if (level === 'green') {
-    ctaText.innerHTML = '<strong>Dossier solide</strong><br>Vous pouvez proposer un rendez-vous au prospect.';
-  } else if (level === 'orange') {
-    ctaText.innerHTML = '<strong>Dossier à challenger</strong><br>RDV possible, à confirmer avec le courtier en amont.';
+  const btnBooking = document.getElementById('btnBooking');
+  if (!qualifie) {
+    bookingCta.classList.add('hidden');
+  } else if (!state.lieuRdv) {
+    bookingCta.classList.remove('hidden');
+    btnBooking.classList.add('hidden');
+    ctaText.innerHTML = '<strong>⚠️ Lieu du RDV à confirmer</strong><br>Renseignez le lieu du rendez-vous ci-dessus pour débloquer la prise de RDV.';
+  } else {
+    bookingCta.classList.remove('hidden');
+    btnBooking.classList.remove('hidden');
+    if (level === 'green') {
+      ctaText.innerHTML = '<strong>Dossier solide</strong><br>Vous pouvez proposer un rendez-vous au prospect.';
+    } else {
+      ctaText.innerHTML = '<strong>Dossier à challenger</strong><br>RDV possible, à confirmer avec le courtier en amont.';
+    }
   }
 }
 
@@ -1017,6 +1048,7 @@ function collectPayload() {
   return {
     source: 'qualification-telepro', timestamp: new Date().toISOString(),
     prospect: { nom: g('nom'), prenom: g('prenom'), telephone: g('tel'), email: g('email') },
+    rdv_lieu: state.lieuRdv === 'domicile' ? 'Domicile' : state.lieuRdv === 'travail' ? 'Lieu de travail' : null,
     projet: {
       type: 'investissement_locatif_lmnp', montant, mode_paiement: state.mode, epargne_disponible: epargne,
       apport_mobilise: apport, reliquat_a_financer: capital, duree_ans: duree, taux_indicatif_pct: taux, capital_a_financer: capital,
@@ -1124,6 +1156,8 @@ function resetForm() {
   state.duree = 25; state.taux = 3.9; state.epargne = 8000; state.apport = 8000; state.mode = 'mixte';
   state.objections = { augmenter_apport:null, baisser_budget:null };
   state.infoMailSent = false;
+  state.lieuRdv = null;
+  document.querySelectorAll('#lieuRdvToggle .toggle-btn').forEach(b=>b.classList.remove('sel'));
   document.querySelectorAll('#modalApportToggle .toggle-btn, #modalBudgetToggle .toggle-btn').forEach(b=>b.classList.remove('sel'));
   closeRedModal();
   document.querySelectorAll('#modeAchatToggle .toggle-btn').forEach(b=>b.classList.toggle('sel', b.dataset.val === 'mixte'));
