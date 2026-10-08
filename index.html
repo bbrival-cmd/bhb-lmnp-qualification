@@ -93,13 +93,9 @@
   .signal-stat-lbl{ font-size:9.5px; font-weight:600; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:.5px; margin-top:1px; }
   .signal-stat-sub{ font-size:10.5px; color:rgba(255,255,255,.4); margin-top:2px; }
 
-  .lieu-rdv-block{ margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14); }
-  .lieu-rdv-block.hidden{ display:none; }
-  .lieu-rdv-label{ display:block; font-size:12.5px; font-weight:700; color:#fff; margin-bottom:3px; }
-  .lieu-rdv-block .field-hint{ color:rgba(255,255,255,.65); display:block; margin-bottom:2px; }
-  .lieu-rdv-block .toggle-btn{ background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.3); color:rgba(255,255,255,.85); }
-  .lieu-rdv-block .toggle-btn:hover{ border-color:var(--accent); color:#fff; }
-  .lieu-rdv-block .toggle-btn.sel{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .lieu-rdv-block{ margin-top:14px; padding-top:14px; border-top:1px dashed var(--border); }
+  .lieu-rdv-label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:3px; }
+  .lieu-rdv-block .field-hint{ display:block; margin-bottom:2px; }
 
   .booking-cta{
     margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14);
@@ -356,14 +352,6 @@
         <div class="signal-stat-sub">prix minimum requis</div>
       </div>
     </div>
-    <div class="lieu-rdv-block hidden" id="lieuRdvBlock">
-      <label class="lieu-rdv-label">📍 Lieu du rendez-vous <span class="req">*</span></label>
-      <span class="field-hint">À demander systématiquement au prospect avant de proposer un créneau.</span>
-      <div class="toggle-group" id="lieuRdvToggle" style="margin-top:8px;">
-        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'domicile')" data-val="domicile">🏠 Domicile</div>
-        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'travail')" data-val="travail">🏢 Lieu de travail</div>
-      </div>
-    </div>
     <div class="booking-cta hidden" id="bookingCta">
       <div class="booking-cta-text" id="bookingCtaText"><strong>Dossier finançable</strong><br>Vous pouvez proposer un rendez-vous au prospect.</div>
       <a class="btn-booking" id="btnBooking" href="https://api.leadconnectorhq.com/widget/bookings/benoit-brival-personal-calendar-qxbqrjmdwqglqbgeea3f8" target="_blank" rel="noopener noreferrer">📅 Programmer le RDV</a>
@@ -410,6 +398,14 @@
       <div class="field">
         <label>Email</label>
         <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink(); resetInfoMailState();">
+      </div>
+    </div>
+    <div class="lieu-rdv-block" id="lieuRdvBlock">
+      <label class="lieu-rdv-label">📍 Lieu du rendez-vous <span class="req">*</span></label>
+      <span class="field-hint">À demander systématiquement au prospect — conditionne l'affichage du bouton de booking.</span>
+      <div class="toggle-group" id="lieuRdvToggle" style="margin-top:8px;">
+        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'domicile')" data-val="domicile">🏠 Domicile</div>
+        <div class="toggle-btn" onclick="selectToggle('lieuRdv',this,'travail')" data-val="travail">🏢 Lieu de travail</div>
       </div>
     </div>
     <div class="info-mail-row">
@@ -946,7 +942,6 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   if (level !== 'red') closeRedModal();
 
   const qualifie = level === 'green' || level === 'orange';
-  document.getElementById('lieuRdvBlock').classList.toggle('hidden', !qualifie);
   const bookingCta = document.getElementById('bookingCta');
   const ctaText = document.getElementById('bookingCtaText');
   const btnBooking = document.getElementById('btnBooking');
@@ -955,7 +950,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   } else if (!state.lieuRdv) {
     bookingCta.classList.remove('hidden');
     btnBooking.classList.add('hidden');
-    ctaText.innerHTML = '<strong>⚠️ Lieu du RDV à confirmer</strong><br>Renseignez le lieu du rendez-vous ci-dessus pour débloquer la prise de RDV.';
+    ctaText.innerHTML = '<strong>⚠️ Lieu du RDV à confirmer</strong><br>Renseignez le lieu du rendez-vous (carte Contact, en haut) pour débloquer la prise de RDV.';
   } else {
     bookingCta.classList.remove('hidden');
     btnBooking.classList.remove('hidden');
