@@ -94,6 +94,7 @@
   .signal-stat-sub{ font-size:10.5px; color:rgba(255,255,255,.4); margin-top:2px; }
 
   .lieu-rdv-block{ margin-top:14px; padding-top:14px; border-top:1px dashed var(--border); }
+  .lieu-rdv-block.hidden{ display:none; }
   .lieu-rdv-label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:3px; }
   .lieu-rdv-block .field-hint{ display:block; margin-bottom:2px; }
 
@@ -400,7 +401,7 @@
         <input type="email" id="email" placeholder="jean.dupont@email.fr" oninput="updateBookingLink(); resetInfoMailState();">
       </div>
     </div>
-    <div class="lieu-rdv-block" id="lieuRdvBlock">
+    <div class="lieu-rdv-block hidden" id="lieuRdvBlock">
       <label class="lieu-rdv-label">📍 Lieu du rendez-vous <span class="req">*</span></label>
       <span class="field-hint">À demander systématiquement au prospect — conditionne l'affichage du bouton de booking.</span>
       <div class="toggle-group" id="lieuRdvToggle" style="margin-top:8px;">
@@ -942,6 +943,7 @@ function updateSignal({ revenuTotal, revenuPersonnel, tde, capaciteTotale, monta
   if (level !== 'red') closeRedModal();
 
   const qualifie = level === 'green' || level === 'orange';
+  document.getElementById('lieuRdvBlock').classList.toggle('hidden', !qualifie);
   const bookingCta = document.getElementById('bookingCta');
   const ctaText = document.getElementById('bookingCtaText');
   const btnBooking = document.getElementById('btnBooking');
