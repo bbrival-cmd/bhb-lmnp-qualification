@@ -1013,6 +1013,12 @@ function validate() {
   if (!tel) { markError('tel'); showToast('Le téléphone est requis', 'error'); return false; }
   const montant = getAmount('montant');
   if (montant < 10000) { showToast('Veuillez saisir un prix de bien valide', 'error'); return false; }
+  const qualifie = state.lastSignalLevel === 'green' || state.lastSignalLevel === 'orange';
+  if (qualifie && !state.lieuRdv) {
+    showToast('Dossier qualifié : confirmez le lieu du RDV (domicile/travail) avant d\'envoyer la fiche', 'error');
+    document.getElementById('lieuRdvBlock')?.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
   return true;
 }
 
