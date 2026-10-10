@@ -7,7 +7,7 @@
 <title>Votre sélection LMNP · Cabinet BHB</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="5 résidences gérées choisies pour votre projet : prix, rentabilité, loyer estimé et avis de votre conseiller.">
+<meta name="description" content="5 résidences gérées choisies pour votre projet : prix, loyer, effort d’épargne réel, bail et avis de votre conseiller.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cabinet BHB">
 <meta property="og:title" content="Votre sélection de résidences LMNP">
@@ -89,6 +89,58 @@
   .fig b{ display:block; font-size:18px; color:var(--navy); font-weight:800; }
   .fig span{ font-size:11.5px; color:var(--ink-muted); font-weight:600; }
   @media (max-width:420px){ .fig b{ font-size:15px; } }
+
+  .figs{ grid-template-columns:repeat(2,1fr); }
+  .fig small{ display:block; font-size:11px; color:var(--ink-faint); font-weight:600; margin-top:2px; }
+
+  .hyp{ margin:34px 0 0; background:var(--surface); border-radius:18px; box-shadow:var(--shadow-sm); padding:22px 24px; display:grid; grid-template-columns:minmax(0,1fr); gap:18px; }
+  @media (max-width:520px){ .hyp{ padding:18px 14px; } .cmp{ font-size:13px; } .cmp td, .cmp th{ padding-left:4px; padding-right:4px; } .budget{ padding:12px; } .bl{ font-size:13px; } }
+  .hyp h2{ font-family:var(--font-display); font-weight:600; font-size:24px; margin:0; }
+  .hyp > p{ margin:-8px 0 0; color:var(--ink-muted); font-size:14px; line-height:1.55; }
+  .controls{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width:720px){ .controls{ grid-template-columns:1fr; } }
+  .ctl{ background:var(--soft); border-radius:12px; padding:12px 14px; display:grid; gap:8px; }
+  .ctl label{ font-size:11.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-faint); font-weight:800; }
+  .ctl input[type=number]{ width:100%; font:inherit; font-size:18px; font-weight:800; color:var(--navy); background:var(--surface); border:1.5px solid var(--line); border-radius:10px; padding:8px 10px; }
+  .ctl input[type=range]{ width:100%; accent-color:var(--navy); }
+  .ctl .val{ font-size:18px; font-weight:800; color:var(--navy); }
+  .seg{ display:flex; gap:6px; }
+  .seg button{ flex:1; font:inherit; font-weight:800; font-size:14px; padding:9px 0; border-radius:10px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; }
+  .seg button.on{ background:var(--navy); border-color:var(--navy); color:#fff; }
+  .cmp{ width:100%; border-collapse:collapse; font-size:14px; }
+  .cmp th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); font-weight:800; padding:0 8px 8px; }
+  .cmp td{ padding:11px 8px; border-top:1px solid var(--line); }
+  .cmp td.n, .cmp th.n{ text-align:right; } .cmp td.n{ white-space:nowrap; }
+  .cmp tr{ cursor:pointer; }
+  .cmp tr:hover td{ background:var(--soft); }
+  .cmp .best td{ font-weight:800; }
+  .cmp .city{ font-weight:700; } .cmp .typ{ display:block; font-size:12px; color:var(--ink-muted); font-weight:500; }
+  .eff{ color:var(--navy); font-weight:800; }
+  .pos{ color:var(--ok); }
+  @media (max-width:520px){ .cmp .hide-s{ display:none; } }
+
+  .budget{ background:var(--soft); border-radius:14px; padding:14px 16px; }
+  .budget h3{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); margin:0 0 8px; }
+  .bl{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; padding:4px 0; }
+  .bl span:first-child{ color:var(--ink-muted); }
+  .bl .tag{ font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:1px 6px; border-radius:6px; margin-left:6px; background:var(--surface); color:var(--ink-faint); }
+  .bl b{ white-space:nowrap; }
+  .btot{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; border-top:1.5px solid var(--line); margin-top:6px; padding-top:10px; }
+  .btot span{ font-weight:800; }
+  .btot b{ font-size:22px; color:var(--navy); white-space:nowrap; }
+  .btot b.pos{ color:var(--ok); }
+  .bnote{ font-size:12.5px; color:var(--ink-muted); line-height:1.5; margin:8px 0 0; }
+  .bail{ font-size:13.5px; line-height:1.5; padding:10px 12px; border-radius:10px; border:1px solid var(--line); }
+  .bail.warn{ border-color:var(--accent); }
+
+  .steps{ padding:34px 0 0; }
+  .steps h2{ font-family:var(--font-display); font-weight:600; font-size:26px; margin:0 0 16px; }
+  .steps ol{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(5,1fr); gap:12px; counter-reset:st; }
+  @media (max-width:900px){ .steps ol{ grid-template-columns:1fr; } }
+  .steps li{ background:var(--surface); border-radius:14px; padding:16px; box-shadow:var(--shadow-sm); counter-increment:st; }
+  .steps li::before{ content:counter(st); display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:13px; margin-bottom:10px; }
+  .steps li b{ display:block; font-size:14.5px; margin-bottom:4px; }
+  .steps li span{ font-size:13px; color:var(--ink-muted); line-height:1.5; }
   .why{ border-top:1px solid var(--line); padding-top:14px; }
   .why h3{ font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); margin:0 0 6px; }
   .why p{ font-family:var(--font-display); font-size:16.5px; line-height:1.55; margin:0; }
@@ -128,18 +180,46 @@
       <div class="note" id="note"><p id="noteText"></p><p class="sig" id="sig"></p></div>
     </header>
 
+    <section class="hyp" aria-label="Votre effort d'épargne">
+      <h2>Ce que chaque projet vous coûte vraiment, chaque mois</h2>
+      <p>Tout est compté : crédit, frais de notaire, assurance, taxe foncière, charges et renouvellement du mobilier. Ajustez votre apport, la durée et le taux : tous les chiffres de la page se mettent à jour.</p>
+      <div class="controls">
+        <div class="ctl"><label for="hApport">Votre apport</label><input type="number" id="hApport" min="0" step="500" inputmode="numeric"></div>
+        <div class="ctl"><label>Durée du crédit</label><div class="seg" id="hDuree"><button data-d="15">15 ans</button><button data-d="20">20 ans</button><button data-d="25">25 ans</button></div></div>
+        <div class="ctl"><label for="hTaux">Taux du crédit</label><span class="val" id="hTauxVal"></span><input type="range" id="hTaux" min="3" max="5" step="0.05"></div>
+      </div>
+      <table class="cmp"><thead><tr><th>Résidence</th><th class="n hide-s">Prix</th><th class="n">Loyer / mois</th><th class="n">Votre effort / mois</th></tr></thead><tbody id="cmp"></tbody></table>
+    </section>
+
     <section class="list" id="list" aria-label="Résidences sélectionnées"></section>
+
+    <section class="steps">
+      <h2>De l'option à vos premiers loyers</h2>
+      <ol>
+        <li><b>Option gratuite de 72 h</b><span>Le lot est bloqué pour vous le temps de réfléchir. Sans engagement : si vous ne donnez pas suite, l'option tombe d'elle-même.</span></li>
+        <li><b>Étude de financement</b><span>Notre service financement monte votre dossier et le présente à nos banques partenaires pour obtenir le meilleur taux.</span></li>
+        <li><b>Compromis de vente</b><span>Reçu sous 7 à 10 jours en signature électronique, suivi d'un délai légal de rétractation de 10 jours.</span></li>
+        <li><b>Accord de la banque</b><span>Le compromis est signé sous condition d'obtention du prêt : sans accord bancaire, il est annulé sans frais pour vous.</span></li>
+        <li><b>Signature chez le notaire</b><span>Le bien est déjà loué : les loyers sont versés dès le mois suivant et le crédit démarre en même temps.</span></li>
+      </ol>
+    </section>
 
     <section class="faq">
       <h2>Vos questions, nos réponses</h2>
-      <details><summary>Et si l'exploitant de la résidence fait faillite ?</summary>
-        <p>Vous restez propriétaire de votre lot. Le bail commercial est en général repris par un autre exploitant, parfois après renégociation du loyer : c'est le principal risque du LMNP géré. C'est pourquoi nous regardons l'historique de chaque résidence et la solidité de son gestionnaire avant de vous la proposer.</p></details>
+      <details><summary>Que reste-t-il à ma charge, en plus du crédit ?</summary>
+        <p>La taxe foncière, la part des charges de copropriété qui revient au propriétaire (l'exploitant en prend une partie selon le bail), l'assurance emprunteur et, environ tous les 10 ans, le renouvellement du mobilier demandé par l'exploitant (3 000 à 5 000 € pour un studio). Tout cela est déjà compté dans l'effort mensuel affiché pour chaque résidence. Quand un montant est marqué « estimé », votre conseiller vous communique le chiffre exact.</p></details>
+      <details><summary>Ces charges réduisent-elles mes impôts ?</summary>
+        <p>Elles se déduisent de vos loyers, pas de vos autres revenus : elles ne baissent pas l'impôt sur votre salaire. Au régime réel LMNP, l'amortissement du bien et du mobilier rend en général vos loyers non imposables pendant de nombreuses années ; les charges permettent de prolonger cette période. Nous vous accompagnons sur les déclarations.</p></details>
+      <details><summary>Quels sont les risques ?</summary>
+        <p>Le principal est la défaillance de l'exploitant : vous restez propriétaire et le bail est en général repris par un autre exploitant, parfois avec un loyer renégocié. À l'échéance du bail, le loyer peut aussi être renégocié, collectivement avec les autres propriétaires : c'est pourquoi la date de fin de bail figure sur chaque résidence. Enfin, certains gros travaux de l'immeuble peuvent rester à la charge des propriétaires selon le bail. Nous vérifions l'historique de chaque résidence et la solidité de son exploitant avant de vous la proposer.</p></details>
       <details><summary>Pourrai-je revendre facilement ?</summary>
-        <p>Un lot en résidence gérée se revend sur un marché secondaire actif, avec un bail en cours qui rassure les acquéreurs. Le délai dépend surtout du prix, de l'emplacement et de la santé de l'exploitant : c'est un placement de moyen-long terme.</p></details>
-      <details><summary>Comment sont imposés les loyers ?</summary>
-        <p>Au régime réel LMNP, l'amortissement du bien et du mobilier permet en général de réduire fortement, voire d'annuler, l'impôt sur les loyers pendant de nombreuses années. Nous vous accompagnons sur les déclarations.</p></details>
+        <p>Un lot en résidence gérée se revend sur un marché secondaire actif. Les acquéreurs regardent d'abord le loyer : le prix se calcule à partir du loyer annuel et du rendement qu'ils recherchent au moment de la vente (autour de 6 % aujourd'hui). Un loyer stable ou indexé soutient la valeur, mais le prix de revente n'est pas garanti : c'est un placement de moyen-long terme.</p></details>
+      <details><summary>Combien coûtent les frais de notaire ?</summary>
+        <p>Dans l'ancien, environ 7,5 à 8 % du prix. Par prudence, nos calculs retiennent 8 %, financés dans le prêt avec les frais bancaires. Le montant exact est confirmé par le notaire.</p></details>
+      <details><summary>Et si la banque refuse le prêt ?</summary>
+        <p>Le compromis est signé sous condition suspensive d'obtention du prêt : sans accord bancaire, il est annulé et vous ne perdez rien.</p></details>
       <details><summary>Qui s'occupe de la gestion ?</summary>
-        <p>L'exploitant de la résidence : recherche des occupants, entretien, ménage, services. Vous percevez un loyer fixé par le bail commercial, sans gestion locative à assurer.</p></details>
+        <p>L'exploitant de la résidence : recherche des occupants, entretien, ménage, services. Vous percevez le loyer fixé par le bail commercial, que le logement soit occupé ou non, sans gestion locative à assurer.</p></details>
     </section>
 
     <section class="cta">
@@ -147,7 +227,7 @@
       <button class="btn btn-accent" id="ctaCall">Être rappelé</button>
     </section>
 
-    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
+    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Effort d'épargne : simulation indicative, avant négociation du prix et du taux, avec frais de notaire de 8 %, frais bancaires de 1 200 €, assurance emprunteur de 0,25 % par an du montant emprunté et réserve mobilier de 400 € par an ; taxe foncière et charges réelles quand elles sont indiquées, sinon estimées à 22 % du loyer annuel. Les conditions de crédit dépendent de votre dossier et ne constituent pas une offre de prêt. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
   </div>
 </main>
 <div class="toast" id="toast" hidden></div>
@@ -160,6 +240,63 @@ const esc = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':
 const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
 const pct = n => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' %';
 let D = null;
+const H = { apport: 5000, duree: 25, taux: 4 };
+const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, MOBILIER = 400 / 12, CHARGES_EST = 0.22;
+const AN = new Date().getFullYear();
+
+function calc(p){
+  const loyer = Number(p.loyer_mensuel_estime) || 0;
+  const emprunt = Math.max(0, p.prix * (1 + NOTAIRE) + FRAIS_BANQUE - H.apport);
+  const n = H.duree * 12, r = H.taux / 100 / 12;
+  const mens = emprunt ? (r ? emprunt * r / (1 - Math.pow(1 + r, -n)) : emprunt / n) : 0;
+  const assur = emprunt * ASSURANCE / 12;
+  const reel = p.tf != null && p.copro != null;
+  const charges = reel ? (p.tf + p.copro) / 12 : loyer * CHARGES_EST;
+  const effort = mens + assur + charges + MOBILIER - loyer;
+  return { loyer, emprunt, mens, assur, charges, reel, effort, poche: H.apport + Math.max(0, effort) * n };
+}
+const effTxt = e => e > 0.5 ? '≈ ' + eur(e) : '+ ' + eur(-e) + ' pour vous';
+function bailTxt(p){
+  const y = Number(p.fin_bail);
+  if (!y) return { cls: '', t: 'Bail commercial en place avec l\'exploitant. Sa date d\'échéance vous est communiquée par votre conseiller.' };
+  if (y < AN) return { cls: 'warn', t: `Bail arrivé à échéance en ${y}, en cours de renouvellement : le loyer peut être renégocié. Votre conseiller vous transmet les conditions du nouveau bail.` };
+  if (y <= AN + 1) return { cls: 'warn', t: `Bail commercial jusqu'en ${y}, puis renouvellement (en général pour 9 à 10 ans) ; le loyer peut être renégocié à cette occasion.` };
+  return { cls: '', t: `Bail commercial jusqu'en ${y}, avec reconduction à l'échéance. Loyer fixé par le bail, indexé selon ses clauses.` };
+}
+function budgetHtml(p){
+  const c = calc(p);
+  const tag = c.reel ? '' : '<span class="tag">estimé</span>';
+  return `
+        <div class="budget">
+          <h3>Votre effort d'épargne réel</h3>
+          <div class="bl"><span>Loyer versé par l'exploitant</span><b>+ ${eur(c.loyer)}</b></div>
+          <div class="bl"><span>Mensualité de crédit (${H.duree} ans, ${H.taux.toLocaleString('fr-FR')} %)</span><b>− ${eur(c.mens)}</b></div>
+          <div class="bl"><span>Assurance emprunteur</span><b>− ${eur(c.assur)}</b></div>
+          <div class="bl"><span>Taxe foncière + charges${tag}</span><b>− ${eur(c.charges)}</b></div>
+          <div class="bl"><span>Réserve pour le mobilier</span><b>− ${eur(MOBILIER)}</b></div>
+          <div class="btot"><span>${c.effort > 0.5 ? 'Votre effort par mois' : 'Le projet s\'autofinance'}</span><b class="${c.effort > 0.5 ? '' : 'pos'}">${effTxt(c.effort)}</b></div>
+          <p class="bnote">Montant emprunté : ${eur(c.emprunt)} (prix + frais de notaire + frais bancaires − apport). En ${H.duree} ans, vous aurez mis environ ${eur(c.poche)} de votre poche, apport compris, pour un bien acheté ${eur(p.prix)} et entièrement remboursé, qui continue de vous verser son loyer. Impôt sur ces loyers : en général nul pendant de nombreuses années grâce à l'amortissement LMNP.</p>
+        </div>`;
+}
+function renderBudgets(){
+  const rows = D.selection.map(p => ({ p, c: calc(p) }));
+  const best = Math.min(...rows.map(x => x.c.effort));
+  $('cmp').innerHTML = rows.map(({ p, c }) => `<tr class="${c.effort === best ? 'best' : ''}" data-go="${esc(p.id)}">
+    <td><span class="city">${esc(p.ville)}</span><span class="typ">${esc(p.type)}</span></td>
+    <td class="n hide-s">${eur(p.prix)}</td><td class="n">${eur(c.loyer)}</td>
+    <td class="n"><span class="eff ${c.effort > 0.5 ? '' : 'pos'}">${effTxt(c.effort)}</span></td></tr>`).join('');
+  D.selection.forEach(p => { const el = document.querySelector(`[data-budget="${p.id}"]`); if (el) el.innerHTML = budgetHtml(p); });
+  $('hTauxVal').textContent = H.taux.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' %';
+  document.querySelectorAll('#hDuree button').forEach(b => b.classList.toggle('on', Number(b.dataset.d) === H.duree));
+}
+function setupHyp(){
+  if (D.apport != null) H.apport = Number(D.apport);
+  $('hApport').value = H.apport; $('hTaux').value = H.taux;
+  $('hApport').addEventListener('input', e => { H.apport = Math.max(0, Number(e.target.value) || 0); renderBudgets(); });
+  $('hTaux').addEventListener('input', e => { H.taux = Number(e.target.value); renderBudgets(); });
+  $('hDuree').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) { H.duree = Number(b.dataset.d); renderBudgets(); } });
+  $('cmp').addEventListener('click', e => { const tr = e.target.closest('[data-go]'); if (tr) document.getElementById('f-' + tr.dataset.go)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+}
 
 function toast(m){ const t = $('toast'); t.textContent = m; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 3200); }
 
@@ -176,6 +313,7 @@ async function load(){
   $('noteText').textContent = D.mot_perso || "Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet.";
   $('sig').textContent = '— ' + D.commercial_nom + ', votre conseiller Cabinet BHB';
   $('ctaText').textContent = D.commercial_nom + ' vous rappelle pour en parler.';
+  setupHyp();
   render();
   if ((D.interets || []).includes('rappel')) markCalled();
 }
@@ -200,7 +338,10 @@ function render(){
           <div class="fig"><b>${eur(p.prix)}</b><span>Prix</span></div>
           <div class="fig"><b>${pct(p.rendement)}</b><span>Rentabilité indicative</span></div>
           <div class="fig"><b>≈ ${eur(p.loyer_mensuel_estime)}</b><span>Loyer / mois</span></div>
+          <div class="fig"><b>${p.fin_bail ? esc(p.fin_bail) : '—'}</b><span>Fin du bail actuel</span></div>
         </div>
+        <div data-budget="${esc(p.id)}"></div>
+        <div class="bail ${bailTxt(p).cls}">${bailTxt(p).t}</div>
         <div class="why"><h3>Pourquoi pour vous</h3><p>${esc(p.pourquoi)}</p></div>
         <ul class="pf">${(p.points_forts || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
         ${D.presentation ? '' : `<div class="actions">${done
@@ -209,6 +350,7 @@ function render(){
       </div>
     </article>`; }).join('');
   document.querySelectorAll('.gallery').forEach(setupGallery);
+  renderBudgets();
 }
 
 function setupGallery(g){
