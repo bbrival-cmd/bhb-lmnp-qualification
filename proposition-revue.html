@@ -73,8 +73,8 @@
   .pf{ margin:0; padding-left:18px; font-size:13.5px; line-height:1.6; }
   .facts{ display:grid; grid-template-columns:repeat(3,1fr) auto; gap:8px; align-items:end; background:var(--soft); border-radius:10px; padding:10px 12px; }
   @media (max-width:680px){ .facts{ grid-template-columns:1fr 1fr; } }
-  .facts label{ display:grid; gap:4px; font-size:11px; font-weight:700; color:var(--ink-muted); }
-  .facts input{ font:inherit; font-size:14px; padding:7px 9px; border:1.5px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); width:100%; }
+  .facts > span{ display:grid; gap:2px; font-size:11px; font-weight:700; color:var(--ink-muted); }
+  .facts > span b{ font-size:14px; color:var(--ink); }
   .facts .eff{ font-size:13px; text-align:right; }
   .facts .eff b{ display:block; font-size:17px; color:var(--navy); }
   .apport-bar{ display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; margin:-4px 0 14px; font-size:13.5px; color:var(--ink-muted); }
@@ -152,8 +152,8 @@
 
     <h2>Les 5 résidences proposées</h2>
     <div class="apport-bar"><label>Apport retenu pour les simulations <input type="number" id="apport" min="0" step="500"> €</label>
-      <span>Saisissez la taxe foncière, les charges de copropriété (part propriétaire, par an) et la fin de bail : le client voit son effort d'épargne réel, sans badge « estimé ».</span>
-      <button class="btn btn-ghost" id="saveFacts">Enregistrer les chiffres</button></div>
+      <button class="btn btn-ghost" id="saveFacts">Enregistrer l'apport</button>
+      <span>Seule saisie à faire : taxe foncière, charges et fin de bail sont reprises automatiquement des données partenaires (sinon estimées).</span></div>
     <div class="items" id="items"></div>
 
     <section class="card send" id="sendCard">
@@ -278,13 +278,11 @@ function renderBrief(b){
 }
 
 function effort(p){   // même calcul que la page client : 25 ans, 4 %, notaire 8 %, frais 1 200 €, assurance 0,25 %, mobilier 400 €/an
-  const box = document.querySelector(`[data-facts="${p.id}"]`);
-  const v = k => { const x = box && box.querySelector(`[data-k="${k}"]`).value; return x === '' || x == null ? null : Number(x); };
-  const tf = v('tf') ?? p.tf, copro = v('copro') ?? p.copro, loyer = Number(p.loyer_mensuel_estime) || 0;
+  const tf = p.tf, copro = p.copro, loyer = Number(p.loyer_mensuel_estime) || 0;
   const emp = Math.max(0, p.prix * 1.08 + 1200 - (Number($('apport').value) || 0)), r = 0.04 / 12, n = 300;
   const mens = emp * r / (1 - Math.pow(1 + r, -n));
   const reel = tf != null && copro != null;
-  const e = mens + emp * 0.0025 / 12 + (reel ? (tf + copro) / 12 : loyer * 0.22) + 400 / 12 - loyer;
+  const e = mens + emp * 0.0025 / 12 + (reel ? (tf + copro) / 12 : loyer * 0.15) + 400 / 12 - loyer;
   return { e, reel };
 }
 function renderEfforts(){
@@ -303,9 +301,9 @@ function renderItems(){
         <p class="why">${esc(p.pourquoi)}</p>
         <ul class="pf">${(p.points_forts || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
         <div class="facts" data-facts="${esc(p.id)}">
-          <label>Taxe foncière / an<input type="number" min="0" data-k="tf" value="${p.tf ?? ''}" placeholder="€"></label>
-          <label>Charges copro / an<input type="number" min="0" data-k="copro" value="${p.copro ?? ''}" placeholder="€"></label>
-          <label>Fin de bail<input type="number" min="2000" max="2100" data-k="fin_bail" value="${p.fin_bail ?? ''}" placeholder="année"></label>
+          <span>Taxe foncière <b>${p.tf != null ? eur(p.tf) + '/an' : 'estimée'}</b></span>
+          <span>Charges copro <b>${p.copro != null ? eur(p.copro) + '/an' : 'estimées'}</b></span>
+          <span>Fin de bail <b>${p.fin_bail || 'non communiquée'}</b></span>
           <div class="eff" data-eff="${i}"></div>
         </div>
         ${sent ? '' : `<div class="row-actions"><button class="btn btn-ghost" data-replace="${i}" ${D.remplacements_dispo ? '' : 'disabled title="Plus de projet de remplacement pertinent"'}>🔄 Remplacer</button></div>`}
@@ -314,16 +312,14 @@ function renderItems(){
   renderEfforts();
 }
 
-document.addEventListener('input', e => { if (e.target.closest('.facts') || e.target.id === 'apport') renderEfforts(); });
+document.addEventListener('input', e => { if (e.target.id === 'apport') renderEfforts(); });
 $('saveFacts').addEventListener('click', async () => {
   const b = $('saveFacts'); b.disabled = true; b.textContent = 'Enregistrement…';
-  const lots = {};
-  document.querySelectorAll('[data-facts]').forEach(box => { lots[box.dataset.facts] = Object.fromEntries([...box.querySelectorAll('[data-k]')].map(i => [i.dataset.k, i.value])); });
   try {
-    const d = await api('lmnp-proposition-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, action: 'details', apport: $('apport').value, lots }) });
-    D.selection = d.selection; (D.cahier = D.cahier || {}).apport = d.apport; renderItems(); toast('Chiffres enregistrés : la page client est à jour');
+    const d = await api('lmnp-proposition-action', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ t: T, action: 'details', apport: $('apport').value }) });
+    D.selection = d.selection; (D.cahier = D.cahier || {}).apport = d.apport; renderItems(); toast('Apport enregistré : la page client est à jour');
   } catch (err) { toast(err.message); }
-  b.disabled = false; b.textContent = 'Enregistrer les chiffres';
+  b.disabled = false; b.textContent = "Enregistrer l'apport";
 });
 
 document.addEventListener('click', async e => {

@@ -207,7 +207,7 @@
     <section class="faq">
       <h2>Vos questions, nos réponses</h2>
       <details><summary>Que reste-t-il à ma charge, en plus du crédit ?</summary>
-        <p>La taxe foncière, la part des charges de copropriété qui revient au propriétaire (l'exploitant en prend une partie selon le bail), l'assurance emprunteur et, environ tous les 10 ans, le renouvellement du mobilier demandé par l'exploitant (3 000 à 5 000 € pour un studio). Tout cela est déjà compté dans l'effort mensuel affiché pour chaque résidence. Quand un montant est marqué « estimé », votre conseiller vous communique le chiffre exact.</p></details>
+        <p>La taxe foncière, la part des charges de copropriété qui revient au propriétaire (l'exploitant en prend une partie selon le bail), l'assurance emprunteur et, environ tous les 10 ans, le renouvellement du mobilier demandé par l'exploitant (3 000 à 5 000 € pour un studio). Tout cela est déjà compté dans l'effort mensuel affiché pour chaque résidence. Quand un montant est marqué « estimé », le chiffre exact figure dans le dossier du lot, remis avant toute réservation.</p></details>
       <details><summary>Ces charges réduisent-elles mes impôts ?</summary>
         <p>Elles se déduisent de vos loyers, pas de vos autres revenus : elles ne baissent pas l'impôt sur votre salaire. Au régime réel LMNP, l'amortissement du bien et du mobilier rend en général vos loyers non imposables pendant de nombreuses années ; les charges permettent de prolonger cette période. Pour les déclarations, votre conseiller vous oriente vers la solution adaptée (expert-comptable ou service en ligne spécialisé LMNP).</p></details>
       <details><summary>Quels sont les risques ?</summary>
@@ -227,7 +227,7 @@
       <button class="btn btn-accent" id="ctaCall">Être rappelé</button>
     </section>
 
-    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Effort d'épargne : simulation indicative, avant négociation du prix et du taux, avec frais de notaire de 8 %, frais bancaires de 1 200 €, assurance emprunteur de 0,25 % par an du montant emprunté et réserve mobilier de 400 € par an ; taxe foncière et charges réelles quand elles sont indiquées, sinon estimées à 22 % du loyer annuel. Les conditions de crédit dépendent de votre dossier et ne constituent pas une offre de prêt. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
+    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Effort d'épargne : simulation indicative, avant négociation du prix et du taux, avec frais de notaire de 8 %, frais bancaires de 1 200 €, assurance emprunteur de 0,25 % par an du montant emprunté et réserve mobilier de 400 € par an ; taxe foncière et charges réelles quand elles sont indiquées, sinon estimées à 15 % du loyer annuel (niveau constaté sur les résidences gérées comparables). Les conditions de crédit dépendent de votre dossier et ne constituent pas une offre de prêt. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
   </div>
 </main>
 <div class="toast" id="toast" hidden></div>
@@ -241,7 +241,7 @@ const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
 const pct = n => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' %';
 let D = null;
 const H = { apport: 5000, duree: 25, taux: 4 };
-const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, MOBILIER = 400 / 12, CHARGES_EST = 0.22;
+const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, MOBILIER = 400 / 12, CHARGES_EST = 0.15;
 const AN = new Date().getFullYear();
 
 function calc(p){
@@ -258,8 +258,8 @@ function calc(p){
 const effTxt = e => e > 0.5 ? '≈ ' + eur(e) : '+ ' + eur(-e) + ' pour vous';
 function bailTxt(p){
   const y = Number(p.fin_bail);
-  if (!y) return { cls: '', t: 'Bail commercial en place avec l\'exploitant. Sa date d\'échéance vous est communiquée par votre conseiller.' };
-  if (y < AN) return { cls: 'warn', t: `Bail arrivé à échéance en ${y}, en cours de renouvellement : le loyer peut être renégocié. Votre conseiller vous transmet les conditions du nouveau bail.` };
+  if (!y) return { cls: '', t: 'Bail commercial en cours avec l\'exploitant. Sa date d\'échéance figure dans le dossier du lot, remis avant toute réservation.' };
+  if (y < AN) return { cls: 'warn', t: `Bail arrivé à échéance en ${y}, en cours de renouvellement : le loyer peut être renégocié. Les conditions du nouveau bail figurent dans le dossier du lot.` };
   if (y <= AN + 1) return { cls: 'warn', t: `Bail commercial jusqu'en ${y}, puis renouvellement (en général pour 9 à 10 ans) ; le loyer peut être renégocié à cette occasion.` };
   return { cls: '', t: `Bail commercial jusqu'en ${y}, avec reconduction à l'échéance. Loyer fixé par le bail, indexé selon ses clauses.` };
 }
