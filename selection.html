@@ -240,7 +240,7 @@ const esc = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':
 const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
 const pct = n => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' %';
 let D = null;
-const H = { apport: 5000, duree: 25, taux: 4 };
+const H = { apport: 5000, duree: 25, taux: 3.8 };
 const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, CHARGES_EST = 0.15;
 const AN = new Date().getFullYear();
 

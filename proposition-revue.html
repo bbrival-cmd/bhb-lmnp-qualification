@@ -277,9 +277,9 @@ function renderBrief(b){
     </div>`;
 }
 
-function effort(p){   // même calcul que la page client : 25 ans, 4 %, notaire 8 %, frais 1 200 €, assurance 0,25 %
+function effort(p){   // même calcul que la page client : 25 ans, 3,8 %, notaire 8 %, frais 1 200 €, assurance 0,25 %
   const tf = p.tf, copro = p.copro, loyer = Number(p.loyer_mensuel_estime) || 0;
-  const emp = Math.max(0, p.prix * 1.08 + 1200 - (Number($('apport').value) || 0)), r = 0.04 / 12, n = 300;
+  const emp = Math.max(0, p.prix * 1.08 + 1200 - (Number($('apport').value) || 0)), r = 0.038 / 12, n = 300;
   const mens = emp * r / (1 - Math.pow(1 + r, -n));
   const reel = tf != null && copro != null;
   const e = mens + emp * 0.0025 / 12 + (reel ? (tf + copro) / 12 : loyer * 0.15) - loyer;
