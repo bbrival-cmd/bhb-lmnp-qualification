@@ -182,7 +182,7 @@
 
     <section class="hyp" aria-label="Votre effort d'épargne">
       <h2>Ce que chaque projet vous coûte vraiment, chaque mois</h2>
-      <p>Tout est compté : crédit, frais de notaire, assurance, taxe foncière, charges et renouvellement du mobilier. Ajustez votre apport, la durée et le taux : tous les chiffres de la page se mettent à jour.</p>
+      <p>Tout est compté : crédit, frais de notaire, assurance, taxe foncière et charges. Ajustez votre apport, la durée et le taux : tous les chiffres de la page se mettent à jour.</p>
       <div class="controls">
         <div class="ctl"><label for="hApport">Votre apport</label><input type="number" id="hApport" min="0" step="500" inputmode="numeric"></div>
         <div class="ctl"><label>Durée du crédit</label><div class="seg" id="hDuree"><button data-d="15">15 ans</button><button data-d="20">20 ans</button><button data-d="25">25 ans</button></div></div>
@@ -207,7 +207,7 @@
     <section class="faq">
       <h2>Vos questions, nos réponses</h2>
       <details><summary>Que reste-t-il à ma charge, en plus du crédit ?</summary>
-        <p>La taxe foncière, la part des charges de copropriété qui revient au propriétaire (l'exploitant en prend une partie selon le bail), l'assurance emprunteur et, environ tous les 10 ans, le renouvellement du mobilier demandé par l'exploitant (3 000 à 5 000 € pour un studio). Tout cela est déjà compté dans l'effort mensuel affiché pour chaque résidence. Quand un montant est marqué « estimé », le chiffre exact figure dans le dossier du lot, remis avant toute réservation.</p></details>
+        <p>La taxe foncière, la part des charges de copropriété qui revient au propriétaire (l'exploitant en prend une partie selon le bail), l'assurance emprunteur et, environ tous les 10 ans, le renouvellement du mobilier demandé par l'exploitant (3 000 à 5 000 € pour un studio). Les charges courantes sont comptées dans l'effort mensuel affiché pour chaque résidence ; le mobilier est une dépense ponctuelle, déductible de vos loyers. Quand un montant est marqué « estimé », le chiffre exact figure dans le dossier du lot, remis avant toute réservation.</p></details>
       <details><summary>Ces charges réduisent-elles mes impôts ?</summary>
         <p>Elles se déduisent de vos loyers, pas de vos autres revenus : elles ne baissent pas l'impôt sur votre salaire. Au régime réel LMNP, l'amortissement du bien et du mobilier rend en général vos loyers non imposables pendant de nombreuses années ; les charges permettent de prolonger cette période. Pour les déclarations, votre conseiller vous oriente vers la solution adaptée (expert-comptable ou service en ligne spécialisé LMNP).</p></details>
       <details><summary>Quels sont les risques ?</summary>
@@ -227,7 +227,7 @@
       <button class="btn btn-accent" id="ctaCall">Être rappelé</button>
     </section>
 
-    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Effort d'épargne : simulation indicative, avant négociation du prix et du taux, avec frais de notaire de 8 %, frais bancaires de 1 200 €, assurance emprunteur de 0,25 % par an du montant emprunté et réserve mobilier de 400 € par an ; taxe foncière et charges réelles quand elles sont indiquées, sinon estimées à 15 % du loyer annuel (niveau constaté sur les résidences gérées comparables). Les conditions de crédit dépendent de votre dossier et ne constituent pas une offre de prêt. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
+    <p class="legal">Rentabilités indicatives calculées sur la base des loyers prévus au bail commercial, hors frais et fiscalité, non garanties. Loyer mensuel estimé = prix × rentabilité ÷ 12. Effort d'épargne : simulation indicative, avant négociation du prix et du taux, avec frais de notaire de 8 %, frais bancaires de 1 200 €, assurance emprunteur de 0,25 % par an du montant emprunté, hors renouvellement ponctuel du mobilier ; taxe foncière et charges réelles quand elles sont indiquées, sinon estimées à 15 % du loyer annuel (niveau constaté sur les résidences gérées comparables). Les conditions de crédit dépendent de votre dossier et ne constituent pas une offre de prêt. Prix indicatifs, sous réserve de disponibilité au moment de la réservation. Un investissement immobilier comporte des risques, notamment de perte en capital, de vacance et de liquidité. Document personnel, établi pour vous par le Cabinet BHB.</p>
   </div>
 </main>
 <div class="toast" id="toast" hidden></div>
@@ -241,7 +241,7 @@ const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
 const pct = n => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' %';
 let D = null;
 const H = { apport: 5000, duree: 25, taux: 4 };
-const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, MOBILIER = 400 / 12, CHARGES_EST = 0.15;
+const NOTAIRE = 0.08, FRAIS_BANQUE = 1200, ASSURANCE = 0.0025, CHARGES_EST = 0.15;
 const AN = new Date().getFullYear();
 
 function calc(p){
@@ -252,8 +252,8 @@ function calc(p){
   const assur = emprunt * ASSURANCE / 12;
   const reel = p.tf != null && p.copro != null;
   const charges = reel ? (p.tf + p.copro) / 12 : loyer * CHARGES_EST;
-  const effort = mens + assur + charges + MOBILIER - loyer;
-  return { loyer, emprunt, mens, assur, charges, reel, effort, poche: H.apport + Math.max(0, effort) * n };
+  const effort = mens + assur + charges - loyer;
+  return { loyer, emprunt, mens, assur, charges, reel, effort };
 }
 const effTxt = e => e > 0.5 ? '≈ ' + eur(e) : '+ ' + eur(-e) + ' pour vous';
 function bailTxt(p){
@@ -273,9 +273,8 @@ function budgetHtml(p){
           <div class="bl"><span>Mensualité de crédit (${H.duree} ans, ${H.taux.toLocaleString('fr-FR')} %)</span><b>− ${eur(c.mens)}</b></div>
           <div class="bl"><span>Assurance emprunteur</span><b>− ${eur(c.assur)}</b></div>
           <div class="bl"><span>Taxe foncière + charges${tag}</span><b>− ${eur(c.charges)}</b></div>
-          <div class="bl"><span>Réserve pour le mobilier</span><b>− ${eur(MOBILIER)}</b></div>
           <div class="btot"><span>${c.effort > 0.5 ? 'Votre effort par mois' : 'Le projet s\'autofinance'}</span><b class="${c.effort > 0.5 ? '' : 'pos'}">${effTxt(c.effort)}</b></div>
-          <p class="bnote">Montant emprunté : ${eur(c.emprunt)} (prix + frais de notaire + frais bancaires − apport). En ${H.duree} ans, vous aurez mis environ ${eur(c.poche)} de votre poche, apport compris, pour un bien acheté ${eur(p.prix)} et entièrement remboursé, qui continue de vous verser son loyer. Impôt sur ces loyers : en général nul pendant de nombreuses années grâce à l'amortissement LMNP.</p>
+          <p class="bnote">Vous empruntez ${eur(c.emprunt)}, frais de notaire compris. Dans ${H.duree} ans, le bien est entièrement payé et son loyer est pour vous. Grâce au statut LMNP, ces loyers ne sont en général pas imposés pendant de nombreuses années.</p>
         </div>`;
 }
 function renderBudgets(){
