@@ -64,7 +64,8 @@
   .check{ display:flex; gap:10px; align-items:flex-start; font-size:14px; font-weight:600; margin-top:14px; cursor:pointer; }
   .check input{ width:18px; height:18px; accent-color:var(--navy); margin:2px 0 0; flex:none; }
   .cal{ border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; }
-  .cal iframe{ width:100%; border:none; min-height:820px; display:block; }
+  .cal iframe{ width:100%; border:none; height:1180px; display:block; }
+  @media (max-width:640px){ .cal iframe{ height:1400px; } }
   .hint{ font-size:13px; color:var(--ink-faint); margin:10px 0 0; line-height:1.5; }
   .done{ text-align:center; padding:34px 22px; }
   .done .ico{ width:58px; height:58px; border-radius:50%; background:var(--ok); color:#fff; display:grid; place-items:center; font-size:30px; margin:0 auto 14px; }
@@ -102,7 +103,7 @@
       <button class="btn btn-primary" id="calBtn" type="button">Choisir la date du rendez-vous</button>
       <p class="error" id="error" role="alert" hidden></p>
       <div id="calWrap" hidden>
-        <div class="cal"><iframe id="cal" title="Calendrier de réservation" scrolling="no"></iframe></div>
+        <div class="cal"><iframe id="cal" title="Calendrier de réservation" scrolling="yes"></iframe></div>
         <p class="hint">Une fois le créneau confirmé dans le calendrier, cliquez ci-dessous : la confirmation et la liste des documents partent par email.</p>
         <button class="btn btn-primary" id="sendBtn" type="button" style="margin-top:12px">Envoyer la confirmation et la liste des documents</button>
         <p class="error" id="sendError" role="alert" hidden></p>
