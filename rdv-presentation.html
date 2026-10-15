@@ -167,7 +167,7 @@ async function send(sansDate) {
     const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...d, sans_date: !!sansDate }) });
     const j = await r.json().catch(() => ({}));
     if (j.ok) {
-      $('doneText').innerHTML = (j.rdv ? `Rendez-vous confirmé le <b>${j.rdv.libelle}</b>. ` : '') + `La liste des documents à préparer vient d'être envoyée à <b>${d.email.replace(/</g, '&lt;')}</b>.`;
+      $('doneText').innerHTML = (j.rdv ? `Rendez-vous confirmé le <b>${j.rdv.libelle}</b>. ` : '') + (j.deja ? `La confirmation et la liste des documents avaient déjà été envoyées à <b>${d.email.replace(/</g, '&lt;')}</b> : aucun doublon.` : `La liste des documents à préparer vient d'être envoyée à <b>${d.email.replace(/</g, '&lt;')}</b>.`);
       $('formView').hidden = true; $('doneView').hidden = false; scrollTo(0, 0);
     } else if (j.erreur === 'rdv_introuvable') {
       show('sendError', 'Le rendez-vous n\'apparaît pas encore : vérifiez que la réservation a bien été confirmée dans le calendrier (avec la même adresse email).');
