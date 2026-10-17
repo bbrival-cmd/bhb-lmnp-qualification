@@ -807,7 +807,9 @@ function updateBookingLink() {
   const base = 'https://api.leadconnectorhq.com/widget/bookings/benoit-brival-personal-calendar-qxbqrjmdwqglqbgeea3f8';
   const prenom = (document.getElementById('prenom')?.value || '').trim();
   const nom = (document.getElementById('nom')?.value || '').trim();
-  const tel = (document.getElementById('tel')?.value || '').replace(/\s/g, '');
+  // Numéro au format international : sans indicatif, la page de réservation devine le pays (ex. +40 si le télépro est en Roumanie)
+  const tel = (document.getElementById('tel')?.value || '').replace(/[^\d+]/g, '')
+    .replace(/^00/, '+').replace(/^0(\d{9})$/, '+33$1').replace(/^33(\d{9})$/, '+33$1');
   const email = (document.getElementById('email')?.value || '').trim();
   const params = new URLSearchParams();
   if (prenom) params.set('first_name', prenom);
