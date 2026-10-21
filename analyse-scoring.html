@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Analyse et Scoring · Cabinet BHB</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f4ec; --surface:#ffffff; --line:#e4ddc9; --field:#fbfaf6;
+    --ink:#20263a; --ink-muted:#5b6272; --ink-faint:#8d8570;
+    --navy:#314975; --gold:#898068; --accent:#f0aa00; --accent-ink:#20263a;
+    --ok:#2f7d4f; --err:#b3261e;
+    --font-display:'Fraunces',Georgia,serif; --font-ui:'Montserrat',Arial,sans-serif;
+    --shadow-sm:0 6px 16px rgba(32,38,58,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d;
+      --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+      --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --err:#f08a80;
+      --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#171b28; --surface:#1f2434; --line:#333a52; --field:#1a1f2d;
+    --ink:#eef0f6; --ink-muted:#aeb4c8; --ink-faint:#9a927d;
+    --navy:#8fa3d6; --gold:#c9c2af; --ok:#6cc08f; --err:#f08a80;
+    --shadow-sm:0 6px 16px rgba(0,0,0,.3); color-scheme:dark;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-ui); font-size:15px; }
+  [hidden]{ display:none !important; }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 20px; }
+  .nav{ background:#314975; padding:12px 0; }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .nav img{ height:30px; }
+  .nav span{ color:#fff; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.85; }
+  h1{ font-family:var(--font-display); font-weight:600; font-size:clamp(26px,4.4vw,36px); margin:34px 0 6px; line-height:1.15; }
+  .lead{ color:var(--ink-muted); margin:0 0 26px; line-height:1.6; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:18px; box-shadow:var(--shadow-sm); }
+  .card h2{ font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin:0 0 14px; display:flex; align-items:center; gap:10px; }
+  .step{ display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--navy); color:#fff; font-size:12px; }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:600px){ .grid{ grid-template-columns:1fr; } }
+  label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink-muted); margin-bottom:6px; }
+  input, textarea{ width:100%; font:inherit; color:var(--ink); background:var(--field); border:1.5px solid var(--line); border-radius:9px; padding:11px 12px; }
+  input:focus, textarea:focus{ outline:none; border-color:var(--navy); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:30px; padding:15px 28px; font:inherit; font-weight:800; cursor:pointer; }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); width:100%; font-size:16px; }
+  .btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
+  .error{ color:var(--err); font-weight:600; margin:12px 0 0; }
+  .docs{ display:grid; gap:8px; }
+  .doc{ display:flex; align-items:center; gap:12px; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px; background:var(--field); cursor:pointer; font-weight:600; font-size:14.5px; }
+  .doc input{ width:20px; height:20px; accent-color:var(--navy); flex:none; margin:0; }
+  .doc:has(input:checked){ border-color:var(--navy); }
+  .doc small{ display:block; font-weight:500; color:var(--ink-faint); font-size:12.5px; margin-top:2px; }
+  .more{ margin-top:10px; font-size:13px; font-weight:700; color:var(--navy); background:none; border:none; cursor:pointer; padding:4px 0; font-family:inherit; }
+  .check{ display:flex; gap:10px; align-items:flex-start; font-size:14px; font-weight:600; margin-top:14px; cursor:pointer; }
+  .check input{ width:18px; height:18px; accent-color:var(--navy); margin:2px 0 0; flex:none; }
+  .cal{ border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#fff; }
+  .cal iframe{ width:100%; border:none; height:1180px; display:block; }
+  @media (max-width:640px){ .cal iframe{ height:1400px; } }
+  .hint{ font-size:13px; color:var(--ink-faint); margin:10px 0 0; line-height:1.5; }
+  .done{ text-align:center; padding:34px 22px; }
+  .done .ico{ width:58px; height:58px; border-radius:50%; background:var(--ok); color:#fff; display:grid; place-items:center; font-size:30px; margin:0 auto 14px; }
+  .done h2{ justify-content:center; font-family:var(--font-display); text-transform:none; letter-spacing:0; font-size:26px; color:var(--ink); }
+  .btn-ghost{ background:none; border:1.5px solid var(--line); color:var(--ink); }
+  .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  .row .btn{ flex:1 1 220px; }
+
+  .crs{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  @media (max-width:820px){ .crs{ grid-template-columns:1fr; } }
+  .cr{ display:grid; gap:8px; }
+  .cr h3{ margin:0; font-size:14px; font-weight:800; color:var(--navy); }
+  .cr h3 small{ display:block; font-weight:600; color:var(--ink-faint); font-size:12px; margin-top:2px; }
+  .zone{ border:2px dashed var(--line); border-radius:12px; padding:16px 12px; text-align:center; cursor:pointer; font-size:13px; color:var(--ink-muted); transition:border-color .15s, background .15s; }
+  .zone.over{ border-color:var(--accent); background:rgba(240,170,0,.08); }
+  .zone.done{ border-style:solid; border-color:var(--ok); color:var(--ok); font-weight:700; }
+  .cr textarea{ width:100%; min-height:110px; resize:vertical; font:inherit; font-size:13px; padding:10px; border:1.5px solid var(--line); border-radius:10px; background:var(--field); color:var(--ink); }
+  .cr .count{ font-size:11.5px; color:var(--ink-faint); text-align:right; }
+  .res{ display:grid; gap:16px; margin-top:24px; }
+  .score{ background:var(--surface); border-radius:16px; padding:22px; box-shadow:var(--shadow-sm); border-left:5px solid var(--accent); }
+  .stars{ font-size:34px; letter-spacing:4px; color:var(--accent); line-height:1; }
+  .pct{ font-family:var(--font-display); font-size:26px; font-weight:600; margin-left:10px; color:var(--ink); }
+  .verdict{ margin:10px 0 0; font-size:15px; line-height:1.55; }
+  .two{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  @media (max-width:720px){ .two{ grid-template-columns:1fr; } }
+  .box{ background:var(--surface); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow-sm); }
+  .box h3{ margin:0 0 10px; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:800; }
+  .box ul{ margin:0; padding-left:18px; line-height:1.6; font-size:14px; }
+  .box ol{ margin:0; padding-left:20px; line-height:1.6; font-size:14px; }
+  .box p{ margin:0 0 8px; line-height:1.6; font-size:14px; }
+  .box p b{ color:var(--navy); }
+  .obj{ margin:0 0 10px; font-size:14px; line-height:1.55; } .obj b{ display:block; }
+  .axe{ font-family:var(--font-display); font-size:19px; line-height:1.45; margin:0 0 10px; }
+  .closing{ background:var(--navy); color:#fff; border-radius:14px; padding:16px 20px; font-family:var(--font-display); font-size:18px; line-height:1.5; }
+  .closing small{ display:block; font-family:var(--font-ui); font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.75; margin-bottom:4px; }
+  .ghl{ font-size:13px; color:var(--ink-muted); }
+  .wait{ display:flex; align-items:center; gap:12px; margin-top:16px; color:var(--ink-muted); font-size:14px; }
+  .spin{ width:22px; height:22px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--accent); animation:sp 1s linear infinite; }
+  @keyframes sp{ to{ transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap"><img src="logo-bhb-white.png" alt="Cabinet BHB"><span>Analyse et Scoring</span></div></nav>
+<main class="wrap">
+  <h1>Analyse et Scoring</h1>
+  <p class="lead">Déposez le ou les comptes-rendus disponibles. L'analyse tient compte aussi de toutes les notes déjà présentes dans la fiche GHL du prospect (y compris vos remarques). Le résultat s'affiche ici et s'enregistre en note datée dans GHL, avec le score sur l'opportunité.</p>
+  <section class="card">
+    <h2><span class="step">1</span> Le prospect</h2>
+    <div class="grid">
+      <div><label for="prenom">Prénom</label><input id="prenom" autocomplete="off"></div>
+      <div><label for="nom">Nom</label><input id="nom" autocomplete="off"></div>
+      <div><label for="email">Email (sert à retrouver la fiche GHL)</label><input id="email" type="email" autocomplete="off"></div>
+      <div><label for="telephone">Téléphone</label><input id="telephone" type="tel" autocomplete="off"></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2><span class="step">2</span> Les comptes-rendus</h2>
+    <div class="crs">
+      <div class="cr" data-k="r1"><h3>R1 <small>Bilan patrimonial</small></h3><div class="zone" tabindex="0">Glissez le PDF / Word / texte<br>ou cliquez</div><textarea placeholder="… ou collez le texte ici"></textarea><div class="count"></div><input type="file" accept=".pdf,.docx,.txt,.vtt,.srt,.md" hidden></div>
+      <div class="cr" data-k="r2"><h3>R2 <small>Présentation des projets</small></h3><div class="zone" tabindex="0">Glissez le PDF / Word / texte<br>ou cliquez</div><textarea placeholder="… ou collez le texte ici"></textarea><div class="count"></div><input type="file" accept=".pdf,.docx,.txt,.vtt,.srt,.md" hidden></div>
+      <div class="cr" data-k="r3"><h3>R3 <small>Confirmation de projet</small></h3><div class="zone" tabindex="0">Glissez le PDF / Word / texte<br>ou cliquez</div><textarea placeholder="… ou collez le texte ici"></textarea><div class="count"></div><input type="file" accept=".pdf,.docx,.txt,.vtt,.srt,.md" hidden></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2><span class="step">3</span> L'analyse</h2>
+    <button class="btn btn-primary" id="go" type="button">Générer l'analyse, la préconisation et le scoring</button>
+    <p class="error" id="error" role="alert" hidden></p>
+    <div class="wait" id="wait" hidden><div class="spin"></div><span>Analyse en cours (environ 1 minute)…</span></div>
+  </section>
+  <div class="res" id="res" hidden></div>
+</main>
+<footer>Cabinet BHB · LMNP rentable 100 % géré · usage interne</footer>
+<script>
+const API = 'https://n8n.srv1404527.hstgr.cloud/webhook/lmnp-analyse';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const q = new URLSearchParams(location.search);
+['prenom', 'nom', 'email', 'telephone'].forEach(k => { if (q.get(k)) $(k).value = q.get(k); });
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+async function extract(f){
+  const ext = f.name.split('.').pop().toLowerCase(); let text = '';
+  if (ext === 'docx') {
+    if (!window.mammoth) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js');
+    text = (await mammoth.extractRawText({ arrayBuffer: await f.arrayBuffer() })).value;
+  } else if (ext === 'pdf') {
+    if (!window.pdfjsLib) { await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'); pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }
+    const pdf = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+    for (let i = 1; i <= pdf.numPages; i++) { const c = await (await pdf.getPage(i)).getTextContent(); text += c.items.map(it => it.str).join(' ') + '\n'; }
+  } else {
+    text = await f.text();
+    if (ext === 'vtt' || ext === 'srt') text = text.replace(/^WEBVTT.*$/m, '').replace(/^\d+\s*$/gm, '').replace(/^[\d:.,]+ --> [\d:.,]+.*$/gm, '').replace(/\n{2,}/g, '\n');
+  }
+  return text.trim();
+}
+document.querySelectorAll('.cr').forEach(box => {
+  const zone = box.querySelector('.zone'), ta = box.querySelector('textarea'), inp = box.querySelector('input'), cnt = box.querySelector('.count');
+  const count = () => { const n = ta.value.trim().length; cnt.textContent = n ? n.toLocaleString('fr-FR') + ' caractères' : ''; };
+  const read = async f => {
+    zone.classList.remove('done'); zone.textContent = 'Lecture de ' + f.name + '…';
+    try { ta.value = await extract(f); count(); zone.textContent = '✓ ' + f.name; zone.classList.add('done'); }
+    catch (e) { zone.textContent = 'Fichier illisible : collez le texte'; }
+  };
+  zone.addEventListener('click', () => inp.click());
+  zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inp.click(); } });
+  ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('over'); }));
+  zone.addEventListener('drop', e => { if (e.dataTransfer.files[0]) read(e.dataTransfer.files[0]); });
+  inp.addEventListener('change', () => { if (inp.files[0]) read(inp.files[0]); });
+  ta.addEventListener('input', count);
+});
+const show = msg => { $('error').textContent = msg || ''; $('error').hidden = !msg; };
+const li = a => (a || []).map(x => `<li>${esc(x)}</li>`).join('');
+function render(d){
+  const a = d.analyse || {}, s = a.scoring || {}, p = a.preconisation || {}, an = a.analyse || {};
+  const n = d.etoiles || 0;
+  $('res').innerHTML = `
+  <div class="score"><span class="stars">${'★'.repeat(n)}${'☆'.repeat(5 - n)}</span><span class="pct">${n}/5 · ≈ ${esc(s.pourcentage)} %</span>
+    <p class="verdict">${esc(s.verdict)}</p>
+    <div class="two"><div><h3 style="font-size:12px;color:var(--ok);margin:0 0 6px">CE QUI POUSSE VERS LE OUI</h3><ul>${li(s.pour)}</ul></div>
+    <div><h3 style="font-size:12px;color:var(--err);margin:0 0 6px">CE QUI RETIENT</h3><ul>${li(s.contre)}</ul></div></div></div>
+  <div class="box"><h3>Analyse — après ${esc(d.etape)}</h3>
+    <p><b>Profil :</b> ${esc(an.profil)}</p><p><b>Situation financière :</b> ${esc(an.situation_financiere)}</p>
+    <p><b>Objectifs :</b> ${esc(an.objectifs)}</p><p><b>Enjeux :</b> ${esc(an.enjeux)}</p><p><b>Évolution :</b> ${esc(an.evolution)}</p>
+    ${(an.projets_vus || []).length ? `<p><b>Projets vus :</b></p><ul>${li(an.projets_vus)}</ul>` : ''}</div>
+  <div class="box"><h3>Préconisation</h3><p class="axe">${esc(p.axe)}</p><ul>${li(p.arguments)}</ul>
+    ${(p.projets_a_pousser || []).length ? `<p style="margin-top:12px"><b>Projets à pousser :</b></p><ul>${(p.projets_a_pousser).map(x => `<li><b>${esc(x.projet)}</b> — ${esc(x.pourquoi)}</li>`).join('')}</ul>` : ''}</div>
+  <div class="box"><h3>Objections et réponses</h3>${(p.objections || []).map(o => `<p class="obj"><b>« ${esc(String(o.objection || '').replace(/^[«"“\s]+|[»"”\s]+$/g, ''))} »</b>→ ${esc(o.reponse)}</p>`).join('')}</div>
+  <div class="two" style="margin:0"><div class="box"><h3>À préparer</h3><ul>${li(p.a_preparer)}</ul></div><div class="box"><h3>Déroulé conseillé</h3><ol>${li(p.deroule)}</ol></div></div>
+  <div class="closing"><small>Question de closing</small>« ${esc(String(p.question_closing || '').replace(/^[«"“\s]+|[»"”\s]+$/g, ''))} »</div>
+  ${(a.vigilance || []).length ? `<div class="box"><h3>Vigilance</h3><ul>${li(a.vigilance)}</ul></div>` : ''}
+  <div class="box"><h3>Prochaine action</h3><p>${esc(a.prochaine_action)}</p>
+    <p class="ghl">GHL : ${d.ghl?.note === 201 ? '✓ note « Analyse & scoring » enregistrée' : '⚠️ note non enregistrée'} · ${d.ghl?.score === 200 ? '✓ score ' + n + '/5 sur l\'opportunité' : 'score non écrit (' + esc(d.ghl?.score) + ')'} · <a href="https://app.gohighlevel.com/v2/location/o4lz2Jn9cCqPrm0m4MnQ/contacts/detail/${esc(d.ghl?.contact)}" target="_blank" rel="noopener">ouvrir la fiche</a></p></div>`;
+  $('res').hidden = false; $('res').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('go').onclick = async () => {
+  const cr = {}; document.querySelectorAll('.cr').forEach(b => cr[b.dataset.k] = b.querySelector('textarea').value.trim());
+  const body = { prenom: $('prenom').value.trim(), nom: $('nom').value.trim(), email: $('email').value.trim(), telephone: $('telephone').value.trim(), cr };
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) return show("Indiquez l'email du prospect (il sert à retrouver sa fiche GHL).");
+  if (!Object.values(cr).some(t => t.length > 200)) return show('Déposez au moins un compte-rendu (R1, R2 ou R3).');
+  show(''); $('go').disabled = true; $('wait').hidden = false; $('res').hidden = true;
+  try {
+    const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json().catch(() => ({}));
+    if (!d.ok) throw new Error(d.error || "L'analyse n'a pas abouti. Réessayez dans un instant.");
+    render(d);
+  } catch (e) { show(e.message); }
+  $('go').disabled = false; $('wait').hidden = true;
+};
+</script>
+</body>
+</html>
