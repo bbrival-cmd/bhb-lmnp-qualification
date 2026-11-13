@@ -73,12 +73,16 @@
   .recent li{ padding:6px 0; font-size:14px; }
   .recent small{ color:var(--ink-faint); }
   footer{ text-align:center; color:var(--ink-faint); font-size:12px; padding:20px 0 40px; }
+  .modes{ display:flex; gap:8px; margin:22px 0 0; flex-wrap:wrap; }
+  .modes a{ flex:1 1 200px; text-align:center; padding:11px 14px; border-radius:30px; border:1.5px solid var(--line); color:var(--ink-muted); font-weight:700; font-size:13.5px; text-decoration:none; background:var(--surface); }
+  .modes a.on{ background:var(--navy); border-color:var(--navy); color:#fff; }
 </style>
 </head>
 <body>
 <nav class="nav"><div class="wrap"><img src="logo-bhb-white.png" alt="Cabinet BHB"><span>Outil commercial</span></div></nav>
 
 <main class="wrap">
+  <div class="modes"><a href="selection-manuelle">Je choisis mes lots</a><a href="proposition-commerciale" class="on">Sélection automatique</a></div>
   <div id="formView">
     <h1>Préparer une proposition</h1>
     <p class="lead">Déposez le compte-rendu de votre visio : l'outil en extrait le cahier des charges du client et sélectionne 5 résidences dans le stock disponible. Vous relirez la sélection avant tout envoi.</p>

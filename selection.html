@@ -163,6 +163,8 @@
   .legal{ color:var(--ink-faint); font-size:11.5px; line-height:1.6; padding:10px 0 40px; }
   .msg{ padding:90px 20px; text-align:center; color:var(--ink-muted); }
   .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#20263a; color:#fff; padding:12px 22px; border-radius:30px; font-weight:700; font-size:13.5px; box-shadow:0 8px 24px rgba(0,0,0,.25); z-index:50; text-align:center; max-width:calc(100% - 32px); }
+  .g-empty{ display:grid; place-items:center; text-align:center; background:linear-gradient(135deg,#314975,#20263a); color:#fff; font-weight:700; font-size:18px; min-height:220px; }
+  .g-empty small{ display:block; font-weight:500; font-size:13px; opacity:.75; margin-top:6px; }
 </style>
 </head>
 <body>
@@ -321,16 +323,17 @@ async function load(){
 function render(){
   $('list').innerHTML = D.selection.map((p, i) => {
     const done = (D.interets || []).includes(p.id);
+    if (!(p.photos || []).length) p.photos = [];
     const multi = p.photos.length > 1;
     return `
     <article class="fiche" id="f-${esc(p.id)}">
-      <div class="gallery" data-g="${i}">
+      ${!p.photos.length ? `<div class="gallery g-empty"><span>${esc(p.type || 'Résidence gérée')}<br><small>Photos présentées lors de notre rendez-vous</small></span></div>` : `<div class="gallery" data-g="${i}">
         ${multi ? `<span class="g-num">1 / ${p.photos.length}</span>` : ''}
         ${p.photos.map((ph, k) => `<img src="${esc(ph.url)}" alt="${esc(p.name)} — ${esc(ph.l)}" class="${k ? '' : 'on'}" ${k ? 'loading="lazy"' : ''} data-l="${esc(ph.l)}">`).join('')}
         <span class="g-cap">${esc(p.photos[0].l)}</span>
         ${multi ? `<button class="g-arrow g-prev" aria-label="Photo précédente">‹</button><button class="g-arrow g-next" aria-label="Photo suivante">›</button>
         <div class="g-dots">${p.photos.map((_, k) => `<span class="${k ? '' : 'on'}"></span>`).join('')}</div>` : ''}
-      </div>
+      </div>`}
       <div class="content">
         <div class="kicker">${esc(p.type)} · ${esc(p.ville)}</div>
         <h2>${esc(p.name)}</h2>
@@ -349,7 +352,7 @@ function render(){
           : `<button class="btn btn-outline" data-interest="${esc(p.id)}">Ce projet m'intéresse</button>`}</div>`}
       </div>
     </article>`; }).join('');
-  document.querySelectorAll('.gallery').forEach(setupGallery);
+  document.querySelectorAll('.gallery:not(.g-empty)').forEach(setupGallery);
   renderBudgets();
 }
 
