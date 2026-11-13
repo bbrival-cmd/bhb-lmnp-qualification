@@ -7,11 +7,11 @@
 <title>Votre sélection LMNP · Cabinet BHB</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="5 résidences gérées choisies pour votre projet : prix, loyer, effort d’épargne réel, bail et avis de votre conseiller.">
+<meta name="description" content="Les résidences gérées choisies pour votre projet : prix, loyer, effort d’épargne réel, bail et avis de votre conseiller.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cabinet BHB">
 <meta property="og:title" content="Votre sélection de résidences LMNP">
-<meta property="og:description" content="5 résidences gérées choisies pour votre projet : prix, rentabilité, loyer estimé et avis de votre conseiller.">
+<meta property="og:description" content="Les résidences gérées choisies pour votre projet : prix, rentabilité, loyer estimé et avis de votre conseiller.">
 <meta property="og:image" content="https://selection.cabinetbhb.fr/og-selection.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -308,8 +308,9 @@ async function load(){
   $('state').hidden = true; $('app').hidden = false; $('navCall').hidden = !!D.presentation;
   if (D.presentation) document.querySelector('.cta').hidden = true;   // présentation en R2 : pas de boutons d'action
   document.title = D.prenom + ', votre sélection LMNP · Cabinet BHB';
-  $('title').textContent = D.prenom + ', voici les 5 résidences sélectionnées pour vous';
-  $('noteText').textContent = D.mot_perso || "Suite à notre échange, j'ai sélectionné pour vous 5 résidences qui correspondent à votre projet.";
+  const nb = D.selection.length;
+  $('title').textContent = D.prenom + ', voici les ' + nb + ' résidences sélectionnées pour vous';
+  $('noteText').textContent = D.mot_perso || "Suite à notre échange, j'ai sélectionné pour vous " + nb + " résidences qui correspondent à votre projet.";
   $('sig').textContent = '— ' + D.commercial_nom + ', votre conseiller Cabinet BHB';
   $('ctaText').textContent = D.commercial_nom + ' vous rappelle pour en parler.';
   setupHyp();
