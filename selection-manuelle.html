@@ -53,6 +53,7 @@
   label{ display:block; font-size:12.5px; font-weight:700; color:var(--ink-muted); margin-bottom:6px; }
   input, textarea{ width:100%; font:inherit; color:var(--ink); background:var(--field); border:1.5px solid var(--line); border-radius:9px; padding:11px 12px; }
   textarea{ min-height:96px; resize:vertical; }
+  .hint{ font-weight:600; color:var(--ink-muted); font-size:13px; }
   input:focus, textarea:focus{ outline:none; border-color:var(--navy); }
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:30px; padding:15px 28px; font:inherit; font-weight:800; cursor:pointer; text-decoration:none; }
   .btn-primary{ background:var(--accent); color:var(--accent-ink); width:100%; font-size:16px; }
@@ -93,7 +94,7 @@
 <main class="wrap">
   <div class="modes"><a href="selection-manuelle" class="on">Je choisis mes lots</a><a href="proposition-commerciale">Sélection automatique</a></div>
   <h1>Créer un lien de simulation</h1>
-  <p class="lead">Déposez les fiches produit des lots que vous avez choisis. Vous obtenez la page client avec la simulation du coût mensuel de chaque projet, selon l'apport.</p>
+  <p class="lead">Déposez les fiches PDF ou collez les liens Pierre et Sens des lots que vous avez choisis. Vous obtenez la page client avec la simulation du coût mensuel de chaque projet, selon l'apport.</p>
 
   <div id="form">
     <section class="card">
@@ -108,10 +109,12 @@
     </section>
 
     <section class="card">
-      <h2><span class="step">2</span> Les fiches produit</h2>
+      <h2><span class="step">2</span> Les lots</h2>
       <div class="zone" id="zone" tabindex="0"><b>Glissez vos fiches PDF ici</b>ou cliquez pour les choisir · jusqu'à 10 lots</div>
       <input type="file" id="file" accept=".pdf" multiple hidden>
       <div class="files" id="files"></div>
+      <div style="margin-top:16px"><label for="liens">Liens Pierre et Sens <span class="hint" id="nbLiens"></span></label>
+        <textarea id="liens" rows="3" placeholder="https://pierre-sens.ekeenox.immo/v/…&#10;Un lien par ligne"></textarea></div>
       <button class="more" id="perso" type="button">+ Personnaliser le message d'accueil</button>
       <div id="persoBox" hidden style="margin-top:8px"><label for="mot">Message affiché en haut de la page client</label><textarea id="mot" placeholder="Laissez vide pour le message par défaut."></textarea></div>
     </section>
@@ -120,7 +123,7 @@
       <h2><span class="step">3</span> Le lien</h2>
       <button class="btn btn-primary" id="go" type="button">Créer le lien de simulation</button>
       <p class="error" id="error" role="alert" hidden></p>
-      <div class="wait" id="wait" hidden><div class="spin"></div><span>Lecture des fiches (environ 1 minute)…</span></div>
+      <div class="wait" id="wait" hidden><div class="spin"></div><span>Lecture des lots (environ 1 à 2 minutes)…</span></div>
     </section>
   </div>
 
@@ -135,6 +138,8 @@ const eur = n => n == null ? '—' : Math.round(n).toLocaleString('fr-FR') + ' �
 const q = new URLSearchParams(location.search);
 ['prenom', 'nom', 'email', 'telephone', 'apport'].forEach(k => { if (q.get(k)) $(k).value = q.get(k); });
 const fiches = [];   // { fichier, texte, etat }
+const liensPS = () => [...new Set(($('liens').value.match(/https?:\/\/[^\s]*ekeenox\.immo\/v\/[A-Za-z0-9]+/g) || []))];
+$('liens').oninput = () => { const n = liensPS().length; $('nbLiens').textContent = n ? `· ${n} lien${n > 1 ? 's' : ''} reconnu${n > 1 ? 's' : ''}` : ''; };
 
 function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
 async function lirePdf(f){
@@ -176,7 +181,7 @@ function rendu(d){
     <div class="row"><button class="btn btn-primary" id="copier" type="button" style="width:auto">Copier le lien</button><a class="btn btn-ghost" href="${esc(d.client_url)}" target="_blank" rel="noopener">Ouvrir la page</a></div>
     <div class="lots">${lots.map((l, i) => `<div class="lot"><b>${i + 1}. ${esc(l.nom_affiche)}</b> · ${esc(l.ville)}
       <div class="meta">${eur(l.prix)} · ${l.rendement != null ? String(l.rendement).replace('.', ',') + ' %' : '—'} · loyer ${eur(l.loyer_mensuel)}/mois · bail jusqu'en ${esc(l.fin_bail || '—')} · ${l.photos ? l.photos + ' photo' + (l.photos > 1 ? 's' : '') : 'sans photo'}</div>
-      <div class="meta">Fiche : ${esc(l.fichier)}${l.dans_stock ? '' : ' · absent de notre stock (nom fictif créé)'}</div>
+      <div class="meta">Source : ${esc(l.fichier)}${l.dans_stock ? '' : ' · absent de notre stock (nom fictif créé)'}</div>
       ${l.statut_stock === 'vendu' ? `<div class="al">⚠️ Ce programme est marqué « vendu » dans notre stock : vérifiez que ce lot est bien disponible.</div>` : ''}
       ${l.alerte ? `<div class="al">⚠️ ${esc(l.alerte)}</div>` : ''}</div>`).join('')}</div>
     <p class="small">Lien en mode présentation : aucun email n'est envoyé au prospect et l'ouverture ne déclenche pas d'alerte.<br>
@@ -188,10 +193,12 @@ $('go').onclick = async () => {
   const ok = fiches.filter(f => f.etat === 'ok');
   if (!$('prenom').value.trim()) return show('Indiquez au moins le prénom du prospect.');
   if (fiches.some(f => !f.etat)) return show('Patientez : lecture des fiches en cours.');
-  if (!ok.length) return show('Déposez au moins une fiche PDF lisible.');
+  const liens = liensPS();
+  if (!ok.length && !liens.length) return show('Déposez au moins une fiche PDF lisible ou collez un lien Pierre et Sens.');
+  if (ok.length + liens.length > 10) return show('10 lots maximum par sélection.');
   show(''); $('go').disabled = true; $('wait').hidden = false;
   const body = { prenom: $('prenom').value.trim(), nom: $('nom').value.trim(), email: $('email').value.trim(), telephone: $('telephone').value.trim(),
-    apport: $('apport').value, mot_perso: $('mot').value.trim(), commercial_email: 'b.brival@cabinetbhb.com', fiches: ok.map(f => ({ fichier: f.fichier, texte: f.texte })) };
+    apport: $('apport').value, mot_perso: $('mot').value.trim(), commercial_email: 'b.brival@cabinetbhb.com', fiches: ok.map(f => ({ fichier: f.fichier, texte: f.texte })), liens };
   try {
     const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const d = await r.json().catch(() => ({}));
